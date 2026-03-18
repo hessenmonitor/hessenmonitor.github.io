@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hessenmonitor — Akademische Umfrageforschung</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink:    #1a1a2e;
+      --paper:  #f5f0e8;
+      --accent: #c0392b;
+      --gold:   #d4a843;
+      --mid:    #6b6b7a;
+      --border: #d8d0c0;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--paper); color: var(--ink);
+      font-family: 'DM Sans', sans-serif; font-weight: 300;
+      line-height: 1.7; overflow-x: hidden;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 3rem;
+      background: rgba(245,240,232,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); z-index: 100;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700;
+      color: var(--ink); text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    nav ul { list-style: none; display: flex; gap: 2.5rem; }
+    nav ul a {
+      font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--mid); text-decoration: none; transition: color 0.2s;
+    }
+    nav ul a:hover { color: var(--accent); }
+
+    .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 5rem; }
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 6rem 4rem 6rem 5rem;
+    }
+    .eyebrow {
+      font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .eyebrow::before { content: ''; display: block; width: 2rem; height: 1px; background: var(--accent); }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 4vw, 4.2rem); line-height: 1.1;
+      font-weight: 700; margin-bottom: 1.5rem;
+    }
+    h1 em { font-style: italic; color: var(--accent); }
+    .hero-desc { font-size: 1.05rem; color: var(--mid); max-width: 38ch; margin-bottom: 3rem; line-height: 1.8; }
+    .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 2rem; font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem; font-weight: 500; letter-spacing: 0.06em;
+      text-transform: uppercase; text-decoration: none;
+      border: 1.5px solid var(--ink); cursor: pointer; transition: all 0.25s;
+    }
+    .btn-primary { background: var(--ink); color: var(--paper); }
+    .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+    .btn-secondary { background: transparent; color: var(--ink); }
+    .btn-secondary:hover { background: var(--ink); color: var(--paper); }
+
+    .hero-right { position: relative; overflow: hidden; background: white; border-left: 1px solid var(--border); }
+    .bg-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 40px 40px; opacity: 0.4;
+    }
+    .stat-cards {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; justify-content: center;
+      gap: 1.5rem; padding: 5rem 3.5rem; height: 100%;
+    }
+    .stat-card {
+      background: var(--paper); border: 1px solid var(--border);
+      padding: 1.5rem 2rem; width: 100%; max-width: 300px;
+      box-shadow: 4px 4px 0 var(--border);
+      animation: rise 0.7s ease both;
+    }
+    .stat-card:nth-child(2) { animation-delay: 0.15s; margin-left: 2rem; }
+    .stat-card:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+    .stat-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.4rem; }
+    .stat-value { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700; line-height: 1; }
+    .stat-value sup { font-size: 1rem; color: var(--accent); }
+    .stat-sub { font-size: 0.78rem; color: var(--mid); margin-top: 0.4rem; }
+
+    hr { border: none; border-top: 1px solid var(--border); }
+
+    .about { display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; padding: 6rem 5rem; }
+    .section-tag { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 2.5vw, 2.6rem); line-height: 1.2; font-weight: 700; }
+    .about-body p { color: var(--mid); margin-bottom: 1.2rem; max-width: 60ch; }
+    .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem; }
+    .pillar { border-top: 2px solid var(--ink); padding-top: 1.2rem; }
+    .pillar-num { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--border); line-height: 1; margin-bottom: 0.5rem; }
+    .pillar h3 { font-size: 0.9rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .pillar p { font-size: 0.82rem; color: var(--mid); line-height: 1.6; }
+
+    .dashboard-section { padding: 4rem 5rem 6rem; }
+    .section-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 2.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem;
+    }
+    .dashboard-frame { width: 100%; height: 800px; border: 1px solid var(--border); box-shadow: 8px 8px 0 var(--border); }
+
+    footer {
+      border-top: 1px solid var(--border); padding: 2.5rem 5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.78rem; color: var(--mid);
+    }
+    .footer-logo { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--ink); }
+
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      nav ul { gap: 1.2rem; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 6rem 2rem 4rem; }
+      .about { grid-template-columns: 1fr; padding: 4rem 2rem; gap: 2rem; }
+      .pillars { grid-template-columns: 1fr; }
+      .dashboard-section { padding: 3rem 1.5rem; }
+      footer { flex-direction: column; gap: 1rem; padding: 2rem 1.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">Hessen<span>monitor</span></a>
+  <ul>
+    <li><a href="#about">Über uns</a></li>
+    <li><a href="#dashboard">Dashboard</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <p class="eyebrow">Akademische Umfrageforschung · Hessen</p>
+    <h1>Daten, die <em>Hessen</em><br>verstehen lassen.</h1>
+    <p class="hero-desc">
+      Der Hessenmonitor erfasst systematisch Einstellungen, Lebenslagen und
+      politische Überzeugungen der hessischen Bevölkerung — wissenschaftlich
+      fundiert, transparent und zugänglich.
+    </p>
+    <div class="btn-group">
+      <a href="#dashboard" class="btn btn-primary">→ Zum Dashboard</a>
+      <a href="#about" class="btn btn-secondary">Mehr erfahren</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="bg-grid"></div>
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-label">Befragte Personen</div>
+        <div class="stat-value">3.842<sup>↑</sup></div>
+        <div class="stat-sub">Repräsentative Stichprobe 2024</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Erhebungswellen</div>
+        <div class="stat-value">12</div>
+        <div class="stat-sub">Seit 2018 kontinuierlich</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Themenfelder</div>
+        <div class="stat-value">7</div>
+        <div class="stat-sub">Politik · Soziales · Wirtschaft</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr />
+
+<section class="about" id="about">
+  <div class="fade-up">
+    <p class="section-tag">Das Projekt</p>
+    <h2>Methodik &amp; Ansatz</h2>
+  </div>
+  <div class="about-body fade-up">
+    <p>
+      Der Hessenmonitor ist ein Langzeit-Forschungsprojekt zur systematischen
+      Erfassung gesellschaftlicher Einstellungen in Hessen. Auf Basis
+      repräsentativer Zufallsstichproben werden halbjährlich rund 1.000 Personen
+      zu politischen, sozialen und wirtschaftlichen Themen befragt.
+    </p>
+    <p>
+      Alle Daten werden nach wissenschaftlichen Standards erhoben, gewichtet und
+      dokumentiert. Die Ergebnisse stehen der Öffentlichkeit, Politik und
+      Wissenschaft frei zur Verfügung.
+    </p>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-num">01</div>
+        <h3>Repräsentativität</h3>
+        <p>Geschichtete Zufallsstichproben nach Alter, Geschlecht und Region.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02</div>
+        <h3>Transparenz</h3>
+        <p>Fragebögen, Gewichtungsverfahren und Rohdaten offen zugänglich.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03</div>
+        <h3>Kontinuität</h3>
+        <p>Zeitreihen seit 2018 ermöglichen Trendanalysen über mehrere Jahre.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr />
+
+<section class="dashboard-section" id="dashboard">
+  <div class="section-header fade-up">
+    <div>
+      <p class="section-tag">Interaktive Auswertung</p>
+      <h2>Umfrage-Dashboard</h2>
+    </div>
+    <a href="dashboard/index.html" class="btn btn-secondary" target="_blank">Vollbild ↗</a>
+  </div>
+  <iframe
+    class="dashboard-frame fade-up"
+    src="dashboard/index.html"
+    title="Hessenmonitor Umfrage-Dashboard"
+    loading="lazy"
+    frameborder="0">
+  </iframe>
+</section>
+
+<footer id="contact">
+  <span class="footer-logo">Hessenmonitor</span>
+  <span>Akademisches Forschungsprojekt · Hessen, Deutschland</span>
+  <span>© 2025 — Alle Rechte vorbehalten</span>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
