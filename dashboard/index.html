@@ -10,462 +10,780 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --bg:      #ffffff;
-      --surface: #f8f7f4;
-      --ink:     #1a1a2e;
-      --mid:     #6b6b7a;
-      --border:  #e2ddd6;
-      --accent:  #c0392b;
-      --accent2: #2563eb;
-      --accent3: #d4a843;
-      --accent4: #16a34a;
+      --surface: #f0f5fa;
+      --ink:     #1e3a5f;
+      --mid:     #4a6a8a;
+      --border:  #ccdaea;
+      --r:  #c0392b;
+      --b:  #2e6da4;
+      --g:  #1e3a5f;
+      --o:  #7aafd4;
+      --p:  #2e6da4;
     }
     body {
       background: var(--bg); color: var(--ink);
       font-family: 'DM Sans', sans-serif; font-weight: 300;
-      font-size: 0.88rem; line-height: 1.5;
+      font-size: 0.88rem; line-height: 1.5; min-height: 100vh;
     }
 
-    /* TOOLBAR */
+    /* ── TOOLBAR ── */
     .toolbar {
-      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+      display: flex; align-items: flex-end; gap: 1.2rem; flex-wrap: wrap;
       padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
       background: var(--surface); position: sticky; top: 0; z-index: 10;
     }
-    .toolbar-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); white-space: nowrap; }
-    select, .chip-group { font-family: inherit; font-size: 0.82rem; }
+    .ctrl { display: flex; flex-direction: column; gap: 0.3rem; min-width: 160px; }
+    .ctrl-label {
+      font-size: 0.63rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--mid);
+    }
     select {
-      padding: 0.4rem 0.8rem; border: 1px solid var(--border);
-      background: white; color: var(--ink); cursor: pointer;
-      appearance: none; padding-right: 1.8rem;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b6b7a'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 0.6rem center;
+      font-family: inherit; font-size: 0.82rem;
+      padding: 0.42rem 2rem 0.42rem 0.7rem;
+      border: 1px solid var(--border); background: #fff
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b6b7a'/%3E%3C/svg%3E")
+        no-repeat right 0.6rem center;
+      color: var(--ink); cursor: pointer; appearance: none;
+      transition: border-color 0.2s;
     }
-    .chip-group { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-    .chip {
-      padding: 0.3rem 0.8rem; border: 1px solid var(--border);
-      background: white; cursor: pointer; font-size: 0.78rem;
-      transition: all 0.18s; color: var(--mid);
-    }
-    .chip.active { background: var(--ink); color: white; border-color: var(--ink); }
-    .toolbar-sep { width: 1px; height: 24px; background: var(--border); flex-shrink: 0; }
+    select:focus { outline: none; border-color: var(--ink); }
+    select:disabled { opacity: 0.3; cursor: default; background-color: var(--surface); }
+    .sep { width: 1px; height: 36px; background: var(--border); align-self: center; }
 
-    /* GRID */
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      padding: 0.55rem 1.5rem; font-size: 0.71rem; color: var(--mid);
+      border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.35rem;
+      background: var(--bg);
+    }
+    .breadcrumb strong { color: var(--ink); font-weight: 500; }
+    .bc-arrow { opacity: 0.35; }
+
+    /* ── KPI ROW ── */
+    .kpi-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--border);
+    }
+    .kpi { padding: 1.2rem 1.5rem; border-right: 1px solid var(--border); }
+    .kpi:last-child { border-right: none; }
+    .kpi-lbl { font-size: 0.64rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.3rem; }
+    .kpi-val { font-size: 1.85rem; font-weight: 500; line-height: 1; }
+    .kpi-sub { font-size: 0.7rem; color: var(--mid); margin-top: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .c-r{color:var(--r)} .c-b{color:var(--b)} .c-g{color:var(--g)} .c-o{color:var(--o)}
+
+    /* ── GRID ── */
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: auto;
+      grid-template-columns: 1fr 1fr;
       gap: 1px; background: var(--border);
-      border-top: 1px solid var(--border);
     }
+    .card { background: var(--bg); padding: 1.3rem 1.5rem; display: flex; flex-direction: column; gap: 0.9rem; }
+    .card.full { grid-column: 1 / -1; }
+    .card-hd { display: flex; flex-direction: column; gap: 0.15rem; }
+    .card-title { font-size: 0.73rem; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--mid); }
+    .card-sub   { font-size: 0.69rem; color: #bbb; font-style: italic; }
 
-    /* KPI ROW */
-    .kpi-row {
-      grid-column: 1 / -1;
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 1px; background: var(--border);
+    /* ── TABLE ── */
+    .tbl { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .tbl th {
+      font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--mid); text-align: left; padding: 0.38rem 0.5rem;
+      border-bottom: 1px solid var(--border); font-weight: 400;
     }
-    .kpi {
-      background: var(--bg); padding: 1.4rem 1.5rem;
+    .tbl td { padding: 0.55rem 0.5rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .tbl tr:last-child td { border-bottom: none; }
+    .tbl tr.active td { background: var(--surface); }
+    .tbl tr:hover td { background: var(--surface); }
+    .bar-w { width: 110px; }
+    .bar-bg { background: var(--surface); height: 5px; border-radius: 3px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+    .mono { font-family: 'DM Mono', monospace; font-size: 0.77rem; text-align: right; white-space: nowrap; }
+    /* Streuung dots */
+    .streuung { display: flex; align-items: center; gap: 3px; }
+    .streuung-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--border); flex-shrink: 0;
+      transition: background 0.3s;
+    }
+    .streuung-dot.filled { background: #2e6da4; }
+    .streuung-lbl { font-size: 0.67rem; color: var(--mid); margin-left: 4px; white-space: nowrap; }
+
+    /* ── FRAGEWORTLAUT ── */
+    .frage-panel {
+      display: grid; grid-template-columns: var(--frage-cols, 1fr 1fr);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .frage-block {
+      padding: 0.8rem 1.5rem; border-right: 1px solid var(--border);
       display: flex; flex-direction: column; gap: 0.3rem;
     }
-    .kpi-label { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mid); }
-    .kpi-value { font-size: 2rem; font-weight: 500; line-height: 1; }
-    .kpi-value.red   { color: var(--accent); }
-    .kpi-value.blue  { color: var(--accent2); }
-    .kpi-value.gold  { color: var(--accent3); }
-    .kpi-value.green { color: var(--accent4); }
-    .kpi-delta { font-size: 0.75rem; color: var(--mid); }
-    .kpi-delta.up   { color: var(--accent4); }
-    .kpi-delta.down { color: var(--accent); }
-
-    /* CHART CARDS */
-    .card {
-      background: var(--bg); padding: 1.4rem 1.5rem;
-      display: flex; flex-direction: column; gap: 1rem;
+    .frage-block:last-child { border-right: none; }
+    .frage-tag {
+      font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--mid); display: flex; align-items: center; gap: 0.4rem;
     }
-    .card.wide { grid-column: span 2; }
-    .card.full { grid-column: 1 / -1; }
-    .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
-    .card-title { font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mid); }
-    .card-sub { font-size: 0.72rem; color: var(--border); margin-top: 0.2rem; }
-    .chart-wrap { position: relative; }
-    canvas { width: 100% !important; }
-
-    /* LIKERT TABLE */
-    .likert-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-    .likert-table th { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--border); font-weight: 400; }
-    .likert-table td { padding: 0.55rem 0.5rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    .likert-table tr:last-child td { border-bottom: none; }
-    .bar-cell { width: 140px; }
-    .bar-bg { background: var(--surface); height: 6px; border-radius: 3px; overflow: hidden; }
-    .bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
-    .val { font-family: 'DM Mono', monospace; font-size: 0.78rem; text-align: right; min-width: 36px; }
-    .trend-up   { color: var(--accent4); font-size: 0.7rem; }
-    .trend-down { color: var(--accent);  font-size: 0.7rem; }
-    .trend-flat { color: var(--mid);     font-size: 0.7rem; }
-
-    /* REGION MAP placeholder */
-    .map-placeholder {
-      flex: 1; background: var(--surface); border: 1px dashed var(--border);
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column; gap: 0.5rem; color: var(--mid);
-      font-size: 0.78rem; min-height: 220px;
+    .frage-tag::before {
+      content: ''; display: inline-block; width: 8px; height: 8px;
+      border-radius: 50%; flex-shrink: 0;
     }
-    .map-placeholder svg { opacity: 0.3; }
+    .frage-tag.sel::before { background: var(--b); }
+    .frage-tag.vgl::before { background: var(--o); }
+    .frage-text {
+      font-size: 0.8rem; color: var(--ink); font-style: italic;
+      line-height: 1.55; border-left: 2px solid var(--border);
+      padding-left: 0.7rem; margin-top: 0.1rem;
+    }
 
-    /* FOOTER */
-    .dash-footer {
-      padding: 1rem 1.5rem; border-top: 1px solid var(--border);
-      font-size: 0.72rem; color: var(--mid);
+    /* ── FOOTER ── */
+    .footer {
+      padding: 0.85rem 1.5rem; border-top: 1px solid var(--border);
+      font-size: 0.69rem; color: var(--mid);
       display: flex; justify-content: space-between;
     }
+    .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--r); margin-right: 0.35rem; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
   </style>
 </head>
 <body>
 
 <!-- TOOLBAR -->
 <div class="toolbar">
-  <span class="toolbar-label">Welle</span>
-  <select id="sel-wave" onchange="update()">
-    <option value="all">Alle (2018–2024)</option>
-    <option value="2024">2024</option>
-    <option value="2023">2023</option>
-    <option value="2022">2022</option>
-    <option value="2021">2021</option>
-  </select>
+  <div class="ctrl">
+    <span class="ctrl-label">Themengruppe</span>
+    <select id="sel-gruppe" onchange="onGruppeChange()"></select>
+  </div>
 
-  <div class="toolbar-sep"></div>
-  <span class="toolbar-label">Region</span>
-  <select id="sel-region" onchange="update()">
-    <option value="all">Alle Regionen</option>
-    <option value="nordhessen">Nordhessen</option>
-    <option value="mittelhessen">Mittelhessen</option>
-    <option value="suedhessen">Südhessen</option>
-    <option value="rheinmain">Rhein-Main</option>
-  </select>
+  <div class="ctrl" id="wrap-thema">
+    <span class="ctrl-label">Thema</span>
+    <select id="sel-thema" onchange="render()"></select>
+  </div>
 
-  <div class="toolbar-sep"></div>
-  <span class="toolbar-label">Altersgruppe</span>
-  <div class="chip-group" id="age-chips">
-    <div class="chip active" data-age="all" onclick="toggleAge(this)">Alle</div>
-    <div class="chip" data-age="18-29" onclick="toggleAge(this)">18–29</div>
-    <div class="chip" data-age="30-44" onclick="toggleAge(this)">30–44</div>
-    <div class="chip" data-age="45-59" onclick="toggleAge(this)">45–59</div>
-    <div class="chip" data-age="60+" onclick="toggleAge(this)">60+</div>
+  <div class="sep"></div>
+
+  <div class="ctrl">
+    <span class="ctrl-label">Vergleichsgruppe <span style="font-weight:300;opacity:0.6">(optional)</span></span>
+    <select id="sel-vgl" onchange="onVglChange()"></select>
+  </div>
+
+  <div class="ctrl" id="wrap-vgl-thema" style="display:none">
+    <span class="ctrl-label">Thema (Vergleich)</span>
+    <select id="sel-vgl-thema" onchange="render()"></select>
   </div>
 </div>
 
-<!-- DASHBOARD GRID -->
+<!-- BREADCRUMB -->
+<div class="breadcrumb" id="bc"></div>
+
+<!-- FRAGEWORTLAUT -->
+<div class="frage-panel" id="frage-panel">
+  <div class="frage-block">
+    <span class="frage-tag sel" id="frage-sel-lbl">Auswahl</span>
+    <div class="frage-text" id="frage-sel-text"></div>
+  </div>
+  <div class="frage-block" id="frage-vgl-block">
+    <span class="frage-tag vgl" id="frage-vgl-lbl">Vergleich</span>
+    <div class="frage-text" id="frage-vgl-text"></div>
+  </div>
+</div>
+
+<!-- KPIs -->
+<div class="kpi-row">
+  <div class="kpi"><div class="kpi-lbl">Befragte</div><div class="kpi-val c-r">3.842</div><div class="kpi-sub">Erhebungswelle 2024</div></div>
+  <div class="kpi"><div class="kpi-lbl">Zustimmung — Auswahl</div><div class="kpi-val c-b" id="kpi-sel">—</div><div class="kpi-sub" id="kpi-sel-lbl">—</div></div>
+  <div class="kpi" id="kpi-vgl-cell"><div class="kpi-lbl">Zustimmung — Vergleich</div><div class="kpi-val c-o" id="kpi-vgl">—</div><div class="kpi-sub" id="kpi-vgl-lbl">—</div></div>
+  <div class="kpi" id="kpi-diff-cell"><div class="kpi-lbl">Differenz</div><div class="kpi-val c-g" id="kpi-diff">—</div><div class="kpi-sub" id="kpi-diff-lbl">—</div></div>
+</div>
+
+<!-- CHARTS -->
 <div class="grid">
 
-  <!-- KPIs -->
-  <div class="kpi-row">
-    <div class="kpi">
-      <span class="kpi-label">Befragte</span>
-      <span class="kpi-value red" id="kpi-n">3.842</span>
-      <span class="kpi-delta up" id="kpi-n-d">↑ +312 ggü. Vorjahr</span>
-    </div>
-    <div class="kpi">
-      <span class="kpi-label">Rücklaufquote</span>
-      <span class="kpi-value blue" id="kpi-rr">67,4 %</span>
-      <span class="kpi-delta up" id="kpi-rr-d">↑ +2,1 Pkt.</span>
-    </div>
-    <div class="kpi">
-      <span class="kpi-label">Demokratiezufriedenheit</span>
-      <span class="kpi-value gold" id="kpi-dem">52 %</span>
-      <span class="kpi-delta down" id="kpi-dem-d">↓ −4 Pkt. ggü. 2022</span>
-    </div>
-    <div class="kpi">
-      <span class="kpi-label">Wirtschaftsoptimismus</span>
-      <span class="kpi-value green" id="kpi-wirt">38 %</span>
-      <span class="kpi-delta up" id="kpi-wirt-d">↑ +6 Pkt.</span>
-    </div>
-  </div>
-
-  <!-- Trend line chart (wide) -->
-  <div class="card wide">
-    <div class="card-header">
-      <div>
-        <div class="card-title">Zeitreihe — Kernindikatoren</div>
-        <div class="card-sub">2018–2024, Anteil Zustimmung in %</div>
-      </div>
-    </div>
-    <div class="chart-wrap"><canvas id="chart-trend" height="160"></canvas></div>
-  </div>
-
-  <!-- Age breakdown bar chart -->
+  <!-- Bar: side-by-side comparison -->
   <div class="card">
-    <div class="card-header">
-      <div>
-        <div class="card-title">Altersgruppen</div>
-        <div class="card-sub">Demokratiezufriedenheit</div>
-      </div>
+    <div class="card-hd">
+      <div class="card-title" id="bar-title">Vergleich Zustimmungsrate</div>
+      <div class="card-sub" id="bar-sub"></div>
     </div>
-    <div class="chart-wrap"><canvas id="chart-age" height="180"></canvas></div>
+    <canvas id="chart-bar" height="200"></canvas>
   </div>
 
-  <!-- Likert table -->
-  <div class="card wide">
-    <div class="card-header">
-      <div>
-        <div class="card-title">Themenfelder — Zustimmungsraten</div>
-        <div class="card-sub">Aktuelles Erhebungsjahr</div>
-      </div>
+  <!-- Dist: stacked answer distribution for both -->
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-title">Antwortverteilung</div>
+      <div class="card-sub" id="dist-sub">Auswahl vs. Vergleich</div>
     </div>
-    <table class="likert-table" id="likert-table">
-      <thead>
-        <tr>
-          <th>Thema</th>
-          <th class="bar-cell">Zustimmung</th>
-          <th class="val">%</th>
-          <th>Trend</th>
-        </tr>
-      </thead>
+    <canvas id="chart-dist" height="200"></canvas>
+  </div>
+
+  <!-- Table: all themen in selected Gruppe -->
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-title" id="tbl-sel-title">Themen — Auswahl</div>
+      <div class="card-sub" id="tbl-sel-sub"></div>
+    </div>
+    <table class="tbl" id="tbl-sel">
+      <thead><tr><th>Thema</th><th class="bar-w">Zustimmung</th><th class="mono">%</th><th>Streuung</th></tr></thead>
       <tbody></tbody>
     </table>
   </div>
 
-  <!-- Region donut -->
-  <div class="card">
-    <div class="card-header">
-      <div>
-        <div class="card-title">Stichprobe nach Region</div>
-        <div class="card-sub">Anteil Befragte</div>
-      </div>
+  <!-- Table: all themen in Vergleichsgruppe -->
+  <div class="card" id="tbl-vgl-card">
+    <div class="card-hd">
+      <div class="card-title" id="tbl-vgl-title">Themen — Vergleich</div>
+      <div class="card-sub" id="tbl-vgl-sub"></div>
     </div>
-    <div class="chart-wrap"><canvas id="chart-region" height="180"></canvas></div>
-  </div>
-
-  <!-- Party bar -->
-  <div class="card wide">
-    <div class="card-header">
-      <div>
-        <div class="card-title">Parteipräferenz</div>
-        <div class="card-sub">Zweitstimme, in %</div>
-      </div>
-    </div>
-    <div class="chart-wrap"><canvas id="chart-party" height="120"></canvas></div>
-  </div>
-
-  <!-- Satisfaction grouped bar -->
-  <div class="card">
-    <div class="card-header">
-      <div>
-        <div class="card-title">Lebenszufriedenheit</div>
-        <div class="card-sub">nach Geschlecht</div>
-      </div>
-    </div>
-    <div class="chart-wrap"><canvas id="chart-sat" height="180"></canvas></div>
+    <table class="tbl" id="tbl-vgl">
+      <thead><tr><th>Thema</th><th class="bar-w">Zustimmung</th><th class="mono">%</th><th>Streuung</th></tr></thead>
+      <tbody></tbody>
+    </table>
   </div>
 
 </div>
 
-<div class="dash-footer">
-  <span>Hessenmonitor · Akademisches Forschungsprojekt</span>
-  <span id="footer-filter">Filter: Alle Wellen · Alle Regionen · Alle Altersgruppen</span>
+<div class="footer">
+  <span><span class="dot"></span>Hessenmonitor · Erhebungswelle 2024 · <em>Verteilungen: Platzhalterdaten bis Ergebnisse vorliegen</em></span>
+  <span id="footer-txt"></span>
 </div>
 
 <script>
-// ── DATA ────────────────────────────────────────────────────────────────────
+// ── DATA ─────────────────────────────────────────────────────────────────────
+// Themengruppen and Themen are taken directly from the survey questionnaire
+// (Demokratische Zustände in Hessen, Welle 2024).
+// Distributions are placeholders until real response data is available.
+// varName references the LimeSurvey variable name from the XML.
 
-const DATA = {
-  trend: {
-    labels: ['2018','2019','2020','2021','2022','2023','2024'],
-    demokratie: [58, 61, 55, 54, 56, 54, 52],
-    wirtschaft:  [32, 35, 28, 30, 34, 32, 38],
-    vertrauen:   [44, 46, 41, 43, 47, 45, 49],
+const GRUPPEN = {
+
+  "Regionale Verbundenheit": {
+    subgroups: true,
+    themen: {
+      "Verbundenheit mit Gemeinde": {
+        varName: "G1Q00001_SQ001",
+        base: 72, dist: [28, 44, 18, 10],
+        fragewortlaut: "Die Menschen haben unterschiedlich starke Bindungen zu ihrer Stadt oder Region. Wie ist das bei Ihnen? Fühlen Sie sich verbunden mit … Ihrer Stadt oder Gemeinde und ihren Bürgern?",
+        scale: ["Sehr verbunden", "Eher verbunden", "Eher nicht verbunden", "Überhaupt nicht verbunden"]
+      },
+      "Verbundenheit mit Hessen": {
+        varName: "G1Q00001_SQ002",
+        base: 65, dist: [22, 43, 23, 12],
+        fragewortlaut: "Fühlen Sie sich verbunden mit … Hessen und seinen Bürgern?",
+        scale: ["Sehr verbunden", "Eher verbunden", "Eher nicht verbunden", "Überhaupt nicht verbunden"]
+      },
+      "Verbundenheit mit Deutschland": {
+        varName: "G1Q00001_SQ003",
+        base: 61, dist: [19, 42, 26, 13],
+        fragewortlaut: "Fühlen Sie sich verbunden mit … Deutschland und seinen Bürgern?",
+        scale: ["Sehr verbunden", "Eher verbunden", "Eher nicht verbunden", "Überhaupt nicht verbunden"]
+      },
+      "Verbundenheit mit der EU": {
+        varName: "G1Q00001_SQ004",
+        base: 44, dist: [12, 32, 32, 24],
+        fragewortlaut: "Fühlen Sie sich verbunden mit … der Europäischen Union und ihren Bürgern?",
+        scale: ["Sehr verbunden", "Eher verbunden", "Eher nicht verbunden", "Überhaupt nicht verbunden"]
+      },
+      "Lebenszufriedenheit persönlich": {
+        varName: "G1Q00003_SQ001",
+        base: 66, dist: [18, 48, 22, 12],
+        fragewortlaut: "Wie zufrieden sind Sie alles in allem mit Ihrer persönlichen Lebenssituation?",
+        scale: ["Sehr zufrieden", "Zufrieden", "Eher zufrieden", "Eher unzufrieden", "Unzufrieden", "Sehr unzufrieden"]
+      },
+      "Lebensbedingungen in Hessen": {
+        varName: "G1Q00003_SQ002",
+        base: 54, dist: [12, 42, 30, 16],
+        fragewortlaut: "Und wie zufrieden sind Sie mit den heutigen Lebensbedingungen und Lebensverhältnissen in Hessen?",
+        scale: ["Sehr zufrieden", "Zufrieden", "Eher zufrieden", "Eher unzufrieden", "Unzufrieden", "Sehr unzufrieden"]
+      },
+    }
   },
-  age: {
-    labels: ['18–29', '30–44', '45–59', '60+'],
-    values: [48, 54, 51, 56]
+
+  "Wirtschaft & Lebenslage": {
+    subgroups: true,
+    themen: {
+      "Wirtschaftslage Deutschland": {
+        varName: "G2Q00007_SQ001",
+        base: 38, dist: [6, 32, 38, 24],
+        fragewortlaut: "Wie beurteilen Sie die derzeitige wirtschaftliche Lage in Deutschland?",
+        scale: ["Sehr gut", "Gut", "Eher gut", "Eher schlecht", "Schlecht", "Sehr schlecht"]
+      },
+      "Wirtschaftslage Wohnort": {
+        varName: "G2Q00007_SQ002",
+        base: 52, dist: [11, 41, 30, 18],
+        fragewortlaut: "Wie beurteilen Sie die derzeitige wirtschaftliche Lage an Ihrem Wohnort?",
+        scale: ["Sehr gut", "Gut", "Eher gut", "Eher schlecht", "Schlecht", "Sehr schlecht"]
+      },
+      "Persönliche Wirtschaftslage": {
+        varName: "G2Q00007_SQ003",
+        base: 60, dist: [14, 46, 26, 14],
+        fragewortlaut: "Wie beurteilen Sie Ihre persönliche wirtschaftliche Lage?",
+        scale: ["Sehr gut", "Gut", "Eher gut", "Eher schlecht", "Schlecht", "Sehr schlecht"]
+      },
+      "Wirtschaftliche Zukunftserwartung": {
+        varName: "G2Q00009_SQ001",
+        base: 35, dist: [7, 28, 38, 27],
+        fragewortlaut: "Was erwarten Sie, wie wird die wirtschaftliche Lage in einem Jahr in Deutschland sein?",
+        scale: ["Viel besser", "Etwas besser", "Etwa gleich bleiben", "Etwas schlechter", "Viel schlechter"]
+      },
+      "Wohnkostenbelastung": {
+        varName: "G2Q00003",
+        base: 41, dist: [15, 26, 32, 27],
+        fragewortlaut: "Wie stark belasten Miete, Hauskredit oder Wohnkosten Ihr Haushaltsbudget?",
+        scale: ["< 25 %", "25–35 %", "35–45 %", "> 45 %"]
+      },
+      "Finanzielle Auskommen": {
+        varName: "G2Q00004",
+        base: 58, dist: [12, 46, 28, 14],
+        fragewortlaut: "Wie kommt Ihr Haushalt mit dem monatlichen Einkommen zurecht?",
+        scale: ["Sehr gut", "Gut", "Eher gut", "Eher schlecht", "Schlecht", "Sehr schlecht"]
+      },
+    }
   },
-  region: {
-    labels: ['Nordhessen','Mittelhessen','Südhessen','Rhein-Main'],
-    values: [18, 22, 24, 36],
-    colors: ['#c0392b','#2563eb','#d4a843','#16a34a']
+
+  "Demokratie & Politik": {
+    subgroups: true,
+    themen: {
+      "Demokratie als Ideal": {
+        varName: "G4Q00020",
+        base: 71, dist: [30, 41, 18, 11],
+        fragewortlaut: "Die drei folgenden Fragen beschäftigen sich mit dem Thema Demokratie. Zunächst geht es nicht um tatsächliche Demokratien, sondern um das Prinzip der Demokratie als Idee. Sind Sie…?",
+        scale: ["Entschieden für die Demokratie", "Für die Demokratie", "Eher für die Demokratie", "Eher gegen die Demokratie", "Gegen die Demokratie", "Entschieden gegen die Demokratie"]
+      },
+      "Demokratie im Grundgesetz": {
+        varName: "G4Q00021",
+        base: 63, dist: [18, 45, 24, 13],
+        fragewortlaut: "Nun geht es um die Demokratie, so wie sie in unserem Grundgesetz festgelegt ist. Wie zufrieden sind Sie mit dieser Demokratie?",
+        scale: ["Sehr zufrieden", "Zufrieden", "Eher zufrieden", "Eher unzufrieden", "Unzufrieden", "Sehr unzufrieden"]
+      },
+      "Demokratie in der Praxis": {
+        varName: "G4Q00022",
+        base: 44, dist: [8, 36, 34, 22],
+        fragewortlaut: "Nun geht es um die Demokratie, wie sie tatsächlich in Deutschland funktioniert. Wie zufrieden sind Sie mit dieser Demokratie?",
+        scale: ["Sehr zufrieden", "Zufrieden", "Eher zufrieden", "Eher unzufrieden", "Unzufrieden", "Sehr unzufrieden"]
+      },
+      "Politisches Interesse allgemein": {
+        varName: "G3Q00001",
+        base: 58, dist: [16, 42, 27, 15],
+        fragewortlaut: "Zunächst einmal ganz allgemein: Wie stark interessieren Sie sich für Politik?",
+        scale: ["Sehr stark", "Stark", "Eher stark", "Eher schwach", "Schwach", "Überhaupt nicht"]
+      },
+      "Politisches Interesse Hessen": {
+        varName: "G3Q00002_SQ003",
+        base: 55, dist: [13, 42, 29, 16],
+        fragewortlaut: "Und wie sehr interessieren Sie sich für die Politik in Hessen?",
+        scale: ["Sehr stark", "Stark", "Eher stark", "Eher schwach", "Schwach", "Überhaupt nicht"]
+      },
+      "Politische Selbstwirksamkeit": {
+        varName: "G4Q00018_SQ002",
+        base: 52, dist: [11, 41, 31, 17],
+        fragewortlaut: "Inwieweit stimmen Sie zu: Wichtige politische Fragen kann ich gut verstehen und einschätzen.",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+    }
   },
-  party: {
-    labels: ['CDU','SPD','Grüne','AfD','FDP','Linke','Sonstige'],
-    values: [29, 18, 14, 16, 6, 4, 13],
-    colors: ['#333','#e3000f','#64a12d','#009ee0','#ffed00','#be3075','#aaa']
+
+  "Institutionenvertrauen": {
+    subgroups: true,
+    themen: {
+      "Vertrauen: Politische Parteien": {
+        varName: "G3Q00005_SQ002",
+        base: 28, dist: [5, 23, 38, 34],
+        fragewortlaut: "Wie groß ist das Vertrauen, das Sie den folgenden Einrichtungen entgegenbringen? Den politischen Parteien im Allgemeinen.",
+        scale: ["Sehr großes Vertrauen", "Großes Vertrauen", "Eher großes Vertrauen", "Eher wenig Vertrauen", "Wenig Vertrauen", "Kein Vertrauen"]
+      },
+      "Vertrauen: Bundestag": {
+        varName: "G3Q00005_SQ004",
+        base: 38, dist: [8, 30, 36, 26],
+        fragewortlaut: "Wie groß ist das Vertrauen, das Sie dem deutschen Bundestag entgegenbringen?",
+        scale: ["Sehr großes Vertrauen", "Großes Vertrauen", "Eher großes Vertrauen", "Eher wenig Vertrauen", "Wenig Vertrauen", "Kein Vertrauen"]
+      },
+      "Vertrauen: Hessische Landesregierung": {
+        varName: "G3Q00005_SQ005",
+        base: 42, dist: [9, 33, 35, 23],
+        fragewortlaut: "Wie groß ist das Vertrauen, das Sie der hessischen Landesregierung entgegenbringen?",
+        scale: ["Sehr großes Vertrauen", "Großes Vertrauen", "Eher großes Vertrauen", "Eher wenig Vertrauen", "Wenig Vertrauen", "Kein Vertrauen"]
+      },
+      "Vertrauen: Gerichte": {
+        varName: "G3Q00005_SQ006",
+        base: 61, dist: [14, 47, 26, 13],
+        fragewortlaut: "Wie groß ist das Vertrauen, das Sie den Gerichten und der Justiz entgegenbringen?",
+        scale: ["Sehr großes Vertrauen", "Großes Vertrauen", "Eher großes Vertrauen", "Eher wenig Vertrauen", "Wenig Vertrauen", "Kein Vertrauen"]
+      },
+      "Vertrauen: Polizei": {
+        varName: "G3Q00005_SQ007",
+        base: 66, dist: [20, 46, 22, 12],
+        fragewortlaut: "Wie groß ist das Vertrauen, das Sie der Polizei entgegenbringen?",
+        scale: ["Sehr großes Vertrauen", "Großes Vertrauen", "Eher großes Vertrauen", "Eher wenig Vertrauen", "Wenig Vertrauen", "Kein Vertrauen"]
+      },
+      "Vertrauen: Medien": {
+        varName: "G3Q00005_SQ008",
+        base: 44, dist: [9, 35, 34, 22],
+        fragewortlaut: "Wie groß ist das Vertrauen, das Sie den Medien (Presse, Rundfunk) entgegenbringen?",
+        scale: ["Sehr großes Vertrauen", "Großes Vertrauen", "Eher großes Vertrauen", "Eher wenig Vertrauen", "Wenig Vertrauen", "Kein Vertrauen"]
+      },
+    }
   },
-  sat: {
-    labels: ['Sehr zufrieden','Zufrieden','Weniger zufrieden','Unzufrieden'],
-    maenner: [22, 45, 24, 9],
-    frauen:  [19, 48, 22, 11],
+
+  "Gesellschaft & Werte": {
+    subgroups: true,
+    themen: {
+      "Meinungsfreiheit (Wichtigkeit)": {
+        varName: "G3Q00003_SQ003",
+        base: 88, dist: [52, 36, 8, 4],
+        fragewortlaut: "Über verschiedene Aspekte des Zusammenlebens kann man unterschiedlicher Meinung sein. Wie wichtig ist es für Sie, dass jeder seine Meinung frei äußern kann?",
+        scale: ["Sehr wichtig", "Wichtig", "Eher wichtig", "Eher unwichtig", "Unwichtig", "Überhaupt nicht wichtig"]
+      },
+      "Pressefreiheit (Wichtigkeit)": {
+        varName: "G3Q00003_SQ004",
+        base: 84, dist: [46, 38, 10, 6],
+        fragewortlaut: "Wie wichtig ist es für Sie, dass die Freiheit der Presse gewährleistet ist?",
+        scale: ["Sehr wichtig", "Wichtig", "Eher wichtig", "Eher unwichtig", "Unwichtig", "Überhaupt nicht wichtig"]
+      },
+      "Meinungsfreiheit (Realität)": {
+        varName: "G3Q00004_SQ003",
+        base: 62, dist: [16, 46, 26, 12],
+        fragewortlaut: "Inwiefern sehen Sie es in Deutschland aktuell als erfüllt an, dass jeder seine Meinung frei äußern kann?",
+        scale: ["Vollständig erfüllt", "Überwiegend erfüllt", "Eher erfüllt", "Eher nicht erfüllt", "Kaum erfüllt", "Gar nicht erfüllt"]
+      },
+      "Pressefreiheit (Realität)": {
+        varName: "G3Q00004_SQ004",
+        base: 66, dist: [18, 48, 22, 12],
+        fragewortlaut: "Inwiefern sehen Sie es in Deutschland aktuell als erfüllt an, dass die Freiheit der Presse gewährleistet ist?",
+        scale: ["Vollständig erfüllt", "Überwiegend erfüllt", "Eher erfüllt", "Eher nicht erfüllt", "Kaum erfüllt", "Gar nicht erfüllt"]
+      },
+      "Volkwille vs. Abgeordnete": {
+        varName: "G6Q00001_SQ001",
+        base: 58, dist: [18, 40, 28, 14],
+        fragewortlaut: "Bitte geben Sie an, inwieweit Sie zustimmen oder ablehnen: Die Abgeordneten im deutschen Bundestag sollten ausschließlich dem Willen des Volkes verpflichtet sein.",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+      "Demokratie passt zu Gesellschaft": {
+        varName: "G6Q00002_SQ007",
+        base: 69, dist: [24, 45, 20, 11],
+        fragewortlaut: "Bitte geben Sie zu folgenden Aussagen Ihre Meinung an: Die Demokratie ist das politische System, das am besten zu unserer Gesellschaft passt.",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+    }
   },
-  likert: [
-    { topic: 'Demokratie allgemein',        pct: 52, trend: 'down' },
-    { topic: 'Wirtschaftliche Lage',         pct: 38, trend: 'up'   },
-    { topic: 'Soziale Gerechtigkeit',        pct: 44, trend: 'flat' },
-    { topic: 'Bildungssystem',               pct: 61, trend: 'up'   },
-    { topic: 'Gesundheitsversorgung',        pct: 57, trend: 'flat' },
-    { topic: 'Öffentliche Sicherheit',       pct: 49, trend: 'down' },
-    { topic: 'Klimaschutzmaßnahmen (Land)',  pct: 55, trend: 'up'   },
-  ]
+
+  "Resilienz & Krisen": {
+    subgroups: false,
+    themen: {
+      "Krisenwahrscheinlichkeit Hessen": {
+        varName: "G7Q00001",
+        base: 52, dist: [12, 40, 30, 18],
+        fragewortlaut: "Für wie wahrscheinlich halten Sie es, dass Hessen in den nächsten Jahren von größeren Krisen betroffen sein wird?",
+        scale: ["Sehr wahrscheinlich", "Wahrscheinlich", "Eher wahrscheinlich", "Eher unwahrscheinlich", "Unwahrscheinlich", "Sehr unwahrscheinlich"]
+      },
+      "Vertrauen in lokale Behörden": {
+        varName: "G7Q00005_SQ001",
+        base: 54, dist: [11, 43, 30, 16],
+        fragewortlaut: "Die lokalen Behörden (Verwaltung, Feuerwehr u. a.) sind im Krisenfall in der Lage, angemessen zu reagieren.",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+      "Persönliche Krisenvorsorge": {
+        varName: "G7Q00005_SQ002",
+        base: 38, dist: [8, 30, 34, 28],
+        fragewortlaut: "Ich bin für den Krisenfall ausreichend vorbereitet (z. B. Nahrungsmittelvorräte, Trinkwasser, Medikamente).",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+      "Information durch staatliche Stellen": {
+        varName: "G7Q00006",
+        base: 42, dist: [9, 33, 34, 24],
+        fragewortlaut: "Wie gut fühlen Sie sich durch staatliche Stellen über Maßnahmen zur allgemeinen Krisenvorsorge informiert?",
+        scale: ["Sehr gut", "Gut", "Eher gut", "Eher schlecht", "Schlecht", "Sehr schlecht"]
+      },
+      "Krisenbereitschaft Hessens": {
+        varName: "G7Q00007",
+        base: 39, dist: [7, 32, 37, 24],
+        fragewortlaut: "Wie gut glauben Sie, dass Hessen auf zukünftige Krisen (z. B. Klima, Energie, Sicherheit) vorbereitet ist?",
+        scale: ["Sehr gut", "Gut", "Eher gut", "Eher schlecht", "Schlecht", "Sehr schlecht"]
+      },
+    }
+  },
+
 };
 
-// Jitter data slightly based on filters for demo effect
-function jitter(val, seed) {
-  const r = Math.sin(seed * 9301 + 49297) * 233280;
-  return Math.max(5, Math.min(95, Math.round(val + (r % 1) * 10 - 5)));
-}
+// Default dist labels (shown in chart legend) — generic positive→negative
+const DIST_LABELS = ['Positiv / Zustimmung', 'Eher positiv', 'Eher negativ', 'Negativ / Ablehnung'];
+const DIST_COLORS = ['#1e3a5f', '#7aafd4', '#f4a9a8', '#c0392b'];
+const FONT = { family: 'DM Sans', size: 11 };
+const GRID_CLR = 'rgba(0,0,0,0.05)';
 
-let activeAge = 'all';
 let charts = {};
 
-// ── CHARTS ──────────────────────────────────────────────────────────────────
-
-const GRID_COLOR = 'rgba(0,0,0,0.05)';
-const FONT = { family: 'DM Sans', size: 11 };
-
-function baseOpts() {
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+function gruppeAvg(name) {
+  const vals = Object.values(GRUPPEN[name].themen);
   return {
-    responsive: true,
-    plugins: { legend: { labels: { font: FONT, boxWidth: 12, padding: 12 } }, tooltip: { titleFont: FONT, bodyFont: FONT } },
-    scales: {
-      x: { grid: { color: GRID_COLOR }, ticks: { font: FONT } },
-      y: { grid: { color: GRID_COLOR }, ticks: { font: FONT } }
-    }
+    base: Math.round(vals.reduce((s, t) => s + t.base, 0) / vals.length),
+    dist: [0,1,2,3].map(i => Math.round(vals.reduce((s, t) => s + t.dist[i], 0) / vals.length)),
   };
 }
 
-function initCharts() {
-  // Trend
-  charts.trend = new Chart(document.getElementById('chart-trend'), {
-    type: 'line',
-    data: {
-      labels: DATA.trend.labels,
-      datasets: [
-        { label: 'Demokratiezufriedenheit', data: [...DATA.trend.demokratie], borderColor: '#c0392b', backgroundColor: 'rgba(192,57,43,0.08)', tension: 0.4, pointRadius: 4, fill: true },
-        { label: 'Wirtschaftsoptimismus',   data: [...DATA.trend.wirtschaft],  borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.06)', tension: 0.4, pointRadius: 4, fill: true },
-        { label: 'Institutionenvertrauen',  data: [...DATA.trend.vertrauen],   borderColor: '#d4a843', backgroundColor: 'rgba(212,168,67,0.06)', tension: 0.4, pointRadius: 4, fill: true },
-      ]
-    },
-    options: { ...baseOpts(), plugins: { ...baseOpts().plugins } }
-  });
-
-  // Age
-  charts.age = new Chart(document.getElementById('chart-age'), {
-    type: 'bar',
-    data: {
-      labels: DATA.age.labels,
-      datasets: [{ label: 'Zustimmung %', data: [...DATA.age.values], backgroundColor: ['#c0392b','#2563eb','#d4a843','#16a34a'], borderRadius: 2 }]
-    },
-    options: { ...baseOpts(), plugins: { legend: { display: false } }, scales: { y: { min: 0, max: 100, grid: { color: GRID_COLOR }, ticks: { font: FONT } }, x: { grid: { display: false }, ticks: { font: FONT } } } }
-  });
-
-  // Region donut
-  charts.region = new Chart(document.getElementById('chart-region'), {
-    type: 'doughnut',
-    data: {
-      labels: DATA.region.labels,
-      datasets: [{ data: [...DATA.region.values], backgroundColor: DATA.region.colors, borderWidth: 0, hoverOffset: 6 }]
-    },
-    options: { responsive: true, cutout: '62%', plugins: { legend: { position: 'bottom', labels: { font: FONT, boxWidth: 10, padding: 8 } } } }
-  });
-
-  // Party
-  charts.party = new Chart(document.getElementById('chart-party'), {
-    type: 'bar',
-    data: {
-      labels: DATA.party.labels,
-      datasets: [{ label: 'Zweitstimme %', data: [...DATA.party.values], backgroundColor: DATA.party.colors, borderRadius: 2 }]
-    },
-    options: { ...baseOpts(), indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { min: 0, max: 40, grid: { color: GRID_COLOR }, ticks: { font: FONT } }, y: { grid: { display: false }, ticks: { font: FONT } } } }
-  });
-
-  // Satisfaction grouped
-  charts.sat = new Chart(document.getElementById('chart-sat'), {
-    type: 'bar',
-    data: {
-      labels: DATA.sat.labels,
-      datasets: [
-        { label: 'Männer', data: [...DATA.sat.maenner], backgroundColor: 'rgba(37,99,235,0.7)', borderRadius: 2 },
-        { label: 'Frauen', data: [...DATA.sat.frauen],  backgroundColor: 'rgba(192,57,43,0.7)', borderRadius: 2 },
-      ]
-    },
-    options: { ...baseOpts(), scales: { y: { min: 0, max: 60, grid: { color: GRID_COLOR }, ticks: { font: FONT } }, x: { grid: { display: false }, ticks: { font: FONT, maxRotation: 0 } } } }
-  });
-
-  renderLikert(DATA.likert);
+function getThemaData(gruppeName, themaName) {
+  const g = GRUPPEN[gruppeName];
+  if (!g.subgroups || !themaName || themaName === '__avg__') return gruppeAvg(gruppeName);
+  return g.themen[themaName];
 }
 
-// ── LIKERT TABLE ─────────────────────────────────────────────────────────────
+function barColor(v) {
+  return v >= 55 ? "#1e3a5f" : v >= 40 ? "#2e6da4" : "#c0392b";
+}
 
-function renderLikert(rows) {
-  const tbody = document.querySelector('#likert-table tbody');
-  tbody.innerHTML = rows.map(r => {
-    const icon = r.trend === 'up' ? '<span class="trend-up">↑</span>' : r.trend === 'down' ? '<span class="trend-down">↓</span>' : '<span class="trend-flat">→</span>';
-    const color = r.pct >= 55 ? '#16a34a' : r.pct >= 40 ? '#d4a843' : '#c0392b';
-    return `<tr>
-      <td>${r.topic}</td>
-      <td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:${r.pct}%;background:${color}"></div></div></td>
-      <td class="val">${r.pct} %</td>
-      <td>${icon}</td>
+// Streuung: measures polarisation of answer distribution.
+// Uses normalised entropy — max (1.0) when all 4 options equally chosen (25% each),
+// min (0.0) when all answers fall on one option.
+// Returns a 0–4 integer score for display as filled dots.
+function streuung(dist) {
+  const total = dist.reduce((s, v) => s + v, 0);
+  if (total === 0) return 0;
+  let entropy = 0;
+  dist.forEach(v => {
+    const p = v / total;
+    if (p > 0) entropy -= p * Math.log2(p);
+  });
+  const maxEntropy = Math.log2(dist.length); // = 2 for 4 options
+  const norm = entropy / maxEntropy;         // 0..1
+  return Math.round(norm * 4);              // 0..4 dots
+}
+
+function streuungLabel(score) {
+  if (score <= 1) return 'gering';
+  if (score === 2) return 'mittel';
+  if (score === 3) return 'hoch';
+  return 'sehr hoch';
+}
+
+function streuungHTML(dist) {
+  const score = streuung(dist);
+  const lbl   = streuungLabel(score);
+  const dots  = [1,2,3,4].map(i =>
+    `<span class="streuung-dot${i <= score ? ' filled' : ''}"></span>`
+  ).join('');
+  return `<div class="streuung" title="Streuung: ${lbl}">${dots}<span class="streuung-lbl">${lbl}</span></div>`;
+}
+
+function renderTable(tableId, gruppeName, activeThema) {
+  const tbody = document.querySelector(`#${tableId} tbody`);
+  tbody.innerHTML = Object.entries(GRUPPEN[gruppeName].themen).map(([name, d]) => {
+    const isActive = name === activeThema;
+    const color = barColor(d.base);
+    return `<tr class="${isActive ? 'active' : ''}">
+      <td>${isActive ? '<strong>' + name + '</strong>' : name}</td>
+      <td class="bar-w"><div class="bar-bg"><div class="bar-fill" style="width:${d.base}%;background:${color}"></div></div></td>
+      <td class="mono">${d.base} %</td>
+      <td>${streuungHTML(d.dist)}</td>
     </tr>`;
   }).join('');
 }
 
-// ── UPDATE ───────────────────────────────────────────────────────────────────
-
-function update() {
-  const wave   = document.getElementById('sel-wave').value;
-  const region = document.getElementById('sel-region').value;
-  const seed   = (wave === 'all' ? 0 : parseInt(wave)) + (region === 'all' ? 0 : region.length) + (activeAge === 'all' ? 0 : activeAge.length);
-
-  // KPIs
-  const n    = wave === 'all' ? 3842 : jitter(820, seed) * 4;
-  const rr   = jitter(67, seed + 1);
-  const dem  = jitter(52, seed + 2);
-  const wirt = jitter(38, seed + 3);
-  document.getElementById('kpi-n').textContent    = n.toLocaleString('de-DE');
-  document.getElementById('kpi-rr').textContent   = rr + ' %';
-  document.getElementById('kpi-dem').textContent  = dem + ' %';
-  document.getElementById('kpi-wirt').textContent = wirt + ' %';
-
-  // Trend chart
-  charts.trend.data.datasets[0].data = DATA.trend.demokratie.map((v,i) => jitter(v, seed+i));
-  charts.trend.data.datasets[1].data = DATA.trend.wirtschaft.map((v,i)  => jitter(v, seed+i+7));
-  charts.trend.data.datasets[2].data = DATA.trend.vertrauen.map((v,i)   => jitter(v, seed+i+14));
-  charts.trend.update();
-
-  // Age chart
-  charts.age.data.datasets[0].data = DATA.age.values.map((v,i) => jitter(v, seed+i+21));
-  charts.age.update();
-
-  // Region donut
-  charts.region.data.datasets[0].data = DATA.region.values.map((v,i) => jitter(v, seed+i+28));
-  charts.region.update();
-
-  // Party
-  charts.party.data.datasets[0].data = DATA.party.values.map((v,i) => jitter(v, seed+i+35));
-  charts.party.update();
-
-  // Sat
-  charts.sat.data.datasets[0].data = DATA.sat.maenner.map((v,i) => jitter(v, seed+i+42));
-  charts.sat.data.datasets[1].data = DATA.sat.frauen.map((v,i)   => jitter(v, seed+i+49));
-  charts.sat.update();
-
-  // Likert
-  renderLikert(DATA.likert.map((r,i) => ({ ...r, pct: jitter(r.pct, seed+i+56) })));
-
-  // Footer
-  const waveLabel   = wave   === 'all' ? 'Alle Wellen' : 'Welle ' + wave;
-  const regionLabel = region === 'all' ? 'Alle Regionen' : region.charAt(0).toUpperCase() + region.slice(1);
-  const ageLabel    = activeAge === 'all' ? 'Alle Altersgruppen' : activeAge + ' Jahre';
-  document.getElementById('footer-filter').textContent = `Filter: ${waveLabel} · ${regionLabel} · ${ageLabel}`;
+// ── POPULATE SELECTS ─────────────────────────────────────────────────────────
+function fillThemaSelect(selId, gruppeName, includeAvg) {
+  const sel = document.getElementById(selId);
+  const prev = sel.value;
+  sel.innerHTML = '';
+  if (includeAvg) {
+    const o = document.createElement('option');
+    o.value = '__avg__'; o.textContent = `Ø Alle Themen (${gruppeName})`;
+    sel.appendChild(o);
+  }
+  Object.keys(GRUPPEN[gruppeName].themen).forEach(t => {
+    const o = document.createElement('option');
+    o.value = t; o.textContent = t;
+    sel.appendChild(o);
+  });
+  // Restore previous value if still valid
+  if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
 }
 
-function toggleAge(el) {
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  activeAge = el.dataset.age;
-  update();
+function initSelects() {
+  // Themengruppe
+  const gSel = document.getElementById('sel-gruppe');
+  Object.keys(GRUPPEN).forEach(g => {
+    const o = document.createElement('option'); o.value = g; o.textContent = g; gSel.appendChild(o);
+  });
+
+  // Vergleichsgruppe — first option is "none"
+  const vSel = document.getElementById('sel-vgl');
+  const none = document.createElement('option'); none.value = '__none__'; none.textContent = '— kein Vergleich —'; vSel.appendChild(none);
+  Object.keys(GRUPPEN).forEach(g => {
+    const o = document.createElement('option'); o.value = g; o.textContent = g; vSel.appendChild(o);
+  });
+  vSel.selectedIndex = 0; // default: no comparison
+
+  onGruppeChange();
 }
 
-// ── INIT ─────────────────────────────────────────────────────────────────────
-initCharts();
+function onGruppeChange() {
+  const gruppe = document.getElementById('sel-gruppe').value;
+  const info   = GRUPPEN[gruppe];
+
+  const wrapThema = document.getElementById('wrap-thema');
+  if (info.subgroups) {
+    wrapThema.style.display = 'flex';
+    fillThemaSelect('sel-thema', gruppe, false);
+  } else {
+    wrapThema.style.display = 'none';
+  }
+  onVglChange();
+}
+
+function onVglChange() {
+  const vgl     = document.getElementById('sel-vgl').value;
+  const wrapVT  = document.getElementById('wrap-vgl-thema');
+
+  if (vgl === '__none__') {
+    wrapVT.style.display = 'none';
+  } else {
+    const vglInfo = GRUPPEN[vgl];
+    if (vglInfo.subgroups) {
+      wrapVT.style.display = 'flex';
+      fillThemaSelect('sel-vgl-thema', vgl, true);
+    } else {
+      wrapVT.style.display = 'none';
+    }
+  }
+  render();
+}
+
+// ── MAIN RENDER ──────────────────────────────────────────────────────────────
+function render() {
+  const gruppe   = document.getElementById('sel-gruppe').value;
+  const thema    = GRUPPEN[gruppe].subgroups ? document.getElementById('sel-thema').value : null;
+  const vgl      = document.getElementById('sel-vgl').value;
+  const hasVgl   = vgl !== '__none__';
+  const vglThema = hasVgl && GRUPPEN[vgl].subgroups
+    ? document.getElementById('sel-vgl-thema').value : null;
+
+  const selData  = getThemaData(gruppe, thema);
+  const vglData  = hasVgl ? getThemaData(vgl, vglThema) : null;
+  const selLabel = thema && thema !== '__avg__' ? thema : gruppe;
+  const vglLabel = hasVgl ? (vglThema && vglThema !== '__avg__' ? vglThema : vgl) : null;
+
+  // ── FRAGEWORTLAUT
+  const selFrage = selData.fragewortlaut || '(Kein Fragewortlaut für Gruppenebene verfügbar)';
+  document.getElementById('frage-sel-lbl').textContent  = `Fragewortlaut — ${selLabel}`;
+  document.getElementById('frage-sel-text').textContent = `„${selFrage}"`;
+  const frageVglBlock = document.getElementById('frage-vgl-block');
+  if (hasVgl) {
+    frageVglBlock.style.display = 'flex';
+    const vglFrage = vglData.fragewortlaut || '(Kein Fragewortlaut für Gruppenebene verfügbar)';
+    document.getElementById('frage-vgl-lbl').textContent  = `Fragewortlaut — ${vglLabel}`;
+    document.getElementById('frage-vgl-text').textContent = `„${vglFrage}"`;
+    document.getElementById('frage-panel').style.setProperty('--frage-cols', '1fr 1fr');
+  } else {
+    frageVglBlock.style.display = 'none';
+    document.getElementById('frage-panel').style.setProperty('--frage-cols', '1fr');
+  }
+
+  // ── BREADCRUMB
+  let bc = `<strong>${gruppe}</strong>`;
+  if (thema && thema !== '__avg__') bc += ` <span class="bc-arrow">›</span> <strong>${thema}</strong>`;
+  if (hasVgl) {
+    bc += ` <span class="bc-arrow">vs.</span> <strong>${vgl}</strong>`;
+    if (vglThema && vglThema !== '__avg__') bc += ` <span class="bc-arrow">›</span> <strong>${vglThema}</strong>`;
+  }
+  document.getElementById('bc').innerHTML = bc;
+
+  // ── KPIs
+  document.getElementById('kpi-sel').textContent     = selData.base + ' %';
+  document.getElementById('kpi-sel-lbl').textContent = selLabel;
+  const kpiVglRow = document.getElementById('kpi-vgl-cell');
+  const kpiDiffRow = document.getElementById('kpi-diff-cell');
+  if (hasVgl) {
+    kpiVglRow.style.display  = '';
+    kpiDiffRow.style.display = '';
+    document.getElementById('kpi-vgl').textContent     = vglData.base + ' %';
+    document.getElementById('kpi-vgl-lbl').textContent = vglLabel;
+    const diff = selData.base - vglData.base;
+    const diffEl = document.getElementById('kpi-diff');
+    diffEl.textContent = (diff >= 0 ? '+' : '') + diff + ' Pkt.';
+    diffEl.className   = 'kpi-val ' + (diff > 0 ? 'c-g' : diff < 0 ? 'c-r' : 'c-b');
+    document.getElementById('kpi-diff-lbl').textContent = selLabel + ' ggü. ' + vglLabel;
+  } else {
+    kpiVglRow.style.display  = 'none';
+    kpiDiffRow.style.display = 'none';
+  }
+
+  // ── BAR CHART
+  document.getElementById('bar-title').textContent = hasVgl ? 'Zustimmungsrate im Vergleich' : 'Zustimmungsrate';
+  document.getElementById('bar-sub').textContent   = hasVgl ? selLabel + ' vs. ' + vglLabel : selLabel;
+  const barLabels = hasVgl ? [selLabel, vglLabel] : [selLabel];
+  const barData   = hasVgl ? [selData.base, vglData.base] : [selData.base];
+  const barColors = barData.map(v => barColor(v));
+
+  if (charts.bar) charts.bar.destroy();
+  charts.bar = new Chart(document.getElementById('chart-bar'), {
+    type: 'bar',
+    data: {
+      labels: barLabels,
+      datasets: [{ data: barData, backgroundColor: barColors, borderRadius: 3 }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y} %` } }
+      },
+      scales: {
+        y: { min: 0, max: 100, grid: { color: GRID_CLR }, ticks: { font: FONT, callback: v => v + '%' } },
+        x: { grid: { display: false }, ticks: { font: FONT } }
+      }
+    }
+  });
+
+  // ── DIST CHART
+  document.getElementById('dist-sub').textContent = hasVgl ? selLabel + ' vs. ' + vglLabel : selLabel;
+  const distLabels  = hasVgl ? [selLabel, vglLabel] : [selLabel];
+  // Use actual scale labels from the selected Thema (first 4 items), fall back to generic
+  const selScale = (selData.scale && selData.scale.length >= 4) ? selData.scale.slice(0, 4) : DIST_LABELS;
+  if (charts.dist) charts.dist.destroy();
+  charts.dist = new Chart(document.getElementById('chart-dist'), {
+    type: 'bar',
+    data: {
+      labels: distLabels,
+      datasets: selScale.map((lbl, i) => ({
+        label: lbl,
+        data: hasVgl ? [selData.dist[i], vglData.dist[i]] : [selData.dist[i]],
+        backgroundColor: DIST_COLORS[i],
+        borderRadius: 2,
+      }))
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: FONT, boxWidth: 11, padding: 10 } },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y} %` } }
+      },
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { font: FONT } },
+        y: { stacked: true, max: 100, grid: { color: GRID_CLR }, ticks: { font: FONT, callback: v => v + '%' } }
+      }
+    }
+  });
+
+  // ── TABLES
+  document.getElementById('tbl-sel-title').textContent = `Themen — ${gruppe}`;
+  document.getElementById('tbl-sel-sub').textContent   = `Alle ${Object.keys(GRUPPEN[gruppe].themen).length} Themen`;
+  renderTable('tbl-sel', gruppe, thema);
+
+  const tblVglCard = document.getElementById('tbl-vgl-card');
+  if (hasVgl) {
+    tblVglCard.style.display = 'flex';
+    document.getElementById('tbl-vgl-title').textContent = `Themen — ${vgl}`;
+    document.getElementById('tbl-vgl-sub').textContent   = `Alle ${Object.keys(GRUPPEN[vgl].themen).length} Themen`;
+    renderTable('tbl-vgl', vgl, vglThema && vglThema !== '__avg__' ? vglThema : null);
+  } else {
+    tblVglCard.style.display = 'none';
+  }
+
+  // ── FOOTER
+  document.getElementById('footer-txt').textContent = hasVgl ? `${selLabel}  ↔  ${vglLabel}` : selLabel;
+}
+
+// ── START ─────────────────────────────────────────────────────────────────────
+initSelects();
 </script>
 </body>
 </html>
