@@ -1,0 +1,10 @@
+# Data scripts and raw survey data — not part of the public repo
+update_data.py
+redact_data.py
+data/
+
+# Bericht directory — Quarto source and rendered outputs, not part of the public repo
+bericht/
+
+# macOS metadata
+.DS_Store

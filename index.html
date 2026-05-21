@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hessenmonitor — Umfrageforschung</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink:    #1e3a5f;
+      --paper:  #f0f5fa;
+      --accent: #c0392b;
+      --gold:   #2e6da4;
+      --mid:    #4a6a8a;
+      --border: #ccdaea;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--paper); color: var(--ink);
+      font-family: 'DM Sans', sans-serif; font-weight: 300;
+      line-height: 1.7; overflow-x: hidden;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.4rem 3rem;
+      background: rgba(245,240,232,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); z-index: 100;
+    }
+    .nav-logo { text-decoration: none; display: flex; align-items: center; }
+    .nav-logo img { height: 120px; width: auto; display: block; }
+    nav ul { list-style: none; display: flex; gap: 2.5rem; }
+    nav ul a {
+      font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--mid); text-decoration: none; transition: color 0.2s;
+    }
+    nav ul a:hover { color: var(--accent); }
+
+    .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 5rem; }
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 6rem 4rem 6rem 5rem;
+    }
+    .eyebrow {
+      font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .eyebrow::before { content: ''; display: block; width: 2rem; height: 1px; background: var(--accent); }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 4vw, 4.2rem); line-height: 1.1;
+      font-weight: 700; margin-bottom: 1.5rem;
+    }
+    h1 em { font-style: italic; color: var(--accent); }
+    .hero-desc { font-size: 1.05rem; color: var(--mid); max-width: 38ch; margin-bottom: 3rem; line-height: 1.8; }
+    .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 2rem; font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem; font-weight: 500; letter-spacing: 0.06em;
+      text-transform: uppercase; text-decoration: none;
+      border: 1.5px solid var(--ink); cursor: pointer; transition: all 0.25s;
+    }
+    .btn-primary { background: var(--ink); color: var(--paper); }
+    .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+    .btn-secondary { background: transparent; color: var(--ink); }
+    .btn-secondary:hover { background: var(--ink); color: var(--paper); }
+
+    .hero-right { position: relative; overflow: hidden; background: white; border-left: 1px solid var(--border); }
+    .bg-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 40px 40px; opacity: 0.4;
+    }
+    .stat-cards {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; justify-content: center;
+      gap: 1.5rem; padding: 5rem 3.5rem; height: 100%;
+    }
+    .stat-card {
+      background: var(--paper); border: 1px solid var(--border);
+      padding: 1.5rem 2rem; width: 100%; max-width: 300px;
+      box-shadow: 4px 4px 0 var(--border); animation: rise 0.7s ease both;
+    }
+    .stat-card:nth-child(2) { animation-delay: 0.15s; margin-left: 2rem; }
+    .stat-card:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+    .stat-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.4rem; }
+    .stat-value { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700; line-height: 1; }
+    .stat-value sup { font-size: 1rem; color: var(--accent); }
+    .stat-sub { font-size: 0.78rem; color: var(--mid); margin-top: 0.4rem; }
+    .stat-themes { list-style: none; margin-top: 0.7rem; display: flex; flex-direction: column; gap: 0.25rem; }
+    .stat-themes li { font-size: 0.75rem; color: var(--mid); display: flex; align-items: center; gap: 0.4rem; }
+    .stat-themes li::before { content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+    hr { border: none; border-top: 1px solid var(--border); }
+
+    .about { display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; padding: 6rem 5rem; }
+    .section-tag { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 2.5vw, 2.6rem); line-height: 1.2; font-weight: 700; }
+    .about-body p { color: var(--mid); margin-bottom: 1.2rem; max-width: 60ch; }
+    .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem; }
+    .pillar { border-top: 2px solid var(--ink); padding-top: 1.2rem; }
+    .pillar-num { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--border); line-height: 1; margin-bottom: 0.5rem; }
+    .pillar h3 { font-size: 0.9rem; font-weight: 500; margin-bottom: 0.5rem; }
+    .pillar p { font-size: 0.82rem; color: var(--mid); line-height: 1.6; }
+
+    .dashboard-section { padding: 4rem 5rem 6rem; }
+    .section-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 2.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem;
+    }
+    .dashboard-frame { width: 100%; height: calc(100vh - 64px); min-height: 700px; border: 1px solid var(--border); box-shadow: 8px 8px 0 var(--border); }
+
+    /* ── CONTACT ── */
+    .contact-section {
+      padding: 6rem 5rem; background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 3rem; margin-top: 3rem;
+    }
+    .contact-block { display: flex; flex-direction: column; gap: 0.5rem; }
+    .contact-block-label {
+      font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.3rem;
+    }
+    .contact-block h3 { font-size: 0.95rem; font-weight: 500; color: var(--ink); }
+    .contact-block p, .contact-block a {
+      font-size: 0.83rem; color: var(--mid); line-height: 1.7;
+      text-decoration: none;
+    }
+    .contact-block a:hover { color: var(--accent); }
+
+    footer {
+      border-top: 1px solid var(--border); padding: 2rem 5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.78rem; color: var(--mid);
+    }
+    .footer-logo { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--ink); }
+
+    /* ── COLLAPSIBLES ── */
+    details { border: 1px solid var(--border); margin-bottom: 0.75rem; }
+    details summary {
+      padding: 0.9rem 1.2rem; cursor: pointer; font-weight: 500;
+      font-size: 0.9rem; list-style: none; display: flex;
+      justify-content: space-between; align-items: center; user-select: none;
+    }
+    details summary::after { content: '+'; color: var(--accent); font-size: 1.1rem; }
+    details[open] summary::after { content: '−'; }
+    details summary::-webkit-details-marker { display: none; }
+    .details-body { padding: 0.2rem 1.2rem 1rem; font-size: 0.88rem; color: var(--mid); line-height: 1.8; }
+    .details-body p { margin-bottom: 0.6rem; }
+    .details-body ul { padding-left: 1.4rem; }
+    .details-body li { margin-bottom: 0.3rem; }
+
+    /* ── BRIEF CALLOUT ── */
+    .brief-section { padding: 4rem 5rem; background: white; border-top: 1px solid var(--border); }
+    .brief-inner { max-width: 680px; }
+    .brief-intro { font-size: 0.95rem; color: var(--mid); margin-bottom: 1.5rem; line-height: 1.8; }
+
+    /* ── PARTNERS ── */
+    .partners-section { padding: 3rem 5rem; border-top: 1px solid var(--border); }
+    .partners-flex { display: flex; flex-wrap: wrap; gap: 2.5rem; margin-top: 2rem; align-items: center; }
+    .partner-logo { height: 44px; width: auto; object-fit: contain; opacity: 0.85; transition: opacity 0.2s; }
+    .partner-logo:hover { opacity: 1; }
+
+    /* ── INFO SECTION ── */
+    .info-section { padding: 4rem 5rem; border-top: 1px solid var(--border); }
+    .info-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2rem; }
+    @media (max-width: 900px) { .info-cols { grid-template-columns: 1fr; } }
+
+    @media (max-width: 900px) {
+      .contact-section { padding: 4rem 2rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    }
+
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      nav ul { gap: 1.2rem; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 6rem 2rem 4rem; }
+      .about { grid-template-columns: 1fr; padding: 4rem 2rem; gap: 2rem; }
+      .pillars { grid-template-columns: 1fr; }
+      .dashboard-section { padding: 3rem 1.5rem; }
+      footer { flex-direction: column; gap: 1rem; padding: 2rem 1.5rem; text-align: center; }
+    }
+
+    /* ── FINDINGS ── */
+    .findings-section { padding: 5rem 5rem 4rem; border-top: 1px solid var(--border); }
+    .findings-sub-heading { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:700; margin:3.5rem 0 1.5rem; color:var(--ink); }
+    .findings-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+    .finding-card {
+      border:1px solid var(--border); padding:1.8rem 1.6rem; text-decoration:none;
+      color:inherit; display:block; transition:box-shadow 0.2s,transform 0.2s; cursor:pointer;
+    }
+    .finding-card:hover { box-shadow:4px 4px 0 var(--border); transform:translateY(-2px); }
+    .finding-pct {
+      font-family:'Playfair Display',serif; font-size:3rem; font-weight:700; line-height:1;
+      color:var(--ink); margin-bottom:0.4rem;
+    }
+    .finding-unit { font-size:1.2rem; }
+    .finding-label { font-size:0.85rem; color:var(--mid); line-height:1.5; margin-bottom:1.2rem; min-height:2.8em; }
+    .finding-bar { height:3px; background:var(--border); margin-bottom:0.75rem; overflow:hidden; }
+    .finding-bar-fill { height:100%; background:var(--accent); transform-origin:left; transform:scaleX(0); transition:transform 0.9s ease 0.2s; }
+    .finding-card.bar-ready .finding-bar-fill { transform:scaleX(1); }
+    .finding-gruppe { font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); }
+
+    /* ── TOPIC GRID ── */
+    .topic-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; }
+    .topic-card {
+      border:1px solid var(--border); padding:1.4rem 1.6rem; text-decoration:none;
+      color:inherit; display:block; transition:box-shadow 0.2s,border-color 0.2s;
+    }
+    .topic-card:hover { box-shadow:4px 4px 0 var(--border); border-color:var(--ink); }
+    .topic-name { font-size:0.88rem; font-weight:500; color:var(--ink); margin-bottom:0.7rem; }
+    .topic-avg-row { display:flex; align-items:baseline; gap:0.3rem; margin-bottom:0.5rem; }
+    .topic-avg-val { font-family:'Playfair Display',serif; font-size:1.9rem; font-weight:700; line-height:1; }
+    .topic-avg-pct { font-size:0.8rem; color:var(--mid); }
+    .topic-track { height:3px; background:var(--border); overflow:hidden; }
+    .topic-fill { height:100%; background:var(--ink); transform-origin:left; transform:scaleX(0); transition:transform 0.9s ease 0.1s; }
+    .topic-card.bar-ready .topic-fill { transform:scaleX(1); }
+    .topic-n-themen { font-size:0.7rem; color:var(--mid); margin-top:0.4rem; }
+
+    @media(max-width:900px) {
+      .findings-section { padding:3rem 2rem; }
+      .findings-grid, .topic-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo"><img src="logos/hessenmonitor.svg" alt="Hessen-Monitor" /></a>
+  <ul>
+    <li><a href="#about">Über das Projekt</a></li>
+    <li><a href="#findings">Ergebnisse</a></li>
+    <li><a href="#brief">Brief erhalten?</a></li>
+    <li><a href="#dashboard">Explorationstool</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <p class="eyebrow">Gefördert vom HMWK · Hessen</p>
+    <h1>Demokratische <em>Zustände</em><br>in Hessen.</h1>
+    <p class="hero-desc">
+      Der Hessen-Monitor ist eine repräsentative Bevölkerungsbefragung in Hessen.
+      Als Piloterhebung für eine dauerhaft angelegte Studie untersucht er politische
+      Einstellungen, Lebenslagen und gesellschaftliche Haltungen —
+      wissenschaftlich fundiert und gefördert vom HMWK.
+    </p>
+    <div class="btn-group">
+      <a href="#dashboard" class="btn btn-primary">→ Zum Explorationstool</a>
+      <a href="#about" class="btn btn-secondary">Mehr erfahren</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="bg-grid"></div>
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-label">Befragte Personen</div>
+        <!-- STAT_N_START -->
+        <div class="stat-value stat-value-n">—</div>
+        <!-- STAT_N_END -->
+        <div class="stat-sub">Erhebungswelle 2026</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Eingeladen</div>
+        <div class="stat-value" data-target="25000">25.000</div>
+        <div class="stat-sub">Per Brief · Online-Befragung</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Themenfelder</div>
+        <ul class="stat-themes">
+          <li>Regionale Verbundenheit</li>
+          <li>Regionale Politikentfremdung</li>
+          <li>Wirtschaft &amp; Lebenslage</li>
+          <li>Demokratie &amp; Politik</li>
+          <li>Institutionenvertrauen</li>
+          <li>Gesellschaft &amp; Werte</li>
+          <li>Resilienz &amp; Krisen</li>
+          <li>Populismus</li>
+          <li>Politische Kommunikation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr />
+
+<section class="about" id="about">
+  <div class="fade-up">
+    <p class="section-tag">Das Projekt</p>
+    <h2>Über den Hessen-Monitor</h2>
+  </div>
+  <div class="about-body fade-up">
+    <p>
+      Der Hessen-Monitor ist eine repräsentative Umfrage der hessischen Bevölkerung
+      ab 18 Jahren. Rund 25.000 zufällig ausgewählte Personen wurden per Brief zur
+      Teilnahme eingeladen; Ergebnisse werden nach Abschluss der Auswertung veröffentlicht. Die Studie ist eine Piloterhebung für eine zukünftig dauerhaft
+      angelegte Bevölkerungsbefragung in Hessen, gefördert vom Hessischen Ministerium
+      für Wissenschaft und Kunst (HMWK).
+    </p>
+    <p>
+      Als zweite Komponente finden Gruppendiskussionen an den Partnerhochschulen
+      statt. Erste Ergebnisse werden ab Sommer 2026 veröffentlicht; ein vollständiger
+      Ergebnisbericht erscheint in Kürze, nachdem die Umfrage erfolgreich abgeschlossen wurde. Fragebögen und Rohdaten werden
+      über den GESIS-Datenkatalog öffentlich zugänglich gemacht.
+    </p>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-num">01</div>
+        <h3>Repräsentativität</h3>
+        <p>25.000 zufällig ausgewählte Personen eingeladen; gewichtete Stichprobe nach Alter, Geschlecht und Region für Hessen ab 18 Jahren.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02</div>
+        <h3>Offene Daten</h3>
+        <p>Fragebögen und Rohdaten werden nach Abschluss der Auswertung über den GESIS-Datenkatalog zugänglich gemacht.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03</div>
+        <h3>Ergebnisbericht</h3>
+        <p>Erste Ergebnisse ab Sommer 2026; ein vollständiger Ergebnisbericht erscheint in Kürze, nachdem die Umfrage erfolgreich abgeschlossen wurde.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="findings-section fade-up" id="findings">
+  <p class="section-tag">Ausgewählte Ergebnisse</p>
+  <h2 style="margin-bottom:0.5rem;">Was der Hessen-Monitor zeigt</h2>
+  <p style="font-size:0.88rem;color:var(--mid);margin-bottom:2.5rem;">Erste Ergebnisse der Piloterhebung 2026. Alle Werte sind Zustimmungsraten in Prozent.</p>
+  <div class="findings-grid" id="findings-grid"></div>
+  <h3 class="findings-sub-heading">Themenfelder im Überblick</h3>
+  <div class="topic-grid" id="topic-grid"></div>
+</section>
+
+<section class="brief-section fade-up" id="brief">
+  <div class="brief-inner">
+    <p class="section-tag">Teilnahme</p>
+    <h2 style="margin-bottom:1rem;">Ich habe einen Brief bekommen</h2>
+    <p class="brief-intro">
+      Haben Sie ein Einladungsschreiben für den Hessen-Monitor erhalten?
+      Die Teilnahme ist freiwillig und dauert ca. 30 Minuten. Sie finden
+      den Fragebogen unter dem im Brief angegebenen Link oder QR-Code.
+      Bei Fragen wenden Sie sich gerne an uns.
+    </p>
+    <details>
+      <summary>So nehmen Sie teil</summary>
+      <div class="details-body">
+        <ul>
+          <li>Halten Sie den persönlichen Zugangscode aus Ihrem Brief bereit.</li>
+          <li>Rufen Sie den im Brief genannten Link auf oder scannen Sie den individualisierten QR-Code.</li>
+          <li>Geben Sie Ihren Zugangscode ein und starten Sie die Befragung.</li>
+          <li>Die Befragung dauert ca. 30 Minuten und kann in einer Sitzung abgeschlossen werden.</li>
+          <li>Alle Antworten werden vollständig anonymisiert ausgewertet.</li>
+        </ul>
+      </div>
+    </details>
+    <details>
+      <summary>Warum wurde ich ausgewählt?</summary>
+      <div class="details-body">
+        <p>
+          Für den Hessen-Monitor wurden rund 25.000 Personen zufällig aus
+          Adressdatensätzen der Deutschen Post ausgewählt. Zufallsstichproben
+          sind die wissenschaftlich anerkannte Methode, um repräsentative Ergebnisse
+          für die Gesamtbevölkerung zu erzielen. Nur wenn möglichst viele der
+          eingeladenen Personen teilnehmen, können verlässliche Aussagen über
+          die hessische Bevölkerung getroffen werden.
+        </p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<hr />
+
+<section class="dashboard-section" id="dashboard">
+  <div class="section-header fade-up">
+    <div>
+      <p class="section-tag">Interaktive Auswertung</p>
+      <h2>Umfrage Explorationstool</h2>
+    </div>
+    <a href="dashboard/index.html" class="btn btn-secondary" target="_blank">Vollbild ↗</a>
+  </div>
+  <iframe
+    class="dashboard-frame fade-up"
+    src="dashboard/index.html"
+    title="Hessenmonitor Umfrage Explorationstool"
+    loading="lazy"
+    frameborder="0">
+  </iframe>
+</section>
+
+<section class="partners-section fade-up">
+  <p class="section-tag">Konsortium</p>
+  <h2 style="margin-bottom:0.25rem;">Partnerhochschulen</h2>
+  <div class="partners-flex">
+    <img src="logos/marburg.png"     alt="Philipps-Universität Marburg"   class="partner-logo" style="height:60px;" />
+    <img src="logos/tu-darmstadt.svg" alt="TU Darmstadt"                  class="partner-logo" />
+    <img src="logos/giessen.svg"     alt="Justus-Liebig-Universität Gießen" class="partner-logo" />
+    <img src="logos/frankfurt.svg"   alt="Goethe-Universität Frankfurt"   class="partner-logo" />
+    <img src="logos/fulda.svg"       alt="Hochschule Fulda"               class="partner-logo" />
+  </div>
+</section>
+
+<section class="info-section fade-up">
+  <p class="section-tag">Weitere Informationen</p>
+  <div class="info-cols">
+    <div>
+      <h3 style="font-size:1rem;font-weight:500;margin-bottom:1rem;">Datenschutz</h3>
+      <details>
+        <summary>Datenschutzhinweise</summary>
+        <div class="details-body">
+          <p>
+            Die Teilnahme an der Befragung ist freiwillig. Für die Durchführung
+            der Erhebung wurden individualisierte QR-Codes eingesetzt, die eine
+            postalische Zuordnung der Einladungen ermöglichen. Ausgewertet werden
+            ausschließlich aggregierte Daten – eine Rückidentifizierung einzelner
+            Personen aus den Forschungsdaten ist nicht möglich. Die personalisierten
+            Kontaktdaten (Adresse und QR-Code-Zuordnung) werden nach Projektende
+            gelöscht.
+          </p>
+          <p>
+            Die anonymisierten Forschungsdaten werden nach Abschluss der Auswertung
+            im GESIS-Datenkatalog für die wissenschaftliche Nachnutzung bereitgestellt.
+            Die Verarbeitung erfolgt gemäß DSGVO und den geltenden Datenschutzgesetzen.
+          </p>
+        </div>
+      </details>
+    </div>
+    <div>
+      <h3 style="font-size:1rem;font-weight:500;margin-bottom:1rem;">Organisatorische Angaben</h3>
+      <details>
+        <summary>Förderung &amp; Projektlaufzeit</summary>
+        <div class="details-body">
+          <ul>
+            <li><strong>Förderer:</strong> Hessisches Ministerium für Wissenschaft und Kunst (HMWK)</li>
+            <li><strong>Laufzeit:</strong> 01.06.2025 – 30.04.2027</li>
+            <li><strong>Fördervolumen:</strong> 277.256 €</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="contact-section" id="contact">
+  <div class="fade-up">
+    <p class="section-tag">Kontakt</p>
+    <h2>Projektteam</h2>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-block fade-up">
+      <span class="contact-block-label">Sprecher</span>
+      <h3>Prof. Dr. Isabelle Borucki</h3>
+      <p style="font-size:0.78rem;">Philipps-Universität Marburg</p>
+      <h3 style="margin-top:0.75rem;">Prof. Dr. Christian Stecker</h3>
+      <p style="font-size:0.78rem;">TU Darmstadt</p>
+      <a href="mailto:hhessenmonitor@uni-marburg.de" style="margin-top:0.75rem;display:inline-block;">hessenmonitor@uni-marburg.de</a>
+    </div>
+    <div class="contact-block fade-up">
+      <span class="contact-block-label">Konsortium</span>
+      <p>Prof. Dr. Simone Abendschön<br><span style="font-size:0.78rem;">Justus-Liebig-Universität Gießen</span></p>
+      <p style="margin-top:0.5rem;">Prof. Dr. Michèle Knodt<br><span style="font-size:0.78rem;">TU Darmstadt</span></p>
+      <p style="margin-top:0.5rem;">Prof. Dr. Sigrid Roßteutscher<br><span style="font-size:0.78rem;">Goethe-Universität Frankfurt</span></p>
+      <p style="margin-top:0.5rem;">Prof. Dr. Claudia Wiesner<br><span style="font-size:0.78rem;">HAW Fulda</span></p>
+      <p style="margin-top:0.5rem;">Dr. Christina-Marie Juen</p>
+    </div>
+    <div class="contact-block fade-up">
+      <span class="contact-block-label">Projektmitarbeiter</span>
+      <p>Moritz Stockmar<br><span style="font-size:0.78rem;">TU Darmstadt</span></p>
+    </div>
+    <div class="contact-block fade-up">
+      <span class="contact-block-label">Postanschrift</span>
+      <h3>Hessen-Monitor</h3>
+      <p>
+        Institut für Politikwissenschaft<br>
+        Philipps-Universität Marburg<br>
+        Ketzerbach 63<br>
+        35032 Marburg<br>
+        Deutschland
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <img src="logos/hessenmonitor.svg" alt="Hessen-Monitor" style="height:120px;width:auto;display:block;" />
+  <span>Forschungsprojekt · Hessen, Deutschland</span>
+  <span>© 2026 — Alle Rechte vorbehalten</span>
+</footer>
+
+<script>
+// HOMEPAGE_DATA_START
+const HOMEPAGE_DATA = {"findings":[{"pct":null,"label":"fühlen sich mit ihrer Gemeinde verbunden","gruppe":"Regionale Verbundenheit","thema":"Verbundenheit mit Gemeinde"},{"pct":null,"label":"sind mit der Demokratie in der Praxis zufrieden","gruppe":"Demokratie & Politik","thema":"Demokratie in der Praxis"},{"pct":null,"label":"vertrauen der Polizei","gruppe":"Institutionenvertrauen","thema":"Vertrauen: Polizei"},{"pct":null,"label":"beurteilen die Wirtschaftslage in Deutschland positiv","gruppe":"Wirtschaft & Lebenslage","thema":"Wirtschaftslage Deutschland"},{"pct":null,"label":"halten die Demokratie für das beste politische System","gruppe":"Gesellschaft & Werte","thema":"Demokratie passt zu Gesellschaft"},{"pct":null,"label":"fühlen sich persönlich auf Krisensituationen vorbereitet","gruppe":"Resilienz & Krisen","thema":"Persönliche Krisenvorsorge"}],"gruppen":[{"name":"Regionale Verbundenheit","avg":null,"n_themen":6},{"name":"Regionale Politikentfremdung","avg":null,"n_themen":5},{"name":"Wirtschaft & Lebenslage","avg":null,"n_themen":6},{"name":"Demokratie & Politik","avg":null,"n_themen":6},{"name":"Institutionenvertrauen","avg":null,"n_themen":6},{"name":"Gesellschaft & Werte","avg":null,"n_themen":6},{"name":"Resilienz & Krisen","avg":null,"n_themen":5},{"name":"Populismus","avg":null,"n_themen":6},{"name":"Politische Kommunikation","avg":null,"n_themen":6}]};
+// HOMEPAGE_DATA_END
+</script>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  // ── RENDER FINDINGS ─────────────────────────────────────────────────────────────────────────────
+  const dashUrl = 'dashboard/index.html?ref=home';
+  const fGrid = document.getElementById('findings-grid');
+  if (fGrid && HOMEPAGE_DATA) {
+    HOMEPAGE_DATA.findings.forEach(f => {
+    if (f.pct === null) return;
+      const url = `${dashUrl}#g=${encodeURIComponent(f.gruppe)}&t=${encodeURIComponent(f.thema)}`;
+      const card = document.createElement('a');
+      card.href = url; card.className = 'finding-card';
+      card.innerHTML = `
+        <div class="finding-pct"><span class="count-up" data-target="${f.pct}">0</span><span class="finding-unit"> %</span></div>
+        <div class="finding-label">… der Hessinnen und Hessen ${f.label}</div>
+        <div class="finding-bar"><div class="finding-bar-fill" style="width:${f.pct}%"></div></div>
+        <div class="finding-gruppe">${f.gruppe} →</div>`;
+      fGrid.appendChild(card);
+    });
+  }
+
+  // ── RENDER TOPIC GRID ───────────────────────────────────────────────────────────────────────────────
+  const tGrid = document.getElementById('topic-grid');
+  if (tGrid && HOMEPAGE_DATA) {
+    HOMEPAGE_DATA.gruppen.forEach(g => {
+      const url = `${dashUrl}#g=${encodeURIComponent(g.name)}`;
+      const card = document.createElement('a');
+      card.href = url; card.className = 'topic-card';
+      const hasAvg = g.avg != null;
+      card.innerHTML = `
+        <div class="topic-name">${g.name}</div>
+        ${hasAvg ? `
+        <div class="topic-avg-row">
+          <span class="topic-avg-val count-up" data-target="${g.avg}">0</span>
+          <span class="topic-avg-pct">% Ø Zustimmung</span>
+        </div>
+        <div class="topic-track"><div class="topic-fill" style="width:${g.avg}%"></div></div>
+        ` : `<div class="topic-avg-row" style="font-size:0.75rem;color:var(--mid);font-style:italic;">Gemischte Skalen</div>`}
+        <div class="topic-n-themen">${g.n_themen} Themen</div>`;
+      tGrid.appendChild(card);
+    });
+  }
+
+  // ── BAR ANIMATIONS (for finding-card and topic-card) ──────────────────────────────────────────────
+  const barObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('bar-ready'); barObs.unobserve(e.target); } });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.finding-card, .topic-card').forEach(el => barObs.observe(el));
+
+  // ── COUNT-UP ANIMATION ───────────────────────────────────────────────────────────────────────────────
+  function countUp(el) {
+    const target = parseInt(el.dataset.target, 10);
+    const duration = 1200;
+    const start = performance.now();
+    function step(now) {
+      const p = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - p, 3); // ease-out cubic
+      const val = Math.round(ease * target);
+      el.textContent = val >= 1000 ? val.toLocaleString('de-DE') : String(val);
+      if (p < 1) requestAnimationFrame(step);
+      else el.textContent = target >= 1000 ? target.toLocaleString('de-DE') : String(target);
+    }
+    requestAnimationFrame(step);
+  }
+
+  const countObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        countUp(e.target);
+        countObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  setTimeout(() => {
+    document.querySelectorAll('.stat-value[data-target], .count-up[data-target]').forEach(el => countObs.observe(el));
+  }, 50);
+</script>
+</body>
+</html>
