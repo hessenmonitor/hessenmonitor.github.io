@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1024" viewBox="0 0 1536 1024" role="img" aria-labelledby="title desc">
+  <title id="title">hessenmonitor Logo</title>
+  <desc id="desc">Vektorisierte Rekonstruktion des hessenmonitor Logos mit Hessen-Umriss, Balkendiagramm und Schriftzug.</desc>
+  <defs>
+    <style>
+      .blue-dark { fill: #003b70; }
+      .blue-mid { fill: #2f80c2; }
+      .blue-light { fill: #5a9bd3; }
+      .red { fill: #c9082a; }
+      .outline {
+        fill: none;
+        stroke: #003b70;
+        stroke-width: 8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .wordmark {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 132px;
+        font-weight: 300;
+        letter-spacing: 1px;
+      }
+      .claim {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 58px;
+        font-weight: 300;
+        letter-spacing: 1.5px;
+      }
+    </style>
+  </defs>
+
+  <g transform="translate(0 2)">
+    <path class="outline" d="
+      M259 348
+      C259 331 286 322 303 323
+      C315 324 305 306 316 300
+      C325 295 339 297 342 306
+      C346 321 360 306 371 296
+      C384 284 390 269 405 270
+      C420 270 431 278 420 293
+      C410 309 421 318 421 327
+      C421 338 394 340 392 353
+      C389 363 421 378 435 374
+      C444 371 435 354 446 349
+      C458 343 461 342 463 356
+      C466 373 483 370 485 386
+      C487 401 509 399 513 414
+      C519 434 499 436 504 451
+      C509 466 497 477 482 475
+      C467 473 460 490 473 497
+      C456 502 452 521 448 540
+      C444 558 435 576 421 569
+      C412 564 419 586 407 590
+      C396 594 393 607 390 619
+      C385 636 369 639 359 647
+      C343 659 321 649 307 655
+      C291 662 303 677 308 688
+      C318 710 298 713 300 734
+      C302 751 286 751 276 753
+      C266 755 274 770 259 768
+      C249 767 261 751 247 755
+      C237 759 235 744 227 752
+      C217 762 202 745 199 732
+      C196 717 205 712 205 701
+      C205 687 187 678 189 660
+      C192 637 170 631 151 638
+      C128 646 135 632 144 619
+      C151 608 138 596 155 586
+      C171 576 183 580 179 565
+      C175 548 161 557 171 535
+      C180 516 194 522 190 503
+      C187 490 194 482 194 470
+      C194 451 217 438 225 442
+      C239 449 246 429 255 414
+      C263 399 240 400 248 390
+      C257 380 277 400 278 376
+      C280 360 274 351 259 348
+      Z"/>
+
+    <rect class="blue-light" x="210" y="572" width="40" height="65" rx="3"/>
+    <rect class="blue-mid" x="263" y="524" width="40" height="113" rx="3"/>
+    <rect class="blue-dark" x="316" y="472" width="40" height="165" rx="3"/>
+    <rect class="red" x="370" y="410" width="40" height="228" rx="3"/>
+  </g>
+
+  <text class="wordmark" x="519" y="531">
+    <tspan class="blue-dark">hessen</tspan><tspan class="red">monitor</tspan>
+  </text>
+  <text class="claim blue-dark" x="523" y="625">Demokratische Zustände in Hessen</text>
+</svg>
