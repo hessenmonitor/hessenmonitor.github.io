@@ -23,14 +23,16 @@
     body {
       background: var(--bg); color: var(--ink);
       font-family: 'DM Sans', sans-serif; font-weight: 300;
-      font-size: 0.88rem; line-height: 1.5; min-height: 100vh;
+      font-size: 0.88rem; line-height: 1.5;
+      height: 100vh; overflow: hidden;
+      display: flex; flex-direction: column;
     }
 
     /* ── TOOLBAR ── */
     .toolbar {
       display: flex; align-items: flex-end; gap: 1.2rem; flex-wrap: wrap;
-      padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
-      background: var(--surface); position: sticky; top: 0; z-index: 10;
+      padding: 0.7rem 1.5rem; border-bottom: 1px solid var(--border);
+      background: var(--surface); flex-shrink: 0; z-index: 10;
     }
     .ctrl { display: flex; flex-direction: column; gap: 0.3rem; min-width: 160px; }
     .ctrl-label {
@@ -49,22 +51,47 @@
     select:focus { outline: none; border-color: var(--ink); }
     select:disabled { opacity: 0.3; cursor: default; background-color: var(--surface); }
     .sep { width: 1px; height: 36px; background: var(--border); align-self: center; }
+    .back-btn {
+      display: none; align-items: center; gap: 0.4rem;
+      font-size: 0.67rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--mid); text-decoration: none; padding: 0.38rem 0.8rem;
+      border: 1px solid var(--border); margin-right: 0.5rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .back-btn:hover { color: var(--ink); border-color: var(--ink); }
+    .back-btn.visible { display: flex; }
+    .toolbar-actions { margin-left: auto; display: flex; align-items: center; gap: 0.5rem; }
+    .action-btn {
+      font-size: 0.67rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.38rem 0.8rem; border: 1px solid var(--border);
+      background: transparent; color: var(--mid); cursor: pointer;
+      font-family: inherit; transition: border-color 0.15s, color 0.15s;
+    }
+    .action-btn:hover { border-color: var(--ink); color: var(--ink); }
+    .action-btn.success { border-color: #27ae60; color: #27ae60; }
+    .sub-sep { width: 1px; height: 36px; background: var(--border); align-self: center; }
+    .sub-badge {
+      display: inline-block; font-size: 0.6rem; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 0.15rem 0.45rem;
+      background: var(--accent); color: #fff; margin-left: 0.35rem; vertical-align: middle;
+    }
 
     /* ── BREADCRUMB ── */
     .breadcrumb {
-      padding: 0.55rem 1.5rem; font-size: 0.71rem; color: var(--mid);
+      padding: 0.4rem 1.5rem; font-size: 0.71rem; color: var(--mid);
       border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.35rem;
-      background: var(--bg);
+      background: var(--bg); flex-shrink: 0;
     }
     .breadcrumb strong { color: var(--ink); font-weight: 500; }
     .bc-arrow { opacity: 0.35; }
 
     /* ── KPI ROW ── */
+    .tbl-n { color: var(--mid); font-size: 0.72rem; white-space: nowrap; width: 4.5rem; text-align: right; }
     .kpi-row {
       display: grid; grid-template-columns: repeat(4, 1fr);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
     }
-    .kpi { padding: 1.2rem 1.5rem; border-right: 1px solid var(--border); }
+    .kpi { padding: 0.7rem 1.5rem; border-right: 1px solid var(--border); }
     .kpi:last-child { border-right: none; }
     .kpi-lbl { font-size: 0.64rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--mid); margin-bottom: 0.3rem; }
     .kpi-val { font-size: 1.85rem; font-weight: 500; line-height: 1; }
@@ -75,9 +102,11 @@
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
       gap: 1px; background: var(--border);
+      flex: 1; min-height: 0;
     }
-    .card { background: var(--bg); padding: 1.3rem 1.5rem; display: flex; flex-direction: column; gap: 0.9rem; }
+    .card { background: var(--bg); padding: 0.9rem 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; min-height: 0; overflow: auto; }
     .card.full { grid-column: 1 / -1; }
     .card-hd { display: flex; flex-direction: column; gap: 0.15rem; }
     .card-title { font-size: 0.73rem; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--mid); }
@@ -112,11 +141,11 @@
     .frage-panel {
       display: grid; grid-template-columns: var(--frage-cols, 1fr 1fr);
       border-bottom: 1px solid var(--border);
-      background: var(--bg);
+      background: var(--bg); flex-shrink: 0;
     }
     .frage-block {
-      padding: 0.8rem 1.5rem; border-right: 1px solid var(--border);
-      display: flex; flex-direction: column; gap: 0.3rem;
+      padding: 0.5rem 1.5rem; border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 0.2rem;
     }
     .frage-block:last-child { border-right: none; }
     .frage-tag {
@@ -137,18 +166,68 @@
 
     /* ── FOOTER ── */
     .footer {
-      padding: 0.85rem 1.5rem; border-top: 1px solid var(--border);
+      padding: 0.5rem 1.5rem; border-top: 1px solid var(--border);
       font-size: 0.69rem; color: var(--mid);
-      display: flex; justify-content: space-between;
+      display: flex; justify-content: space-between; flex-shrink: 0;
     }
     .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--r); margin-right: 0.35rem; animation: blink 2s infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+    /* ── SKALOMETER ── */
+    .skalo-track { position: relative; width: 100%; height: 6px; border-radius: 3px; overflow: visible; flex-shrink: 0; margin: 2px 0; }
+    .skalo-track-bg { position: absolute; inset: 0; border-radius: 3px;
+      background: linear-gradient(to right, #c0392b 0%, #e67e22 30%, #ccdaea 50%, #7aafd4 70%, #1e3a5f 100%); opacity: 0.25; }
+    .skalo-bar { position: absolute; top: 0; height: 100%; border-radius: 3px; transition: width 0.4s ease, left 0.4s ease; }
+    .skalo-needle { position: absolute; top: -4px; width: 3px; height: 14px; border-radius: 1px; transform: translateX(-50%); transition: left 0.4s ease; }
+    .skalo-mean-lbl { font-family: 'DM Mono', monospace; font-size: 0.77rem; text-align: right; white-space: nowrap; min-width: 42px; }
   </style>
 </head>
 <body>
 
+<script>
+// RESULTS_LIVE_START
+var RESULTS_LIVE = true;
+// RESULTS_LIVE_END
+</script>
+
+<style>
+#cs-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(240,245,250,0.97);
+  backdrop-filter: blur(6px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 1.5rem;
+  font-family: 'DM Sans', sans-serif;
+}
+#cs-overlay img { height: 80px; width: auto; opacity: 0.9; }
+#cs-overlay h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  color: #1e3a5f; font-weight: 700; text-align: center;
+  margin: 0;
+}
+#cs-overlay p {
+  color: #4a6a8a; font-size: 1rem; text-align: center;
+  max-width: 38ch; line-height: 1.7; margin: 0;
+}
+#cs-overlay .cs-rule {
+  width: 3rem; height: 2px; background: #c0392b;
+}
+</style>
+
+<div id="cs-overlay">
+  <img src="../logos/hessenmonitor.svg" alt="Hessenmonitor" />
+  <div class="cs-rule"></div>
+  <h1>Ergebnisse folgen<br>in Kürze</h1>
+  <p>Die Auswertungsergebnisse werden nach Abschluss der Analyse hier veröffentlicht.</p>
+</div>
+<script>if (RESULTS_LIVE) document.getElementById('cs-overlay').remove();</script>
+
+
 <!-- TOOLBAR -->
 <div class="toolbar">
+  <a href="../index.html" class="back-btn" id="back-btn">← Startseite</a>
   <div class="ctrl">
     <span class="ctrl-label">Themengruppe</span>
     <select id="sel-gruppe" onchange="onGruppeChange()"></select>
@@ -170,10 +249,85 @@
     <span class="ctrl-label">Thema (Vergleich)</span>
     <select id="sel-vgl-thema" onchange="render()"></select>
   </div>
+
+  <div class="sub-sep"></div>
+
+  <div class="ctrl">
+    <span class="ctrl-label">Teilgruppe <span style="font-weight:300;opacity:0.6">(optional)</span></span>
+    <select id="sel-sub" onchange="render()">
+      <option value="__all__">— Gesamt —</option>
+      <optgroup label="Geschlecht">
+        <option value="Geschlecht::__alle__">★ Alle Geschlechter vergleichen</option>
+        <option value="Geschlecht::Männer">Männer</option>
+        <option value="Geschlecht::Frauen">Frauen</option>
+      </optgroup>
+      <optgroup label="Alter">
+        <option value="Alter::__alle__">★ Alle Altersgruppen vergleichen</option>
+        <option value="Alter::18–34">18–34 Jahre</option>
+        <option value="Alter::35–49">35–49 Jahre</option>
+        <option value="Alter::50–64">50–64 Jahre</option>
+        <option value="Alter::65+">65+ Jahre</option>
+      </optgroup>
+      <optgroup label="Bildung">
+        <option value="Bildung::__alle__">★ Alle Bildungsgruppen vergleichen</option>
+        <option value="Bildung::Niedrig">Niedrig (Haupt-/Volksschule)</option>
+        <option value="Bildung::Mittel">Mittel (Realschule/Fachabi)</option>
+        <option value="Bildung::Hoch">Hoch (Abitur)</option>
+      </optgroup>
+      <optgroup label="Wahlabsicht">
+        <option value="Wahlabsicht::__alle__">★ Alle Parteien vergleichen</option>
+        <option value="Wahlabsicht::CDU">CDU</option>
+        <option value="Wahlabsicht::AfD">AfD</option>
+        <option value="Wahlabsicht::SPD">SPD</option>
+        <option value="Wahlabsicht::Grüne">Grüne</option>
+        <option value="Wahlabsicht::Linke">Linke</option>
+        <option value="Wahlabsicht::BSW">BSW</option>
+        <option value="Wahlabsicht::FDP">FDP</option>
+      </optgroup>
+    </select>
+  </div>
+
+  <div class="ctrl" style="min-width:auto;align-self:flex-end;padding-bottom:0.45rem;font-size:0.75rem;color:var(--mid);opacity:0.5;">vs.</div>
+
+  <div class="ctrl">
+    <span class="ctrl-label">Vergleich-Teilgruppe <span style="font-weight:300;opacity:0.6">(optional)</span></span>
+    <select id="sel-sub-vgl" onchange="render()">
+      <option value="__all__">— kein Vergleich —</option>
+      <optgroup label="Geschlecht">
+        <option value="Geschlecht::Männer">Männer</option>
+        <option value="Geschlecht::Frauen">Frauen</option>
+      </optgroup>
+      <optgroup label="Alter">
+        <option value="Alter::18–34">18–34 Jahre</option>
+        <option value="Alter::35–49">35–49 Jahre</option>
+        <option value="Alter::50–64">50–64 Jahre</option>
+        <option value="Alter::65+">65+ Jahre</option>
+      </optgroup>
+      <optgroup label="Bildung">
+        <option value="Bildung::Niedrig">Niedrig (Haupt-/Volksschule)</option>
+        <option value="Bildung::Mittel">Mittel (Realschule/Fachabi)</option>
+        <option value="Bildung::Hoch">Hoch (Abitur)</option>
+      </optgroup>
+      <optgroup label="Wahlabsicht">
+        <option value="Wahlabsicht::CDU">CDU</option>
+        <option value="Wahlabsicht::AfD">AfD</option>
+        <option value="Wahlabsicht::SPD">SPD</option>
+        <option value="Wahlabsicht::Grüne">Grüne</option>
+        <option value="Wahlabsicht::Linke">Linke</option>
+        <option value="Wahlabsicht::BSW">BSW</option>
+        <option value="Wahlabsicht::FDP">FDP</option>
+      </optgroup>
+    </select>
+  </div>
+
+  <div class="toolbar-actions">
+    <button class="action-btn" onclick="exportCharts()">↓ Exportieren</button>
+    <button class="action-btn" id="share-btn" onclick="copyShareLink()">⎘ Link kopieren</button>
+  </div>
 </div>
 
 <!-- BREADCRUMB -->
-<div class="breadcrumb" id="bc"></div>
+<div class="breadcrumb" id="bc"><span id="sub-badge" class="sub-badge" style="display:none"></span></div>
 
 <!-- FRAGEWORTLAUT -->
 <div class="frage-panel" id="frage-panel">
@@ -189,9 +343,9 @@
 
 <!-- KPIs -->
 <div class="kpi-row">
-  <div class="kpi"><div class="kpi-lbl">Befragte</div><div class="kpi-val c-r">3.842</div><div class="kpi-sub">Erhebungswelle 2024</div></div>
-  <div class="kpi"><div class="kpi-lbl">Zustimmung — Auswahl</div><div class="kpi-val c-b" id="kpi-sel">—</div><div class="kpi-sub" id="kpi-sel-lbl">—</div></div>
-  <div class="kpi" id="kpi-vgl-cell"><div class="kpi-lbl">Zustimmung — Vergleich</div><div class="kpi-val c-o" id="kpi-vgl">—</div><div class="kpi-sub" id="kpi-vgl-lbl">—</div></div>
+  <div class="kpi"><div class="kpi-lbl">Befragte</div><div class="kpi-val c-r">3.208</div><div class="kpi-sub">Erhebungswelle 2026</div></div>
+  <div class="kpi"><div class="kpi-lbl" id="kpi-sel-label">Zustimmung — Auswahl</div><div class="kpi-val c-b" id="kpi-sel">—</div><div class="kpi-sub" id="kpi-sel-lbl">—</div></div>
+  <div class="kpi" id="kpi-vgl-cell"><div class="kpi-lbl" id="kpi-vgl-label">Zustimmung — Vergleich</div><div class="kpi-val c-o" id="kpi-vgl">—</div><div class="kpi-sub" id="kpi-vgl-lbl">—</div></div>
   <div class="kpi" id="kpi-diff-cell"><div class="kpi-lbl">Differenz</div><div class="kpi-val c-g" id="kpi-diff">—</div><div class="kpi-sub" id="kpi-diff-lbl">—</div></div>
 </div>
 
@@ -204,16 +358,19 @@
       <div class="card-title" id="bar-title">Vergleich Zustimmungsrate</div>
       <div class="card-sub" id="bar-sub"></div>
     </div>
-    <canvas id="chart-bar" height="200"></canvas>
+    <canvas id="chart-bar" style="min-height:0;flex:1"></canvas>
   </div>
 
   <!-- Dist: stacked answer distribution for both -->
   <div class="card">
-    <div class="card-hd">
-      <div class="card-title">Antwortverteilung</div>
-      <div class="card-sub" id="dist-sub">Auswahl vs. Vergleich</div>
+    <div class="card-hd" style="flex-direction:row;justify-content:space-between;align-items:flex-start;">
+      <div>
+        <div class="card-title">Antwortverteilung</div>
+        <div class="card-sub" id="dist-sub">Auswahl vs. Vergleich</div>
+      </div>
+      <button id="dist-toggle" onclick="toggleDistStacked()" style="font-size:0.62rem;letter-spacing:0.07em;text-transform:uppercase;padding:0.2rem 0.55rem;border:1px solid var(--border);background:transparent;color:var(--mid);cursor:pointer;white-space:nowrap;flex-shrink:0;">Gestapelt</button>
     </div>
-    <canvas id="chart-dist" height="200"></canvas>
+    <canvas id="chart-dist" style="min-height:0;flex:1"></canvas>
   </div>
 
   <!-- Table: all themen in selected Gruppe -->
@@ -223,7 +380,7 @@
       <div class="card-sub" id="tbl-sel-sub"></div>
     </div>
     <table class="tbl" id="tbl-sel">
-      <thead><tr><th>Thema</th><th class="bar-w">Zustimmung</th><th class="mono">%</th><th>Streuung</th></tr></thead>
+      <thead><tr><th>Thema</th><th class="bar-w" id="tbl-sel-col">Zustimmung</th><th class="mono">%</th><th>Streuung</th></tr></thead>
       <tbody></tbody>
     </table>
   </div>
@@ -235,7 +392,7 @@
       <div class="card-sub" id="tbl-vgl-sub"></div>
     </div>
     <table class="tbl" id="tbl-vgl">
-      <thead><tr><th>Thema</th><th class="bar-w">Zustimmung</th><th class="mono">%</th><th>Streuung</th></tr></thead>
+      <thead><tr><th>Thema</th><th class="bar-w" id="tbl-vgl-col">Zustimmung</th><th class="mono">%</th><th>Streuung</th></tr></thead>
       <tbody></tbody>
     </table>
   </div>
@@ -243,7 +400,7 @@
 </div>
 
 <div class="footer">
-  <span><span class="dot"></span>Hessenmonitor · Erhebungswelle 2024 · <em>Verteilungen: Platzhalterdaten bis Ergebnisse vorliegen</em></span>
+  <span><span class="dot"></span>Hessenmonitor · Erhebungswelle 2026 · <em>n = — abgeschlossene Interviews</em></span>
   <span id="footer-txt"></span>
 </div>
 
@@ -256,42 +413,78 @@
 
 const GRUPPEN = {
 
+  "Regionale Politikentfremdung": {
+    subgroups: true,
+    themen: {
+      "Bundespolitik ignoriert Region": {
+        varName: "G1Q00002_SQ001",
+        base: 59, dist: [16, 44, 36, 4],
+        fragewortlaut: "Die Bundespolitik interessiert sich nicht für die Region, in der ich lebe.",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+      "Landespolitik ignoriert Region": {
+        varName: "G1Q00002_SQ002",
+        base: 46, dist: [8, 38, 48, 6],
+        fragewortlaut: "Die Landespolitik interessiert sich nicht für die Region, in der ich lebe.",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+      "Übergewicht Rhein-Main-Raum": {
+        varName: "G1Q00002_SQ003",
+        base: 57, dist: [11, 46, 39, 4],
+        fragewortlaut: "Das Land Hessen kümmert sich zu sehr um den Rhein-Main-Raum und zu wenig um andere Regionen.",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+      "Konflikte Stadt vs. Land": {
+        varName: "G1Q00002_SQ004",
+        base: 43, dist: [6, 36, 51, 7],
+        fragewortlaut: "Es gibt starke Konflikte zwischen Menschen, die in Hessen auf dem Land oder in der Stadt leben.",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+      "Unterschiede Stadt vs. Land": {
+        varName: "G1Q00002_SQ005",
+        base: 84, dist: [20, 64, 15, 1],
+        fragewortlaut: "Menschen, die in Hessen in der Stadt oder auf dem Land leben, unterscheiden sich in vielen Dingen.",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+    }
+  },
+
   "Regionale Verbundenheit": {
     subgroups: true,
     themen: {
       "Verbundenheit mit Gemeinde": {
         varName: "G1Q00001_SQ001",
-        base: 72, dist: [28, 44, 18, 10],
+        base: 88, dist: [46, 42, 10, 2],
         fragewortlaut: "Die Menschen haben unterschiedlich starke Bindungen zu ihrer Stadt oder Region. Wie ist das bei Ihnen? Fühlen Sie sich verbunden mit … Ihrer Stadt oder Gemeinde und ihren Bürgern?",
         scale: ["Sehr verbunden", "Eher verbunden", "Eher nicht verbunden", "Überhaupt nicht verbunden"]
       },
       "Verbundenheit mit Hessen": {
         varName: "G1Q00001_SQ002",
-        base: 65, dist: [22, 43, 23, 12],
+        base: 84, dist: [29, 55, 14, 2],
         fragewortlaut: "Fühlen Sie sich verbunden mit … Hessen und seinen Bürgern?",
         scale: ["Sehr verbunden", "Eher verbunden", "Eher nicht verbunden", "Überhaupt nicht verbunden"]
       },
       "Verbundenheit mit Deutschland": {
         varName: "G1Q00001_SQ003",
-        base: 61, dist: [19, 42, 26, 13],
+        base: 86, dist: [35, 51, 12, 2],
         fragewortlaut: "Fühlen Sie sich verbunden mit … Deutschland und seinen Bürgern?",
         scale: ["Sehr verbunden", "Eher verbunden", "Eher nicht verbunden", "Überhaupt nicht verbunden"]
       },
       "Verbundenheit mit der EU": {
         varName: "G1Q00001_SQ004",
-        base: 44, dist: [12, 32, 32, 24],
+        base: 75, dist: [30, 46, 18, 6],
         fragewortlaut: "Fühlen Sie sich verbunden mit … der Europäischen Union und ihren Bürgern?",
         scale: ["Sehr verbunden", "Eher verbunden", "Eher nicht verbunden", "Überhaupt nicht verbunden"]
       },
       "Lebenszufriedenheit persönlich": {
         varName: "G1Q00003_SQ001",
-        base: 66, dist: [18, 48, 22, 12],
+        base: 88, dist: [21, 67, 10, 2],
         fragewortlaut: "Wie zufrieden sind Sie alles in allem mit Ihrer persönlichen Lebenssituation?",
         scale: ["Sehr zufrieden", "Zufrieden", "Eher zufrieden", "Eher unzufrieden", "Unzufrieden", "Sehr unzufrieden"]
       },
       "Lebensbedingungen in Hessen": {
         varName: "G1Q00003_SQ002",
-        base: 54, dist: [12, 42, 30, 16],
+        base: 78, dist: [7, 71, 19, 3],
         fragewortlaut: "Und wie zufrieden sind Sie mit den heutigen Lebensbedingungen und Lebensverhältnissen in Hessen?",
         scale: ["Sehr zufrieden", "Zufrieden", "Eher zufrieden", "Eher unzufrieden", "Unzufrieden", "Sehr unzufrieden"]
       },
@@ -303,37 +496,37 @@ const GRUPPEN = {
     themen: {
       "Wirtschaftslage Deutschland": {
         varName: "G2Q00007_SQ001",
-        base: 38, dist: [6, 32, 38, 24],
+        base: 28, dist: [1, 27, 57, 15],
         fragewortlaut: "Wie beurteilen Sie die derzeitige wirtschaftliche Lage in Deutschland?",
         scale: ["Sehr gut", "Gut", "Eher gut", "Eher schlecht", "Schlecht", "Sehr schlecht"]
       },
       "Wirtschaftslage Wohnort": {
         varName: "G2Q00007_SQ002",
-        base: 52, dist: [11, 41, 30, 18],
+        base: 52, dist: [2, 50, 43, 5],
         fragewortlaut: "Wie beurteilen Sie die derzeitige wirtschaftliche Lage an Ihrem Wohnort?",
         scale: ["Sehr gut", "Gut", "Eher gut", "Eher schlecht", "Schlecht", "Sehr schlecht"]
       },
       "Persönliche Wirtschaftslage": {
         varName: "G2Q00007_SQ003",
-        base: 60, dist: [14, 46, 26, 14],
+        base: 84, dist: [13, 71, 14, 2],
         fragewortlaut: "Wie beurteilen Sie Ihre persönliche wirtschaftliche Lage?",
         scale: ["Sehr gut", "Gut", "Eher gut", "Eher schlecht", "Schlecht", "Sehr schlecht"]
       },
       "Wirtschaftliche Zukunftserwartung": {
         varName: "G2Q00009_SQ001",
-        base: 35, dist: [7, 28, 38, 27],
+        base: 30, dist: [1, 30, 59, 10],
         fragewortlaut: "Was erwarten Sie, wie wird die wirtschaftliche Lage in einem Jahr in Deutschland sein?",
-        scale: ["Viel besser", "Etwas besser", "Etwa gleich bleiben", "Etwas schlechter", "Viel schlechter"]
+        scale: ["Sehr gut", "Gut", "Eher gut", "Eher schlecht", "Schlecht", "Sehr schlecht"]
       },
       "Wohnkostenbelastung": {
         varName: "G2Q00003",
-        base: 41, dist: [15, 26, 32, 27],
+        base: 70, dist: [40, 30, 19, 11],
         fragewortlaut: "Wie stark belasten Miete, Hauskredit oder Wohnkosten Ihr Haushaltsbudget?",
         scale: ["< 25 %", "25–35 %", "35–45 %", "> 45 %"]
       },
       "Finanzielle Auskommen": {
-        varName: "G2Q00004",
-        base: 58, dist: [12, 46, 28, 14],
+        varName: "G2Q00008",
+        base: 85, dist: [23, 62, 13, 2],
         fragewortlaut: "Wie kommt Ihr Haushalt mit dem monatlichen Einkommen zurecht?",
         scale: ["Sehr gut", "Gut", "Eher gut", "Eher schlecht", "Schlecht", "Sehr schlecht"]
       },
@@ -344,38 +537,38 @@ const GRUPPEN = {
     subgroups: true,
     themen: {
       "Demokratie als Ideal": {
-        varName: "G4Q00020",
-        base: 71, dist: [30, 41, 18, 11],
+        varName: "G4Q00001",
+        base: 99, dist: [69, 30, 1, 0],
         fragewortlaut: "Die drei folgenden Fragen beschäftigen sich mit dem Thema Demokratie. Zunächst geht es nicht um tatsächliche Demokratien, sondern um das Prinzip der Demokratie als Idee. Sind Sie…?",
         scale: ["Entschieden für die Demokratie", "Für die Demokratie", "Eher für die Demokratie", "Eher gegen die Demokratie", "Gegen die Demokratie", "Entschieden gegen die Demokratie"]
       },
       "Demokratie im Grundgesetz": {
-        varName: "G4Q00021",
-        base: 63, dist: [18, 45, 24, 13],
-        fragewortlaut: "Nun geht es um die Demokratie, so wie sie in unserem Grundgesetz festgelegt ist. Wie zufrieden sind Sie mit dieser Demokratie?",
+        varName: "G4Q00002",
+        base: 93, dist: [31, 62, 6, 1],
+        fragewortlaut: "Nun geht es um die Demokratie, so wie sie in unserem Grundgesetz festgelegt ist. Wie zufrieden sind Sie damit?",
         scale: ["Sehr zufrieden", "Zufrieden", "Eher zufrieden", "Eher unzufrieden", "Unzufrieden", "Sehr unzufrieden"]
       },
       "Demokratie in der Praxis": {
-        varName: "G4Q00022",
-        base: 44, dist: [8, 36, 34, 22],
-        fragewortlaut: "Nun geht es um die Demokratie, wie sie tatsächlich in Deutschland funktioniert. Wie zufrieden sind Sie mit dieser Demokratie?",
+        varName: "G4Q00003",
+        base: 67, dist: [4, 63, 26, 7],
+        fragewortlaut: "Nun geht es um die Demokratie, wie sie tatsächlich in Deutschland funktioniert. Wie zufrieden sind Sie damit?",
         scale: ["Sehr zufrieden", "Zufrieden", "Eher zufrieden", "Eher unzufrieden", "Unzufrieden", "Sehr unzufrieden"]
       },
       "Politisches Interesse allgemein": {
         varName: "G3Q00001",
-        base: 58, dist: [16, 42, 27, 15],
+        base: 80, dist: [16, 64, 19, 1],
         fragewortlaut: "Zunächst einmal ganz allgemein: Wie stark interessieren Sie sich für Politik?",
         scale: ["Sehr stark", "Stark", "Eher stark", "Eher schwach", "Schwach", "Überhaupt nicht"]
       },
       "Politisches Interesse Hessen": {
         varName: "G3Q00002_SQ003",
-        base: 55, dist: [13, 42, 29, 16],
+        base: 68, dist: [9, 60, 30, 1],
         fragewortlaut: "Und wie sehr interessieren Sie sich für die Politik in Hessen?",
         scale: ["Sehr stark", "Stark", "Eher stark", "Eher schwach", "Schwach", "Überhaupt nicht"]
       },
       "Politische Selbstwirksamkeit": {
         varName: "G4Q00018_SQ002",
-        base: 52, dist: [11, 41, 31, 17],
+        base: 94, dist: [23, 72, 5, 0],
         fragewortlaut: "Inwieweit stimmen Sie zu: Wichtige politische Fragen kann ich gut verstehen und einschätzen.",
         scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
       },
@@ -387,37 +580,37 @@ const GRUPPEN = {
     themen: {
       "Vertrauen: Politische Parteien": {
         varName: "G3Q00005_SQ002",
-        base: 28, dist: [5, 23, 38, 34],
+        base: 37, dist: [0, 36, 49, 15],
         fragewortlaut: "Wie groß ist das Vertrauen, das Sie den folgenden Einrichtungen entgegenbringen? Den politischen Parteien im Allgemeinen.",
         scale: ["Sehr großes Vertrauen", "Großes Vertrauen", "Eher großes Vertrauen", "Eher wenig Vertrauen", "Wenig Vertrauen", "Kein Vertrauen"]
       },
       "Vertrauen: Bundestag": {
         varName: "G3Q00005_SQ004",
-        base: 38, dist: [8, 30, 36, 26],
+        base: 50, dist: [2, 48, 36, 14],
         fragewortlaut: "Wie groß ist das Vertrauen, das Sie dem deutschen Bundestag entgegenbringen?",
         scale: ["Sehr großes Vertrauen", "Großes Vertrauen", "Eher großes Vertrauen", "Eher wenig Vertrauen", "Wenig Vertrauen", "Kein Vertrauen"]
       },
       "Vertrauen: Hessische Landesregierung": {
         varName: "G3Q00005_SQ005",
-        base: 42, dist: [9, 33, 35, 23],
+        base: 62, dist: [2, 60, 30, 8],
         fragewortlaut: "Wie groß ist das Vertrauen, das Sie der hessischen Landesregierung entgegenbringen?",
         scale: ["Sehr großes Vertrauen", "Großes Vertrauen", "Eher großes Vertrauen", "Eher wenig Vertrauen", "Wenig Vertrauen", "Kein Vertrauen"]
       },
       "Vertrauen: Gerichte": {
         varName: "G3Q00005_SQ006",
-        base: 61, dist: [14, 47, 26, 13],
+        base: 58, dist: [2, 56, 33, 9],
         fragewortlaut: "Wie groß ist das Vertrauen, das Sie den Gerichten und der Justiz entgegenbringen?",
         scale: ["Sehr großes Vertrauen", "Großes Vertrauen", "Eher großes Vertrauen", "Eher wenig Vertrauen", "Wenig Vertrauen", "Kein Vertrauen"]
       },
       "Vertrauen: Polizei": {
         varName: "G3Q00005_SQ007",
-        base: 66, dist: [20, 46, 22, 12],
+        base: 81, dist: [25, 55, 14, 6],
         fragewortlaut: "Wie groß ist das Vertrauen, das Sie der Polizei entgegenbringen?",
         scale: ["Sehr großes Vertrauen", "Großes Vertrauen", "Eher großes Vertrauen", "Eher wenig Vertrauen", "Wenig Vertrauen", "Kein Vertrauen"]
       },
       "Vertrauen: Medien": {
         varName: "G3Q00005_SQ008",
-        base: 44, dist: [9, 35, 34, 22],
+        base: 53, dist: [2, 51, 33, 14],
         fragewortlaut: "Wie groß ist das Vertrauen, das Sie den Medien (Presse, Rundfunk) entgegenbringen?",
         scale: ["Sehr großes Vertrauen", "Großes Vertrauen", "Eher großes Vertrauen", "Eher wenig Vertrauen", "Wenig Vertrauen", "Kein Vertrauen"]
       },
@@ -429,37 +622,37 @@ const GRUPPEN = {
     themen: {
       "Meinungsfreiheit (Wichtigkeit)": {
         varName: "G3Q00003_SQ003",
-        base: 88, dist: [52, 36, 8, 4],
+        base: 99, dist: [73, 26, 1, 0],
         fragewortlaut: "Über verschiedene Aspekte des Zusammenlebens kann man unterschiedlicher Meinung sein. Wie wichtig ist es für Sie, dass jeder seine Meinung frei äußern kann?",
         scale: ["Sehr wichtig", "Wichtig", "Eher wichtig", "Eher unwichtig", "Unwichtig", "Überhaupt nicht wichtig"]
       },
       "Pressefreiheit (Wichtigkeit)": {
         varName: "G3Q00003_SQ004",
-        base: 84, dist: [46, 38, 10, 6],
+        base: 98, dist: [75, 24, 1, 0],
         fragewortlaut: "Wie wichtig ist es für Sie, dass die Freiheit der Presse gewährleistet ist?",
         scale: ["Sehr wichtig", "Wichtig", "Eher wichtig", "Eher unwichtig", "Unwichtig", "Überhaupt nicht wichtig"]
       },
       "Meinungsfreiheit (Realität)": {
         varName: "G3Q00004_SQ003",
-        base: 62, dist: [16, 46, 26, 12],
+        base: 88, dist: [26, 62, 10, 2],
         fragewortlaut: "Inwiefern sehen Sie es in Deutschland aktuell als erfüllt an, dass jeder seine Meinung frei äußern kann?",
         scale: ["Vollständig erfüllt", "Überwiegend erfüllt", "Eher erfüllt", "Eher nicht erfüllt", "Kaum erfüllt", "Gar nicht erfüllt"]
       },
       "Pressefreiheit (Realität)": {
         varName: "G3Q00004_SQ004",
-        base: 66, dist: [18, 48, 22, 12],
+        base: 76, dist: [11, 65, 21, 3],
         fragewortlaut: "Inwiefern sehen Sie es in Deutschland aktuell als erfüllt an, dass die Freiheit der Presse gewährleistet ist?",
         scale: ["Vollständig erfüllt", "Überwiegend erfüllt", "Eher erfüllt", "Eher nicht erfüllt", "Kaum erfüllt", "Gar nicht erfüllt"]
       },
       "Volkwille vs. Abgeordnete": {
         varName: "G6Q00001_SQ001",
-        base: 58, dist: [18, 40, 28, 14],
+        base: 96, dist: [51, 45, 4, 0],
         fragewortlaut: "Bitte geben Sie an, inwieweit Sie zustimmen oder ablehnen: Die Abgeordneten im deutschen Bundestag sollten ausschließlich dem Willen des Volkes verpflichtet sein.",
         scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
       },
       "Demokratie passt zu Gesellschaft": {
         varName: "G6Q00002_SQ007",
-        base: 69, dist: [24, 45, 20, 11],
+        base: 99, dist: [59, 40, 1, 0],
         fragewortlaut: "Bitte geben Sie zu folgenden Aussagen Ihre Meinung an: Die Demokratie ist das politische System, das am besten zu unserer Gesellschaft passt.",
         scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
       },
@@ -467,42 +660,226 @@ const GRUPPEN = {
   },
 
   "Resilienz & Krisen": {
-    subgroups: false,
+    subgroups: true,
     themen: {
       "Krisenwahrscheinlichkeit Hessen": {
         varName: "G7Q00001",
-        base: 52, dist: [12, 40, 30, 18],
-        fragewortlaut: "Für wie wahrscheinlich halten Sie es, dass Hessen in den nächsten Jahren von größeren Krisen betroffen sein wird?",
+        base: 70, dist: [13, 57, 28, 2],
+        fragewortlaut: "Für wie wahrscheinlich halten Sie es, dass Hessen in den nächsten Jahren von größeren Krisen betroffen sein wird (z. B. Stromausfall, Hochwasser, Dürre, Sicherheit, Pandemie, Krieg)?",
         scale: ["Sehr wahrscheinlich", "Wahrscheinlich", "Eher wahrscheinlich", "Eher unwahrscheinlich", "Unwahrscheinlich", "Sehr unwahrscheinlich"]
       },
       "Vertrauen in lokale Behörden": {
         varName: "G7Q00005_SQ001",
-        base: 54, dist: [11, 43, 30, 16],
+        base: 69, dist: [3, 66, 28, 3],
         fragewortlaut: "Die lokalen Behörden (Verwaltung, Feuerwehr u. a.) sind im Krisenfall in der Lage, angemessen zu reagieren.",
         scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
       },
       "Persönliche Krisenvorsorge": {
         varName: "G7Q00005_SQ002",
-        base: 38, dist: [8, 30, 34, 28],
-        fragewortlaut: "Ich bin für den Krisenfall ausreichend vorbereitet (z. B. Nahrungsmittelvorräte, Trinkwasser, Medikamente).",
+        base: 47, dist: [3, 44, 46, 7],
+        fragewortlaut: "Ich bin für den Krisenfall ausreichend vorbereitet (z. B. Nahrungsmittelvorräte, Trinkwasser, Kurbel-/Batterieradio).",
         scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
       },
       "Information durch staatliche Stellen": {
-        varName: "G7Q00006",
-        base: 42, dist: [9, 33, 34, 24],
+        varName: "G7Q00002",
+        base: 42, dist: [2, 40, 51, 7],
         fragewortlaut: "Wie gut fühlen Sie sich durch staatliche Stellen über Maßnahmen zur allgemeinen Krisenvorsorge informiert?",
         scale: ["Sehr gut", "Gut", "Eher gut", "Eher schlecht", "Schlecht", "Sehr schlecht"]
       },
       "Krisenbereitschaft Hessens": {
-        varName: "G7Q00007",
-        base: 39, dist: [7, 32, 37, 24],
+        varName: "G7Q00003",
+        base: 35, dist: [0, 35, 60, 5],
         fragewortlaut: "Wie gut glauben Sie, dass Hessen auf zukünftige Krisen (z. B. Klima, Energie, Sicherheit) vorbereitet ist?",
         scale: ["Sehr gut", "Gut", "Eher gut", "Eher schlecht", "Schlecht", "Sehr schlecht"]
       },
     }
   },
 
+  "Populismus": {
+    subgroups: true,
+    themen: {
+      "Politiker handlungsunfähig": {
+        varName: "G6Q00001_SQ002",
+        base: 91, dist: [42, 49, 8, 1],
+        fragewortlaut: "Die Politiker reden zu viel und machen zu wenig.",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+      "Bürger als bessere Vertreter": {
+        varName: "G6Q00001_SQ003",
+        base: 54, dist: [14, 40, 39, 7],
+        fragewortlaut: "Ein einfacher Bürger würde meine Interessen besser vertreten als ein Berufspolitiker.",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+      "Kompromiss als Prinzipienverrat": {
+        varName: "G6Q00001_SQ004",
+        base: 49, dist: [11, 38, 41, 10],
+        fragewortlaut: "Was in der Politik Kompromiss genannt wird, ist in Wirklichkeit nur ein Verrat von Prinzipien.",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+      "Volk statt Politiker entscheiden": {
+        varName: "G6Q00001_SQ006",
+        base: 56, dist: [18, 38, 38, 6],
+        fragewortlaut: "Das Volk, und nicht die Politiker, sollte die wichtigen politischen Entscheidungen treffen.",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+      "Homogenität des Volkswillens": {
+        varName: "G6Q00001_SQ005",
+        base: 43, dist: [7, 37, 43, 13],
+        fragewortlaut: "Das Volk ist sich im Prinzip darüber einig, was politisch passieren muss.",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+      "Politik dient nur den Mächtigen": {
+        varName: "G6Q00001_SQ007",
+        base: 60, dist: [12, 48, 34, 6],
+        fragewortlaut: "Die Politiker kümmern sich nur um die Interessen der Reichen und Mächtigen.",
+        scale: ["Stimme voll und ganz zu", "Stimme zu", "Stimme eher zu", "Lehne eher ab", "Lehne ab", "Lehne voll und ganz ab"]
+      },
+    }
+  },
+
+  "Politische Kommunikation": {
+    subgroups: true,
+    themen: {
+      "TV/Radio als Informationsquelle": {
+        varName: "G4Q00005_SQ002",
+        base: 86, dist: [86, 0, 0, 14],
+        fragewortlaut: "Wenn Sie sich über politische Themen informieren wollen, welche Informationswege nutzen Sie dann hauptsächlich? [Fernsehen oder Radio (inklusive Mediatheken)]",
+        scale: ["Ja", "", "", "Nein"],
+        baseLabel: "Nutzung"
+      },
+      "Zeitungen als Informationsquelle": {
+        varName: "G4Q00005_SQ003",
+        base: 75, dist: [75, 0, 0, 25],
+        fragewortlaut: "Wenn Sie sich über politische Themen informieren wollen, welche Informationswege nutzen Sie dann hauptsächlich? [Zeitungen (gedruckt oder online)]",
+        scale: ["Ja", "", "", "Nein"],
+        baseLabel: "Nutzung"
+      },
+      "Soziale Medien als Informationsquelle": {
+        varName: "G4Q00005_SQ004",
+        base: 31, dist: [31, 0, 0, 69],
+        fragewortlaut: "Wenn Sie sich über politische Themen informieren wollen, welche Informationswege nutzen Sie dann hauptsächlich? [soziale Medien wie Facebook, X (vormals Twitter), Instagram und YouTube]",
+        scale: ["Ja", "", "", "Nein"],
+        baseLabel: "Nutzung"
+      },
+      "Persönliche Gespräche als Informationsquelle": {
+        varName: "G4Q00005_SQ005",
+        base: 62, dist: [62, 0, 0, 38],
+        fragewortlaut: "Wenn Sie sich über politische Themen informieren wollen, welche Informationswege nutzen Sie dann hauptsächlich? [persönliche Gespräche mit Freunden, Verwandten, Bekannten oder Arbeitskollegen]",
+        scale: ["Ja", "", "", "Nein"],
+        baseLabel: "Nutzung"
+      },
+      "Vertrauen: Social Media-Informationen": {
+        varName: "G4Q00009",
+        base: 24, dist: [0, 24, 61, 15],
+        fragewortlaut: "Wie sehr vertrauen Sie Informationen aus sozialen Medien?",
+        scale: ["Vertraue voll und ganz", "Vertraue", "Vertraue eher", "Vertraue eher nicht", "Vertraue nicht", "Vertraue überhaupt nicht"]
+      },
+      "Falschinformationen erkennen": {
+        varName: "G4Q00011",
+        base: 84, dist: [9, 75, 15, 1],
+        fragewortlaut: "Wie gut fühlen Sie sich in der Lage, Falschinformationen zu erkennen?",
+        scale: ["Sehr gut", "Gut", "Eher gut", "Eher schlecht", "Schlecht", "Sehr schlecht"]
+      },
+    }
+  },
+
+  "Skalometer — Parteisympathie": {
+    subgroups: false,
+    plotType: 'skalometer',
+    themen: {
+      "CDU": {
+        varName: "SKALO_CDU",
+        plotType: 'skalometer',
+        mean: -0.6, base: 41,
+        dist11: [16.2, 9.5, 11.2, 7.0, 4.9, 10.6, 6.1, 11.5, 13.8, 6.5, 2.8],
+        fragewortlaut: "Was halten Sie ganz allgemein von den einzelnen politischen Parteien? -5 heißt, dass Sie überhaupt nichts von der Partei halten, +5 heißt, dass Sie sehr viel von der Partei halten. [CDU]",
+        partyColor: "#1e3a5f"
+      },
+      "AfD": {
+        varName: "SKALO_AfD",
+        plotType: 'skalometer',
+        mean: -3.37, base: 14,
+        dist11: [70.7, 4.2, 2.9, 1.7, 1.0, 5.1, 1.5, 2.9, 4.1, 2.4, 3.4],
+        fragewortlaut: "Was halten Sie ganz allgemein von den einzelnen politischen Parteien? -5 heißt, dass Sie überhaupt nichts von der Partei halten, +5 heißt, dass Sie sehr viel von der Partei halten. [AfD]",
+        partyColor: "#005b99"
+      },
+      "SPD": {
+        varName: "SKALO_SPD",
+        plotType: 'skalometer',
+        mean: -0.94, base: 35,
+        dist11: [18.7, 7.4, 10.6, 9.3, 5.9, 13.2, 7.6, 11.4, 10.5, 4.1, 1.4],
+        fragewortlaut: "Was halten Sie ganz allgemein von den einzelnen politischen Parteien? -5 heißt, dass Sie überhaupt nichts von der Partei halten, +5 heißt, dass Sie sehr viel von der Partei halten. [SPD]",
+        partyColor: "#c0392b"
+      },
+      "Grüne": {
+        varName: "SKALO_Grüne",
+        plotType: 'skalometer',
+        mean: -0.32, base: 46,
+        dist11: [22.7, 5.6, 7.5, 4.6, 3.0, 10.2, 6.0, 9.6, 14.3, 10.9, 5.5],
+        fragewortlaut: "Was halten Sie ganz allgemein von den einzelnen politischen Parteien? -5 heißt, dass Sie überhaupt nichts von der Partei halten, +5 heißt, dass Sie sehr viel von der Partei halten. [Bündnis 90 / Die Grünen]",
+        partyColor: "#2d8a4e"
+      },
+      "Linke": {
+        varName: "SKALO_Linke",
+        plotType: 'skalometer',
+        mean: -1.64, base: 29,
+        dist11: [33.6, 6.9, 8.4, 5.6, 4.9, 12.1, 6.7, 7.6, 7.8, 4.3, 2.0],
+        fragewortlaut: "Was halten Sie ganz allgemein von den einzelnen politischen Parteien? -5 heißt, dass Sie überhaupt nichts von der Partei halten, +5 heißt, dass Sie sehr viel von der Partei halten. [Die Linke]",
+        partyColor: "#8e24aa"
+      },
+      "BSW": {
+        varName: "SKALO_BSW",
+        plotType: 'skalometer',
+        mean: -3.43, base: 7,
+        dist11: [55.7, 11.3, 8.3, 4.8, 2.6, 9.9, 2.0, 2.2, 1.7, 0.8, 0.6],
+        fragewortlaut: "Was halten Sie ganz allgemein von den einzelnen politischen Parteien? -5 heißt, dass Sie überhaupt nichts von der Partei halten, +5 heißt, dass Sie sehr viel von der Partei halten. [BSW]",
+        partyColor: "#e67e22"
+      },
+      "FDP": {
+        varName: "SKALO_FDP",
+        plotType: 'skalometer',
+        mean: -1.97, base: 20,
+        dist11: [30.0, 11.2, 11.1, 6.8, 3.6, 17.4, 5.3, 5.8, 4.9, 2.5, 1.4],
+        fragewortlaut: "Was halten Sie ganz allgemein von den einzelnen politischen Parteien? -5 heißt, dass Sie überhaupt nichts von der Partei halten, +5 heißt, dass Sie sehr viel von der Partei halten. [FDP]",
+        partyColor: "#f1c40f"
+      },
+    }
+  },
+
 };
+
+// SUBGROUP_NS_START
+const SUBGROUP_NS = {"Geschlecht":{"Männer":1754,"Frauen":1356},"Alter":{"18–34":270,"35–49":440,"50–64":1483,"65+":1015},"Bildung":{"Niedrig":259,"Mittel":1322,"Hoch":1549},"Wahlabsicht":{"CDU":696,"AfD":401,"SPD":386,"Grüne":767,"Linke":208,"BSW":25,"FDP":128}};
+// SUBGROUP_NS_END
+
+const PARTY_COLORS = {
+  CDU: '#1e3a5f', AfD: '#005b99', SPD: '#c0392b',
+  'Grüne': '#2d8a4e', Linke: '#8e24aa', BSW: '#e67e22', FDP: '#f1c40f'
+};
+const PARTY_ORDER = ['CDU', 'AfD', 'SPD', 'Grüne', 'Linke', 'BSW', 'FDP'];
+
+const DIM_COLORS = {
+  Geschlecht:  { 'Männer': '#1e3a5f', 'Frauen': '#c0392b' },
+  Alter:       { '18–34': '#7aafd4', '35–49': '#2e6da4', '50–64': '#1e4a7a', '65+': '#1e3a5f' },
+  Bildung:     { 'Niedrig': '#e67e22', 'Mittel': '#2e6da4', 'Hoch': '#1e3a5f' },
+  Wahlabsicht: PARTY_COLORS
+};
+const DIM_ORDER = {
+  Geschlecht:  ['Männer', 'Frauen'],
+  Alter:       ['18–34', '35–49', '50–64', '65+'],
+  Bildung:     ['Niedrig', 'Mittel', 'Hoch'],
+  Wahlabsicht: PARTY_ORDER
+};
+const DIM_ALLE_LABEL = {
+  Geschlecht:  'Alle Geschlechter',
+  Alter:       'Alle Altersgruppen',
+  Bildung:     'Alle Bildungsgruppen',
+  Wahlabsicht: 'Alle Parteien'
+};
+
+// SUBGROUPS_DATA_START
+const SUBGROUPS_DATA = {"G1Q00002_SQ001":{"Geschlecht":{"Männer":{"base":60,"dist":[17,43,35,5],"n":1677},"Frauen":{"base":59,"dist":[15,44,38,3],"n":1254}},"Alter":{"18–34":{"base":62,"dist":[19,43,33,5],"n":246},"35–49":{"base":68,"dist":[21,48,29,2],"n":415},"50–64":{"base":60,"dist":[16,44,36,4],"n":1389},"65+":{"base":53,"dist":[12,41,41,6],"n":970}},"Bildung":{"Niedrig":{"base":70,"dist":[24,46,28,2],"n":250},"Mittel":{"base":69,"dist":[20,48,29,3],"n":1248},"Hoch":{"base":49,"dist":[11,38,45,6],"n":1452}},"Wahlabsicht":{"CDU":{"base":48,"dist":[7,41,46,6],"n":660},"AfD":{"base":87,"dist":[44,43,11,2],"n":393},"SPD":{"base":55,"dist":[9,46,39,6],"n":375},"Grüne":{"base":44,"dist":[7,38,49,6],"n":720},"Linke":{"base":62,"dist":[12,50,35,3],"n":190},"FDP":{"base":59,"dist":[16,42,37,5],"n":123}}},"G1Q00002_SQ002":{"Geschlecht":{"Männer":{"base":47,"dist":[9,38,46,7],"n":1665},"Frauen":{"base":45,"dist":[8,38,48,6],"n":1253}},"Alter":{"18–34":{"base":51,"dist":[9,42,45,4],"n":249},"35–49":{"base":53,"dist":[10,44,42,4],"n":410},"50–64":{"base":45,"dist":[9,36,49,6],"n":1384},"65+":{"base":44,"dist":[7,37,48,8],"n":964}},"Bildung":{"Niedrig":{"base":61,"dist":[16,46,36,2],"n":251},"Mittel":{"base":54,"dist":[10,44,42,4],"n":1232},"Hoch":{"base":36,"dist":[5,31,55,9],"n":1455}},"Wahlabsicht":{"CDU":{"base":33,"dist":[4,29,58,9],"n":664},"AfD":{"base":76,"dist":[23,53,21,3],"n":388},"SPD":{"base":45,"dist":[5,40,48,7],"n":369},"Grüne":{"base":33,"dist":[3,30,58,9],"n":730},"Linke":{"base":50,"dist":[8,41,49,2],"n":189},"FDP":{"base":45,"dist":[12,32,50,6],"n":120}}},"G1Q00002_SQ003":{"Geschlecht":{"Männer":{"base":57,"dist":[11,46,39,4],"n":1530},"Frauen":{"base":58,"dist":[10,48,39,3],"n":1069}},"Alter":{"18–34":{"base":54,"dist":[11,44,39,6],"n":191},"35–49":{"base":62,"dist":[10,52,36,2],"n":362},"50–64":{"base":57,"dist":[11,46,39,4],"n":1216},"65+":{"base":57,"dist":[11,45,40,4],"n":908}},"Bildung":{"Niedrig":{"base":71,"dist":[20,51,27,2],"n":224},"Mittel":{"base":64,"dist":[12,52,33,3],"n":1135},"Hoch":{"base":48,"dist":[7,41,47,5],"n":1253}},"Wahlabsicht":{"CDU":{"base":49,"dist":[7,42,47,4],"n":605},"AfD":{"base":71,"dist":[19,52,24,5],"n":346},"SPD":{"base":60,"dist":[10,51,36,3],"n":346},"Grüne":{"base":49,"dist":[5,44,47,4],"n":630},"Linke":{"base":59,"dist":[7,52,38,3],"n":158},"FDP":{"base":46,"dist":[10,36,46,8],"n":108}}},"G1Q00002_SQ004":{"Geschlecht":{"Männer":{"base":44,"dist":[6,37,50,7],"n":1662},"Frauen":{"base":40,"dist":[6,34,53,7],"n":1256}},"Alter":{"18–34":{"base":47,"dist":[6,42,48,4],"n":255},"35–49":{"base":47,"dist":[8,39,46,7],"n":405},"50–64":{"base":41,"dist":[6,35,51,8],"n":1391},"65+":{"base":42,"dist":[6,36,51,7],"n":956}},"Bildung":{"Niedrig":{"base":57,"dist":[11,46,40,3],"n":237},"Mittel":{"base":46,"dist":[7,39,47,7],"n":1258},"Hoch":{"base":37,"dist":[4,33,55,8],"n":1445}},"Wahlabsicht":{"CDU":{"base":39,"dist":[4,35,51,10],"n":657},"AfD":{"base":58,"dist":[14,43,36,7],"n":369},"SPD":{"base":41,"dist":[6,36,50,8],"n":362},"Grüne":{"base":32,"dist":[3,29,60,8],"n":732},"Linke":{"base":45,"dist":[4,41,51,4],"n":193},"FDP":{"base":43,"dist":[6,37,52,5],"n":124}}},"G1Q00002_SQ005":{"Geschlecht":{"Männer":{"base":84,"dist":[20,64,15,1],"n":1724},"Frauen":{"base":84,"dist":[18,66,15,1],"n":1321}},"Alter":{"18–34":{"base":87,"dist":[24,63,12,1],"n":265},"35–49":{"base":85,"dist":[23,63,14,0],"n":430},"50–64":{"base":85,"dist":[19,66,14,1],"n":1454},"65+":{"base":83,"dist":[18,65,16,1],"n":993}},"Bildung":{"Niedrig":{"base":91,"dist":[27,64,9,0],"n":257},"Mittel":{"base":86,"dist":[22,64,13,1],"n":1298},"Hoch":{"base":81,"dist":[16,65,18,1],"n":1511}},"Wahlabsicht":{"CDU":{"base":84,"dist":[18,66,15,1],"n":684},"AfD":{"base":89,"dist":[34,56,9,1],"n":395},"SPD":{"base":83,"dist":[19,64,16,1],"n":376},"Grüne":{"base":82,"dist":[14,68,17,1],"n":756},"Linke":{"base":80,"dist":[10,71,19,0],"n":201},"FDP":{"base":83,"dist":[18,65,16,1],"n":125}}},"G1Q00001_SQ001":{"Geschlecht":{"Männer":{"base":88,"dist":[47,41,10,2],"n":1745},"Frauen":{"base":88,"dist":[44,44,10,2],"n":1350}},"Alter":{"18–34":{"base":75,"dist":[28,47,19,6],"n":269},"35–49":{"base":84,"dist":[46,38,13,3],"n":437},"50–64":{"base":88,"dist":[45,43,10,2],"n":1478},"65+":{"base":92,"dist":[49,43,7,1],"n":1009}},"Bildung":{"Niedrig":{"base":90,"dist":[50,40,8,2],"n":257},"Mittel":{"base":89,"dist":[49,40,8,3],"n":1314},"Hoch":{"base":86,"dist":[41,45,12,2],"n":1544}},"Wahlabsicht":{"CDU":{"base":92,"dist":[54,38,7,1],"n":694},"AfD":{"base":79,"dist":[42,37,17,4],"n":400},"SPD":{"base":91,"dist":[53,38,8,1],"n":386},"Grüne":{"base":89,"dist":[41,47,10,2],"n":765},"Linke":{"base":79,"dist":[35,44,15,6],"n":208},"FDP":{"base":87,"dist":[39,48,9,4],"n":127}}},"G1Q00001_SQ002":{"Geschlecht":{"Männer":{"base":85,"dist":[30,56,12,2],"n":1742},"Frauen":{"base":83,"dist":[27,56,15,2],"n":1337}},"Alter":{"18–34":{"base":70,"dist":[16,54,24,6],"n":268},"35–49":{"base":82,"dist":[29,53,15,3],"n":435},"50–64":{"base":84,"dist":[28,56,14,2],"n":1469},"65+":{"base":89,"dist":[33,56,10,1],"n":1005}},"Bildung":{"Niedrig":{"base":86,"dist":[36,50,12,2],"n":258},"Mittel":{"base":87,"dist":[33,54,11,2],"n":1307},"Hoch":{"base":81,"dist":[24,57,16,3],"n":1536}},"Wahlabsicht":{"CDU":{"base":90,"dist":[34,57,9,0],"n":694},"AfD":{"base":75,"dist":[29,45,21,5],"n":399},"SPD":{"base":90,"dist":[37,53,9,1],"n":385},"Grüne":{"base":85,"dist":[23,61,14,2],"n":761},"Linke":{"base":71,"dist":[21,50,26,3],"n":205},"FDP":{"base":80,"dist":[30,50,14,6],"n":127}}},"G1Q00001_SQ003":{"Geschlecht":{"Männer":{"base":86,"dist":[38,48,12,2],"n":1745},"Frauen":{"base":86,"dist":[31,55,12,2],"n":1337}},"Alter":{"18–34":{"base":68,"dist":[12,56,26,6],"n":270},"35–49":{"base":79,"dist":[29,49,19,3],"n":438},"50–64":{"base":87,"dist":[36,51,11,2],"n":1464},"65+":{"base":91,"dist":[41,50,8,1],"n":1007}},"Bildung":{"Niedrig":{"base":80,"dist":[38,42,17,3],"n":255},"Mittel":{"base":85,"dist":[36,49,12,3],"n":1306},"Hoch":{"base":87,"dist":[33,53,12,2],"n":1541}},"Wahlabsicht":{"CDU":{"base":92,"dist":[47,45,8,0],"n":693},"AfD":{"base":68,"dist":[31,38,24,7],"n":400},"SPD":{"base":95,"dist":[43,52,4,1],"n":385},"Grüne":{"base":91,"dist":[32,59,8,1],"n":764},"Linke":{"base":71,"dist":[16,54,25,5],"n":204},"FDP":{"base":85,"dist":[35,50,12,3],"n":128}}},"G1Q00001_SQ004":{"Geschlecht":{"Männer":{"base":75,"dist":[31,44,18,7],"n":1739},"Frauen":{"base":76,"dist":[30,45,19,6],"n":1338}},"Alter":{"18–34":{"base":61,"dist":[20,41,28,11],"n":266},"35–49":{"base":66,"dist":[21,45,25,9],"n":432},"50–64":{"base":77,"dist":[31,45,18,6],"n":1465},"65+":{"base":81,"dist":[35,46,14,5],"n":1009}},"Bildung":{"Niedrig":{"base":64,"dist":[18,45,27,10],"n":250},"Mittel":{"base":71,"dist":[24,46,21,9],"n":1309},"Hoch":{"base":82,"dist":[38,44,14,4],"n":1537}},"Wahlabsicht":{"CDU":{"base":84,"dist":[32,52,14,2],"n":692},"AfD":{"base":35,"dist":[4,31,38,27],"n":396},"SPD":{"base":87,"dist":[41,47,11,1],"n":385},"Grüne":{"base":94,"dist":[49,45,5,1],"n":765},"Linke":{"base":75,"dist":[26,50,20,4],"n":207},"FDP":{"base":73,"dist":[26,48,20,6],"n":128}}},"G1Q00003_SQ001":{"Geschlecht":{"Männer":{"base":88,"dist":[20,67,11,2],"n":1751},"Frauen":{"base":88,"dist":[23,65,10,2],"n":1352}},"Alter":{"18–34":{"base":82,"dist":[10,72,16,2],"n":268},"35–49":{"base":78,"dist":[13,66,18,3],"n":439},"50–64":{"base":87,"dist":[21,66,11,2],"n":1479},"65+":{"base":94,"dist":[28,66,5,1],"n":1012}},"Bildung":{"Niedrig":{"base":83,"dist":[15,68,15,2],"n":257},"Mittel":{"base":84,"dist":[16,68,13,3],"n":1319},"Hoch":{"base":92,"dist":[26,66,7,1],"n":1544}},"Wahlabsicht":{"CDU":{"base":94,"dist":[30,65,5,0],"n":694},"AfD":{"base":68,"dist":[8,60,25,7],"n":399},"SPD":{"base":93,"dist":[24,69,6,1],"n":386},"Grüne":{"base":96,"dist":[28,68,4,0],"n":767},"Linke":{"base":81,"dist":[14,68,16,2],"n":205},"FDP":{"base":89,"dist":[22,67,11,0],"n":128}}},"G1Q00003_SQ002":{"Geschlecht":{"Männer":{"base":80,"dist":[8,72,17,3],"n":1748},"Frauen":{"base":76,"dist":[6,70,21,3],"n":1345}},"Alter":{"18–34":{"base":69,"dist":[3,66,26,5],"n":264},"35–49":{"base":70,"dist":[5,65,27,3],"n":438},"50–64":{"base":77,"dist":[7,70,19,4],"n":1478},"65+":{"base":86,"dist":[9,77,12,2],"n":1007}},"Bildung":{"Niedrig":{"base":72,"dist":[4,68,24,4],"n":257},"Mittel":{"base":76,"dist":[6,70,21,3],"n":1315},"Hoch":{"base":82,"dist":[9,72,16,3],"n":1537}},"Wahlabsicht":{"CDU":{"base":91,"dist":[12,80,8,0],"n":694},"AfD":{"base":44,"dist":[1,43,42,14],"n":400},"SPD":{"base":90,"dist":[8,81,10,1],"n":386},"Grüne":{"base":88,"dist":[11,77,11,1],"n":762},"Linke":{"base":72,"dist":[2,71,26,1],"n":203},"FDP":{"base":78,"dist":[7,71,20,2],"n":128}}},"G2Q00007_SQ001":{"Geschlecht":{"Männer":{"base":29,"dist":[1,28,55,16],"n":1748},"Frauen":{"base":26,"dist":[0,26,60,14],"n":1338}},"Alter":{"18–34":{"base":21,"dist":[1,20,59,20],"n":266},"35–49":{"base":21,"dist":[0,21,60,19],"n":437},"50–64":{"base":27,"dist":[1,26,57,16],"n":1470},"65+":{"base":34,"dist":[1,33,56,10],"n":1009}},"Bildung":{"Niedrig":{"base":18,"dist":[0,18,61,21],"n":257},"Mittel":{"base":23,"dist":[0,22,60,18],"n":1312},"Hoch":{"base":34,"dist":[1,33,55,11],"n":1535}},"Wahlabsicht":{"CDU":{"base":30,"dist":[0,30,63,7],"n":694},"AfD":{"base":3,"dist":[0,3,49,48],"n":401},"SPD":{"base":38,"dist":[0,38,57,5],"n":382},"Grüne":{"base":46,"dist":[1,45,50,4],"n":763},"Linke":{"base":30,"dist":[1,28,59,12],"n":205},"FDP":{"base":17,"dist":[0,17,60,23],"n":128}}},"G2Q00007_SQ002":{"Geschlecht":{"Männer":{"base":52,"dist":[1,51,42,6],"n":1728},"Frauen":{"base":51,"dist":[2,49,44,5],"n":1321}},"Alter":{"18–34":{"base":47,"dist":[1,46,46,7],"n":260},"35–49":{"base":48,"dist":[2,46,45,7],"n":436},"50–64":{"base":48,"dist":[2,46,46,6],"n":1449},"65+":{"base":60,"dist":[2,58,37,3],"n":995}},"Bildung":{"Niedrig":{"base":42,"dist":[1,41,49,9],"n":254},"Mittel":{"base":46,"dist":[1,45,48,6],"n":1297},"Hoch":{"base":58,"dist":[2,56,38,4],"n":1514}},"Wahlabsicht":{"CDU":{"base":57,"dist":[1,56,40,3],"n":685},"AfD":{"base":25,"dist":[1,25,57,17],"n":399},"SPD":{"base":59,"dist":[1,59,39,1],"n":378},"Grüne":{"base":67,"dist":[3,65,31,1],"n":751},"Linke":{"base":53,"dist":[3,50,41,6],"n":198},"FDP":{"base":48,"dist":[2,46,46,6],"n":124}}},"G2Q00007_SQ003":{"Geschlecht":{"Männer":{"base":85,"dist":[13,71,14,2],"n":1733},"Frauen":{"base":83,"dist":[13,69,16,2],"n":1315}},"Alter":{"18–34":{"base":71,"dist":[4,68,25,3],"n":263},"35–49":{"base":75,"dist":[11,64,21,4],"n":433},"50–64":{"base":84,"dist":[14,70,14,2],"n":1445},"65+":{"base":90,"dist":[14,76,9,1],"n":997}},"Bildung":{"Niedrig":{"base":76,"dist":[5,70,21,4],"n":250},"Mittel":{"base":79,"dist":[7,72,18,3],"n":1288},"Hoch":{"base":89,"dist":[19,70,10,1],"n":1527}},"Wahlabsicht":{"CDU":{"base":92,"dist":[17,75,7,1],"n":692},"AfD":{"base":67,"dist":[6,61,28,5],"n":392},"SPD":{"base":88,"dist":[12,76,10,2],"n":383},"Grüne":{"base":93,"dist":[19,74,7,0],"n":759},"Linke":{"base":71,"dist":[7,64,27,2],"n":203},"FDP":{"base":86,"dist":[16,71,11,2],"n":125}}},"G2Q00009_SQ001":{"Geschlecht":{"Männer":{"base":33,"dist":[1,33,56,10],"n":1754},"Frauen":{"base":26,"dist":[0,26,65,9],"n":1354}},"Alter":{"18–34":{"base":20,"dist":[1,19,64,16],"n":270},"35–49":{"base":20,"dist":[0,20,66,14],"n":440},"50–64":{"base":29,"dist":[1,29,60,10],"n":1480},"65+":{"base":39,"dist":[1,38,55,6],"n":1015}},"Bildung":{"Niedrig":{"base":26,"dist":[1,25,60,14],"n":259},"Mittel":{"base":25,"dist":[0,25,64,11],"n":1321},"Hoch":{"base":35,"dist":[1,34,57,8],"n":1547}},"Wahlabsicht":{"CDU":{"base":37,"dist":[1,36,60,3],"n":696},"AfD":{"base":7,"dist":[0,7,56,37],"n":401},"SPD":{"base":41,"dist":[1,40,56,3],"n":386},"Grüne":{"base":46,"dist":[1,45,52,2],"n":767},"Linke":{"base":25,"dist":[1,24,69,6],"n":208},"FDP":{"base":23,"dist":[0,23,61,16],"n":128}}},"G2Q00003":{"Geschlecht":{"Männer":{"base":74,"dist":[43,31,17,9],"n":1621},"Frauen":{"base":64,"dist":[36,28,22,14],"n":1191}},"Alter":{"18–34":{"base":50,"dist":[26,24,28,22],"n":216},"35–49":{"base":57,"dist":[26,31,26,17],"n":412},"50–64":{"base":71,"dist":[40,30,19,11],"n":1345},"65+":{"base":79,"dist":[48,31,13,8],"n":914}},"Bildung":{"Niedrig":{"base":58,"dist":[25,33,22,20],"n":220},"Mittel":{"base":65,"dist":[34,31,22,13],"n":1203},"Hoch":{"base":76,"dist":[47,29,16,8],"n":1403}},"Wahlabsicht":{"CDU":{"base":80,"dist":[49,31,14,6],"n":633},"AfD":{"base":53,"dist":[26,27,24,23],"n":367},"SPD":{"base":71,"dist":[40,31,22,7],"n":356},"Grüne":{"base":82,"dist":[51,31,13,5],"n":708},"Linke":{"base":57,"dist":[30,27,24,19],"n":180},"FDP":{"base":79,"dist":[52,26,12,10],"n":121}}},"G2Q00008":{"Geschlecht":{"Männer":{"base":85,"dist":[23,62,13,2],"n":1729},"Frauen":{"base":85,"dist":[23,62,13,2],"n":1324}},"Alter":{"18–34":{"base":82,"dist":[16,66,16,2],"n":261},"35–49":{"base":77,"dist":[18,59,20,3],"n":435},"50–64":{"base":86,"dist":[25,60,13,2],"n":1455},"65+":{"base":89,"dist":[22,66,11,1],"n":994}},"Bildung":{"Niedrig":{"base":76,"dist":[7,69,22,2],"n":252},"Mittel":{"base":81,"dist":[13,68,17,2],"n":1290},"Hoch":{"base":90,"dist":[33,57,9,1],"n":1533}},"Wahlabsicht":{"CDU":{"base":94,"dist":[29,65,6,0],"n":691},"AfD":{"base":69,"dist":[9,60,26,5],"n":393},"SPD":{"base":88,"dist":[24,64,11,1],"n":384},"Grüne":{"base":93,"dist":[35,58,7,0],"n":763},"Linke":{"base":78,"dist":[18,59,20,3],"n":200},"FDP":{"base":92,"dist":[25,67,6,2],"n":125}}},"G4Q00001":{"Geschlecht":{"Männer":{"base":99,"dist":[67,32,1,0],"n":1742},"Frauen":{"base":100,"dist":[73,27,0,0],"n":1338}},"Alter":{"18–34":{"base":98,"dist":[68,30,2,0],"n":268},"35–49":{"base":99,"dist":[60,39,1,0],"n":431},"50–64":{"base":100,"dist":[71,29,0,0],"n":1471},"65+":{"base":100,"dist":[73,27,0,0],"n":1001}},"Bildung":{"Niedrig":{"base":100,"dist":[56,44,0,0],"n":248},"Mittel":{"base":99,"dist":[64,35,1,0],"n":1308},"Hoch":{"base":100,"dist":[77,23,0,0],"n":1543}},"Wahlabsicht":{"CDU":{"base":100,"dist":[69,31,0,0],"n":695},"AfD":{"base":97,"dist":[45,52,3,0],"n":389},"SPD":{"base":100,"dist":[80,20,0,0],"n":383},"Grüne":{"base":100,"dist":[86,14,0,0],"n":764},"Linke":{"base":99,"dist":[73,26,1,0],"n":207},"FDP":{"base":100,"dist":[70,30,0,0],"n":128}}},"G4Q00002":{"Geschlecht":{"Männer":{"base":93,"dist":[31,62,6,1],"n":1745},"Frauen":{"base":93,"dist":[30,63,5,2],"n":1332}},"Alter":{"18–34":{"base":92,"dist":[25,67,6,2],"n":265},"35–49":{"base":90,"dist":[23,67,8,2],"n":431},"50–64":{"base":93,"dist":[32,61,6,1],"n":1466},"65+":{"base":95,"dist":[35,60,5,0],"n":1006}},"Bildung":{"Niedrig":{"base":88,"dist":[18,70,10,2],"n":252},"Mittel":{"base":91,"dist":[25,67,7,1],"n":1305},"Hoch":{"base":96,"dist":[38,57,4,1],"n":1539}},"Wahlabsicht":{"CDU":{"base":98,"dist":[36,62,2,0],"n":694},"AfD":{"base":72,"dist":[11,61,22,6],"n":396},"SPD":{"base":98,"dist":[38,60,2,0],"n":382},"Grüne":{"base":99,"dist":[44,55,1,0],"n":762},"Linke":{"base":93,"dist":[23,70,7,0],"n":205},"FDP":{"base":96,"dist":[30,66,3,1],"n":128}}},"G4Q00003":{"Geschlecht":{"Männer":{"base":66,"dist":[4,62,26,8],"n":1748},"Frauen":{"base":68,"dist":[3,65,26,6],"n":1336}},"Alter":{"18–34":{"base":58,"dist":[2,56,32,10],"n":268},"35–49":{"base":57,"dist":[3,54,31,12],"n":437},"50–64":{"base":65,"dist":[4,61,27,8],"n":1468},"65+":{"base":75,"dist":[4,71,21,4],"n":1003}},"Bildung":{"Niedrig":{"base":62,"dist":[2,60,30,8],"n":250},"Mittel":{"base":62,"dist":[3,59,29,9],"n":1310},"Hoch":{"base":72,"dist":[5,67,23,5],"n":1542}},"Wahlabsicht":{"CDU":{"base":84,"dist":[6,79,14,1],"n":694},"AfD":{"base":16,"dist":[0,15,52,33],"n":400},"SPD":{"base":86,"dist":[7,79,14,0],"n":380},"Grüne":{"base":86,"dist":[5,81,13,1],"n":764},"Linke":{"base":54,"dist":[0,54,40,6],"n":205},"FDP":{"base":59,"dist":[3,55,38,4],"n":128}}},"G4Q00005_SQ002":{"Geschlecht":{"Männer":{"base":84,"dist":[84,0,0,16],"n":1754},"Frauen":{"base":88,"dist":[88,0,0,12],"n":1356}},"Alter":{"18–34":{"base":66,"dist":[66,0,0,34],"n":270},"35–49":{"base":79,"dist":[79,0,0,21],"n":440},"50–64":{"base":87,"dist":[87,0,0,13],"n":1483},"65+":{"base":92,"dist":[92,0,0,8],"n":1015}},"Bildung":{"Niedrig":{"base":86,"dist":[86,0,0,14],"n":259},"Mittel":{"base":86,"dist":[86,0,0,14],"n":1322},"Hoch":{"base":87,"dist":[87,0,0,13],"n":1549}},"Wahlabsicht":{"CDU":{"base":94,"dist":[94,0,0,6],"n":696},"AfD":{"base":65,"dist":[65,0,0,35],"n":401},"SPD":{"base":95,"dist":[95,0,0,5],"n":386},"Grüne":{"base":93,"dist":[93,0,0,7],"n":767},"Linke":{"base":76,"dist":[76,0,0,24],"n":208},"FDP":{"base":80,"dist":[80,0,0,20],"n":128}}},"G4Q00005_SQ003":{"Geschlecht":{"Männer":{"base":75,"dist":[75,0,0,25],"n":1754},"Frauen":{"base":73,"dist":[73,0,0,27],"n":1356}},"Alter":{"18–34":{"base":46,"dist":[46,0,0,54],"n":270},"35–49":{"base":67,"dist":[67,0,0,33],"n":440},"50–64":{"base":76,"dist":[76,0,0,24],"n":1483},"65+":{"base":83,"dist":[83,0,0,17],"n":1015}},"Bildung":{"Niedrig":{"base":64,"dist":[64,0,0,36],"n":259},"Mittel":{"base":71,"dist":[71,0,0,29],"n":1322},"Hoch":{"base":80,"dist":[80,0,0,20],"n":1549}},"Wahlabsicht":{"CDU":{"base":84,"dist":[84,0,0,16],"n":696},"AfD":{"base":51,"dist":[51,0,0,49],"n":401},"SPD":{"base":80,"dist":[80,0,0,20],"n":386},"Grüne":{"base":84,"dist":[84,0,0,16],"n":767},"Linke":{"base":66,"dist":[66,0,0,34],"n":208},"FDP":{"base":78,"dist":[78,0,0,22],"n":128}}},"G4Q00005_SQ004":{"Geschlecht":{"Männer":{"base":32,"dist":[32,0,0,68],"n":1754},"Frauen":{"base":30,"dist":[30,0,0,70],"n":1356}},"Alter":{"18–34":{"base":73,"dist":[73,0,0,27],"n":270},"35–49":{"base":43,"dist":[43,0,0,57],"n":440},"50–64":{"base":27,"dist":[27,0,0,73],"n":1483},"65+":{"base":19,"dist":[19,0,0,81],"n":1015}},"Bildung":{"Niedrig":{"base":24,"dist":[24,0,0,76],"n":259},"Mittel":{"base":29,"dist":[29,0,0,71],"n":1322},"Hoch":{"base":32,"dist":[32,0,0,68],"n":1549}},"Wahlabsicht":{"CDU":{"base":19,"dist":[19,0,0,81],"n":696},"AfD":{"base":55,"dist":[55,0,0,45],"n":401},"SPD":{"base":20,"dist":[20,0,0,80],"n":386},"Grüne":{"base":27,"dist":[27,0,0,73],"n":767},"Linke":{"base":51,"dist":[51,0,0,49],"n":208},"FDP":{"base":35,"dist":[35,0,0,65],"n":128}}},"G4Q00005_SQ005":{"Geschlecht":{"Männer":{"base":61,"dist":[61,0,0,39],"n":1754},"Frauen":{"base":63,"dist":[63,0,0,37],"n":1356}},"Alter":{"18–34":{"base":69,"dist":[69,0,0,31],"n":270},"35–49":{"base":61,"dist":[61,0,0,39],"n":440},"50–64":{"base":61,"dist":[61,0,0,39],"n":1483},"65+":{"base":61,"dist":[61,0,0,39],"n":1015}},"Bildung":{"Niedrig":{"base":47,"dist":[47,0,0,53],"n":259},"Mittel":{"base":59,"dist":[59,0,0,41],"n":1322},"Hoch":{"base":66,"dist":[66,0,0,34],"n":1549}},"Wahlabsicht":{"CDU":{"base":58,"dist":[58,0,0,42],"n":696},"AfD":{"base":60,"dist":[60,0,0,40],"n":401},"SPD":{"base":64,"dist":[64,0,0,36],"n":386},"Grüne":{"base":66,"dist":[66,0,0,34],"n":767},"Linke":{"base":69,"dist":[69,0,0,31],"n":208},"FDP":{"base":67,"dist":[67,0,0,33],"n":128}}},"G4Q00009":{"Geschlecht":{"Männer":{"base":23,"dist":[0,22,62,16],"n":1702},"Frauen":{"base":25,"dist":[0,25,61,14],"n":1301}},"Alter":{"18–34":{"base":43,"dist":[0,43,51,6],"n":263},"35–49":{"base":29,"dist":[0,29,60,11],"n":428},"50–64":{"base":21,"dist":[0,21,63,16],"n":1435},"65+":{"base":21,"dist":[0,21,62,17],"n":969}},"Bildung":{"Niedrig":{"base":31,"dist":[0,31,58,11],"n":247},"Mittel":{"base":26,"dist":[0,26,60,14],"n":1285},"Hoch":{"base":20,"dist":[0,20,64,16],"n":1489}},"Wahlabsicht":{"CDU":{"base":20,"dist":[0,20,64,16],"n":679},"AfD":{"base":43,"dist":[1,42,48,9],"n":387},"SPD":{"base":22,"dist":[0,22,63,15],"n":376},"Grüne":{"base":18,"dist":[0,18,64,18],"n":735},"Linke":{"base":24,"dist":[0,24,66,10],"n":199},"FDP":{"base":28,"dist":[0,28,52,20],"n":127}}},"G4Q00011":{"Geschlecht":{"Männer":{"base":89,"dist":[12,76,11,1],"n":1738},"Frauen":{"base":78,"dist":[6,72,21,1],"n":1331}},"Alter":{"18–34":{"base":92,"dist":[14,78,8,0],"n":268},"35–49":{"base":91,"dist":[12,78,9,1],"n":434},"50–64":{"base":83,"dist":[9,74,16,1],"n":1468},"65+":{"base":80,"dist":[7,73,20,0],"n":994}},"Bildung":{"Niedrig":{"base":72,"dist":[7,64,27,2],"n":252},"Mittel":{"base":82,"dist":[6,76,17,1],"n":1302},"Hoch":{"base":88,"dist":[12,76,12,0],"n":1535}},"Wahlabsicht":{"CDU":{"base":83,"dist":[8,74,17,1],"n":689},"AfD":{"base":90,"dist":[15,75,9,1],"n":398},"SPD":{"base":80,"dist":[6,74,20,0],"n":382},"Grüne":{"base":85,"dist":[8,77,14,1],"n":760},"Linke":{"base":88,"dist":[11,77,12,0],"n":206},"FDP":{"base":86,"dist":[15,71,14,0],"n":127}}},"G3Q00001":{"Geschlecht":{"Männer":{"base":85,"dist":[20,65,14,1],"n":1750},"Frauen":{"base":73,"dist":[11,62,25,2],"n":1349}},"Alter":{"18–34":{"base":71,"dist":[15,56,26,3],"n":269},"35–49":{"base":76,"dist":[13,62,22,3],"n":439},"50–64":{"base":80,"dist":[16,64,19,1],"n":1475},"65+":{"base":85,"dist":[18,67,15,0],"n":1013}},"Bildung":{"Niedrig":{"base":68,"dist":[9,58,30,3],"n":257},"Mittel":{"base":76,"dist":[12,64,22,2],"n":1317},"Hoch":{"base":85,"dist":[21,64,14,1],"n":1544}},"Wahlabsicht":{"CDU":{"base":83,"dist":[14,69,16,1],"n":696},"AfD":{"base":79,"dist":[18,60,19,3],"n":399},"SPD":{"base":82,"dist":[17,65,17,1],"n":386},"Grüne":{"base":84,"dist":[19,66,15,0],"n":766},"Linke":{"base":83,"dist":[20,63,16,1],"n":207},"FDP":{"base":89,"dist":[26,63,10,1],"n":128}}},"G3Q00002_SQ003":{"Geschlecht":{"Männer":{"base":71,"dist":[11,60,28,1],"n":1750},"Frauen":{"base":64,"dist":[6,58,35,1],"n":1346}},"Alter":{"18–34":{"base":43,"dist":[5,38,55,2],"n":269},"35–49":{"base":62,"dist":[6,56,35,3],"n":440},"50–64":{"base":68,"dist":[9,58,31,2],"n":1475},"65+":{"base":78,"dist":[11,67,22,0],"n":1009}},"Bildung":{"Niedrig":{"base":69,"dist":[9,60,28,3],"n":254},"Mittel":{"base":70,"dist":[9,61,29,1],"n":1316},"Hoch":{"base":67,"dist":[9,58,32,1],"n":1545}},"Wahlabsicht":{"CDU":{"base":72,"dist":[11,61,27,1],"n":696},"AfD":{"base":67,"dist":[8,59,29,4],"n":401},"SPD":{"base":75,"dist":[10,66,24,0],"n":385},"Grüne":{"base":67,"dist":[8,58,33,1],"n":766},"Linke":{"base":63,"dist":[8,55,36,1],"n":207},"FDP":{"base":69,"dist":[9,60,30,1],"n":128}}},"G4Q00018_SQ002":{"Geschlecht":{"Männer":{"base":97,"dist":[27,70,3,0],"n":1744},"Frauen":{"base":91,"dist":[17,74,8,1],"n":1327}},"Alter":{"18–34":{"base":88,"dist":[17,71,11,1],"n":267},"35–49":{"base":92,"dist":[20,72,7,1],"n":434},"50–64":{"base":94,"dist":[24,71,5,0],"n":1461},"65+":{"base":96,"dist":[24,72,4,0],"n":1000}},"Bildung":{"Niedrig":{"base":88,"dist":[12,76,10,2],"n":249},"Mittel":{"base":92,"dist":[16,76,7,1],"n":1298},"Hoch":{"base":97,"dist":[30,67,3,0],"n":1540}},"Wahlabsicht":{"CDU":{"base":96,"dist":[26,70,3,1],"n":693},"AfD":{"base":92,"dist":[28,64,6,2],"n":397},"SPD":{"base":96,"dist":[19,77,4,0],"n":381},"Grüne":{"base":97,"dist":[23,74,3,0],"n":764},"Linke":{"base":90,"dist":[20,70,10,0],"n":206},"FDP":{"base":97,"dist":[34,63,3,0],"n":128}}},"G3Q00005_SQ002":{"Geschlecht":{"Männer":{"base":39,"dist":[0,38,47,15],"n":1747},"Frauen":{"base":34,"dist":[0,34,51,15],"n":1332}},"Alter":{"18–34":{"base":24,"dist":[0,24,58,18],"n":266},"35–49":{"base":28,"dist":[0,28,48,24],"n":434},"50–64":{"base":36,"dist":[0,35,49,16],"n":1473},"65+":{"base":46,"dist":[0,46,45,9],"n":1002}},"Bildung":{"Niedrig":{"base":27,"dist":[1,26,53,20],"n":256},"Mittel":{"base":31,"dist":[0,31,50,19],"n":1308},"Hoch":{"base":44,"dist":[0,43,47,10],"n":1534}},"Wahlabsicht":{"CDU":{"base":54,"dist":[1,53,43,3],"n":689},"AfD":{"base":5,"dist":[0,5,43,52],"n":399},"SPD":{"base":54,"dist":[1,53,42,4],"n":381},"Grüne":{"base":52,"dist":[0,52,45,3],"n":762},"Linke":{"base":25,"dist":[0,25,63,12],"n":205},"FDP":{"base":28,"dist":[0,28,57,15],"n":128}}},"G3Q00005_SQ004":{"Geschlecht":{"Männer":{"base":51,"dist":[3,48,35,14],"n":1747},"Frauen":{"base":48,"dist":[1,48,36,15],"n":1329}},"Alter":{"18–34":{"base":36,"dist":[2,34,43,21],"n":266},"35–49":{"base":35,"dist":[1,34,44,21],"n":432},"50–64":{"base":50,"dist":[2,48,35,15],"n":1468},"65+":{"base":60,"dist":[3,57,31,9],"n":1005}},"Bildung":{"Niedrig":{"base":37,"dist":[3,34,39,24],"n":254},"Mittel":{"base":41,"dist":[1,40,40,19],"n":1306},"Hoch":{"base":61,"dist":[3,57,31,9],"n":1534}},"Wahlabsicht":{"CDU":{"base":72,"dist":[5,67,26,2],"n":691},"AfD":{"base":6,"dist":[0,6,45,49],"n":399},"SPD":{"base":68,"dist":[3,65,29,3],"n":381},"Grüne":{"base":71,"dist":[3,67,26,4],"n":761},"Linke":{"base":37,"dist":[0,36,49,15],"n":205},"FDP":{"base":40,"dist":[2,38,44,16],"n":127}}},"G3Q00005_SQ005":{"Geschlecht":{"Männer":{"base":64,"dist":[3,61,28,8],"n":1697},"Frauen":{"base":60,"dist":[1,59,32,8],"n":1278}},"Alter":{"18–34":{"base":55,"dist":[2,52,36,10],"n":242},"35–49":{"base":53,"dist":[1,52,35,12],"n":419},"50–64":{"base":60,"dist":[2,58,31,9],"n":1416},"65+":{"base":70,"dist":[4,66,25,5],"n":987}},"Bildung":{"Niedrig":{"base":53,"dist":[4,49,34,13],"n":246},"Mittel":{"base":56,"dist":[1,55,34,10],"n":1263},"Hoch":{"base":70,"dist":[3,67,25,5],"n":1479}},"Wahlabsicht":{"CDU":{"base":83,"dist":[5,78,16,1],"n":679},"AfD":{"base":24,"dist":[0,24,46,30],"n":382},"SPD":{"base":77,"dist":[3,74,22,1],"n":372},"Grüne":{"base":77,"dist":[3,74,21,2],"n":732},"Linke":{"base":48,"dist":[1,47,44,8],"n":193},"FDP":{"base":63,"dist":[2,61,32,5],"n":119}}},"G3Q00005_SQ006":{"Geschlecht":{"Männer":{"base":60,"dist":[2,58,31,9],"n":1700},"Frauen":{"base":57,"dist":[1,56,35,8],"n":1285}},"Alter":{"18–34":{"base":51,"dist":[2,49,39,10],"n":245},"35–49":{"base":51,"dist":[1,49,37,13],"n":420},"50–64":{"base":56,"dist":[1,56,34,9],"n":1420},"65+":{"base":66,"dist":[3,62,29,6],"n":991}},"Bildung":{"Niedrig":{"base":52,"dist":[2,50,37,11],"n":247},"Mittel":{"base":54,"dist":[1,53,36,10],"n":1265},"Hoch":{"base":63,"dist":[2,61,31,6],"n":1487}},"Wahlabsicht":{"CDU":{"base":84,"dist":[4,80,15,1],"n":676},"AfD":{"base":25,"dist":[0,25,45,30],"n":383},"SPD":{"base":72,"dist":[3,69,26,2],"n":373},"Grüne":{"base":65,"dist":[1,64,32,3],"n":735},"Linke":{"base":40,"dist":[1,39,50,10],"n":196},"FDP":{"base":63,"dist":[1,62,31,6],"n":123}}},"G3Q00005_SQ007":{"Geschlecht":{"Männer":{"base":80,"dist":[29,51,13,7],"n":1733},"Frauen":{"base":81,"dist":[20,61,14,5],"n":1305}},"Alter":{"18–34":{"base":76,"dist":[17,59,16,8],"n":263},"35–49":{"base":71,"dist":[17,54,20,9],"n":424},"50–64":{"base":80,"dist":[25,55,14,6],"n":1447},"65+":{"base":87,"dist":[32,56,9,3],"n":997}},"Bildung":{"Niedrig":{"base":65,"dist":[18,47,25,10],"n":246},"Mittel":{"base":76,"dist":[21,54,17,8],"n":1285},"Hoch":{"base":88,"dist":[31,57,9,3],"n":1526}},"Wahlabsicht":{"CDU":{"base":92,"dist":[31,62,7,0],"n":686},"AfD":{"base":34,"dist":[3,30,37,30],"n":391},"SPD":{"base":92,"dist":[38,53,8,1],"n":375},"Grüne":{"base":98,"dist":[39,59,2,0],"n":756},"Linke":{"base":83,"dist":[17,66,15,2],"n":206},"FDP":{"base":76,"dist":[22,54,20,4],"n":127}}},"G3Q00005_SQ008":{"Geschlecht":{"Männer":{"base":51,"dist":[2,49,33,16],"n":1735},"Frauen":{"base":56,"dist":[1,56,32,11],"n":1308}},"Alter":{"18–34":{"base":59,"dist":[2,56,29,13],"n":261},"35–49":{"base":44,"dist":[2,42,36,20],"n":422},"50–64":{"base":51,"dist":[2,49,34,15],"n":1460},"65+":{"base":58,"dist":[2,56,32,10],"n":994}},"Bildung":{"Niedrig":{"base":34,"dist":[2,32,40,26],"n":253},"Mittel":{"base":43,"dist":[1,42,40,17],"n":1290},"Hoch":{"base":65,"dist":[3,62,26,9],"n":1520}},"Wahlabsicht":{"CDU":{"base":65,"dist":[3,62,30,5],"n":683},"AfD":{"base":7,"dist":[0,6,38,56],"n":396},"SPD":{"base":71,"dist":[3,68,26,3],"n":378},"Grüne":{"base":78,"dist":[3,74,21,2],"n":760},"Linke":{"base":54,"dist":[3,51,39,7],"n":204},"FDP":{"base":41,"dist":[0,42,41,17],"n":128}}},"G3Q00003_SQ003":{"Geschlecht":{"Männer":{"base":99,"dist":[72,27,1,0],"n":1752},"Frauen":{"base":100,"dist":[74,26,0,0],"n":1347}},"Alter":{"18–34":{"base":100,"dist":[70,30,0,0],"n":270},"35–49":{"base":99,"dist":[70,30,0,0],"n":439},"50–64":{"base":99,"dist":[75,24,1,0],"n":1480},"65+":{"base":99,"dist":[71,28,1,0],"n":1008}},"Bildung":{"Niedrig":{"base":99,"dist":[71,28,1,0],"n":256},"Mittel":{"base":99,"dist":[70,29,1,0],"n":1319},"Hoch":{"base":100,"dist":[76,24,0,0],"n":1545}},"Wahlabsicht":{"CDU":{"base":100,"dist":[67,33,0,0],"n":695},"AfD":{"base":99,"dist":[79,20,1,0],"n":399},"SPD":{"base":99,"dist":[75,24,1,0],"n":383},"Grüne":{"base":99,"dist":[76,23,1,0],"n":766},"Linke":{"base":100,"dist":[70,30,0,0],"n":207},"FDP":{"base":99,"dist":[70,29,1,0],"n":128}}},"G3Q00003_SQ004":{"Geschlecht":{"Männer":{"base":98,"dist":[72,26,1,1],"n":1745},"Frauen":{"base":99,"dist":[78,21,1,0],"n":1345}},"Alter":{"18–34":{"base":97,"dist":[77,20,3,0],"n":268},"35–49":{"base":98,"dist":[67,31,1,1],"n":434},"50–64":{"base":99,"dist":[76,23,1,0],"n":1473},"65+":{"base":98,"dist":[75,24,1,0],"n":1012}},"Bildung":{"Niedrig":{"base":97,"dist":[62,35,3,0],"n":251},"Mittel":{"base":98,"dist":[67,31,1,1],"n":1314},"Hoch":{"base":99,"dist":[83,16,1,0],"n":1545}},"Wahlabsicht":{"CDU":{"base":99,"dist":[70,29,1,0],"n":694},"AfD":{"base":94,"dist":[62,32,4,2],"n":393},"SPD":{"base":99,"dist":[78,21,1,0],"n":385},"Grüne":{"base":100,"dist":[89,11,0,0],"n":767},"Linke":{"base":99,"dist":[81,18,1,0],"n":208},"FDP":{"base":99,"dist":[77,22,1,0],"n":128}}},"G3Q00004_SQ003":{"Geschlecht":{"Männer":{"base":88,"dist":[27,61,10,2],"n":1740},"Frauen":{"base":87,"dist":[24,63,11,2],"n":1333}},"Alter":{"18–34":{"base":83,"dist":[26,57,14,3],"n":268},"35–49":{"base":82,"dist":[26,56,15,3],"n":431},"50–64":{"base":88,"dist":[28,60,10,2],"n":1460},"65+":{"base":92,"dist":[23,68,8,1],"n":1010}},"Bildung":{"Niedrig":{"base":81,"dist":[15,65,18,2],"n":254},"Mittel":{"base":86,"dist":[23,63,12,2],"n":1301},"Hoch":{"base":90,"dist":[31,60,8,1],"n":1538}},"Wahlabsicht":{"CDU":{"base":95,"dist":[34,61,5,0],"n":693},"AfD":{"base":60,"dist":[11,49,31,9],"n":395},"SPD":{"base":95,"dist":[34,61,5,0],"n":382},"Grüne":{"base":97,"dist":[33,64,3,0],"n":766},"Linke":{"base":86,"dist":[17,68,13,2],"n":207},"FDP":{"base":91,"dist":[25,66,7,2],"n":128}}},"G3Q00004_SQ004":{"Geschlecht":{"Männer":{"base":76,"dist":[10,66,21,3],"n":1731},"Frauen":{"base":77,"dist":[11,66,20,3],"n":1322}},"Alter":{"18–34":{"base":75,"dist":[11,64,21,4],"n":261},"35–49":{"base":68,"dist":[10,58,27,5],"n":430},"50–64":{"base":76,"dist":[10,66,21,3],"n":1462},"65+":{"base":81,"dist":[12,69,17,2],"n":995}},"Bildung":{"Niedrig":{"base":67,"dist":[8,58,29,5],"n":252},"Mittel":{"base":73,"dist":[9,64,24,3],"n":1300},"Hoch":{"base":81,"dist":[13,69,16,2],"n":1523}},"Wahlabsicht":{"CDU":{"base":83,"dist":[12,70,17,1],"n":692},"AfD":{"base":42,"dist":[3,39,47,11],"n":393},"SPD":{"base":87,"dist":[15,72,12,1],"n":379},"Grüne":{"base":92,"dist":[14,78,8,0],"n":755},"Linke":{"base":86,"dist":[18,68,12,2],"n":200},"FDP":{"base":68,"dist":[9,60,29,2],"n":126}}},"G6Q00001_SQ001":{"Geschlecht":{"Männer":{"base":96,"dist":[55,40,4,1],"n":1733},"Frauen":{"base":96,"dist":[44,52,4,0],"n":1304}},"Alter":{"18–34":{"base":96,"dist":[46,50,4,0],"n":264},"35–49":{"base":95,"dist":[49,47,4,0],"n":428},"50–64":{"base":95,"dist":[50,45,4,1],"n":1438},"65+":{"base":96,"dist":[53,43,3,1],"n":998}},"Bildung":{"Niedrig":{"base":98,"dist":[62,36,2,0],"n":253},"Mittel":{"base":98,"dist":[57,41,2,0],"n":1293},"Hoch":{"base":94,"dist":[43,50,6,1],"n":1507}},"Wahlabsicht":{"CDU":{"base":96,"dist":[45,52,3,0],"n":681},"AfD":{"base":99,"dist":[82,18,0,0],"n":400},"SPD":{"base":95,"dist":[40,55,4,1],"n":379},"Grüne":{"base":93,"dist":[40,52,7,1],"n":740},"Linke":{"base":95,"dist":[45,50,4,1],"n":203},"FDP":{"base":95,"dist":[56,39,5,0],"n":127}}},"G6Q00001_SQ002":{"Geschlecht":{"Männer":{"base":91,"dist":[42,49,9,0],"n":1728},"Frauen":{"base":92,"dist":[42,50,8,0],"n":1330}},"Alter":{"18–34":{"base":92,"dist":[50,42,8,0],"n":266},"35–49":{"base":93,"dist":[47,46,7,0],"n":435},"50–64":{"base":91,"dist":[42,48,9,1],"n":1450},"65+":{"base":91,"dist":[38,53,8,1],"n":1002}},"Bildung":{"Niedrig":{"base":98,"dist":[60,38,2,0],"n":254},"Mittel":{"base":95,"dist":[51,44,5,0],"n":1310},"Hoch":{"base":87,"dist":[31,56,12,1],"n":1514}},"Wahlabsicht":{"CDU":{"base":91,"dist":[31,61,7,1],"n":686},"AfD":{"base":100,"dist":[84,16,0,0],"n":400},"SPD":{"base":86,"dist":[26,60,14,0],"n":376},"Grüne":{"base":85,"dist":[23,63,14,0],"n":750},"Linke":{"base":89,"dist":[39,50,10,1],"n":202},"FDP":{"base":88,"dist":[50,38,12,0],"n":128}}},"G6Q00001_SQ003":{"Geschlecht":{"Männer":{"base":54,"dist":[14,40,38,8],"n":1679},"Frauen":{"base":54,"dist":[14,40,40,6],"n":1236}},"Alter":{"18–34":{"base":63,"dist":[18,45,33,4],"n":257},"35–49":{"base":66,"dist":[22,45,28,5],"n":421},"50–64":{"base":52,"dist":[14,38,40,8],"n":1376},"65+":{"base":51,"dist":[10,41,42,7],"n":949}},"Bildung":{"Niedrig":{"base":76,"dist":[27,50,22,1],"n":245},"Mittel":{"base":67,"dist":[17,50,29,4],"n":1247},"Hoch":{"base":39,"dist":[8,30,51,11],"n":1445}},"Wahlabsicht":{"CDU":{"base":41,"dist":[5,37,48,10],"n":658},"AfD":{"base":92,"dist":[45,47,7,1],"n":389},"SPD":{"base":43,"dist":[4,39,50,7],"n":360},"Grüne":{"base":33,"dist":[3,30,56,11],"n":716},"Linke":{"base":64,"dist":[14,49,32,5],"n":193},"FDP":{"base":46,"dist":[13,34,43,10],"n":125}}},"G6Q00001_SQ004":{"Geschlecht":{"Männer":{"base":49,"dist":[12,37,39,12],"n":1677},"Frauen":{"base":49,"dist":[11,38,44,7],"n":1234}},"Alter":{"18–34":{"base":50,"dist":[14,36,43,7],"n":243},"35–49":{"base":59,"dist":[19,40,35,6],"n":416},"50–64":{"base":48,"dist":[11,36,42,11],"n":1382},"65+":{"base":47,"dist":[8,39,42,11],"n":950}},"Bildung":{"Niedrig":{"base":76,"dist":[22,55,22,1],"n":242},"Mittel":{"base":62,"dist":[15,47,33,5],"n":1214},"Hoch":{"base":33,"dist":[6,27,51,16],"n":1467}},"Wahlabsicht":{"CDU":{"base":40,"dist":[5,36,49,10],"n":664},"AfD":{"base":91,"dist":[42,49,8,1],"n":385},"SPD":{"base":36,"dist":[3,33,49,15],"n":356},"Grüne":{"base":25,"dist":[2,23,58,17],"n":729},"Linke":{"base":46,"dist":[10,36,48,6],"n":192},"FDP":{"base":53,"dist":[9,44,39,8],"n":123}}},"G6Q00001_SQ005":{"Geschlecht":{"Männer":{"base":45,"dist":[7,38,41,14],"n":1714},"Frauen":{"base":40,"dist":[6,34,47,13],"n":1274}},"Alter":{"18–34":{"base":36,"dist":[5,30,47,18],"n":266},"35–49":{"base":49,"dist":[9,41,39,11],"n":424},"50–64":{"base":41,"dist":[6,35,45,14],"n":1408},"65+":{"base":46,"dist":[6,40,42,12],"n":975}},"Bildung":{"Niedrig":{"base":70,"dist":[17,53,27,3],"n":243},"Mittel":{"base":55,"dist":[8,47,38,7],"n":1259},"Hoch":{"base":28,"dist":[3,25,51,21],"n":1503}},"Wahlabsicht":{"CDU":{"base":40,"dist":[3,37,49,11],"n":673},"AfD":{"base":81,"dist":[24,56,17,3],"n":390},"SPD":{"base":32,"dist":[2,30,52,16],"n":366},"Grüne":{"base":20,"dist":[0,20,57,23],"n":740},"Linke":{"base":32,"dist":[4,28,46,22],"n":202},"FDP":{"base":41,"dist":[6,35,42,17],"n":127}}},"G6Q00001_SQ006":{"Geschlecht":{"Männer":{"base":56,"dist":[19,38,37,6],"n":1716},"Frauen":{"base":56,"dist":[15,41,40,4],"n":1292}},"Alter":{"18–34":{"base":66,"dist":[18,48,30,4],"n":260},"35–49":{"base":64,"dist":[23,41,32,4],"n":423},"50–64":{"base":55,"dist":[18,37,39,6],"n":1431},"65+":{"base":53,"dist":[15,37,41,7],"n":982}},"Bildung":{"Niedrig":{"base":74,"dist":[31,44,23,2],"n":249},"Mittel":{"base":68,"dist":[23,46,29,2],"n":1282},"Hoch":{"base":42,"dist":[10,31,50,9],"n":1492}},"Wahlabsicht":{"CDU":{"base":45,"dist":[8,37,46,9],"n":680},"AfD":{"base":93,"dist":[57,35,7,1],"n":399},"SPD":{"base":43,"dist":[7,36,49,8],"n":373},"Grüne":{"base":36,"dist":[4,31,57,8],"n":733},"Linke":{"base":58,"dist":[10,48,37,5],"n":197},"FDP":{"base":55,"dist":[19,36,37,8],"n":128}}},"G6Q00001_SQ007":{"Geschlecht":{"Männer":{"base":60,"dist":[11,49,33,7],"n":1706},"Frauen":{"base":60,"dist":[12,48,35,5],"n":1289}},"Alter":{"18–34":{"base":75,"dist":[18,58,21,3],"n":262},"35–49":{"base":66,"dist":[12,54,31,3],"n":426},"50–64":{"base":58,"dist":[12,46,35,7],"n":1420},"65+":{"base":56,"dist":[10,46,37,7],"n":975}},"Bildung":{"Niedrig":{"base":80,"dist":[21,59,19,1],"n":248},"Mittel":{"base":69,"dist":[15,55,27,3],"n":1267},"Hoch":{"base":48,"dist":[6,42,42,10],"n":1500}},"Wahlabsicht":{"CDU":{"base":35,"dist":[3,32,52,13],"n":674},"AfD":{"base":78,"dist":[24,53,18,5],"n":390},"SPD":{"base":60,"dist":[7,53,37,3],"n":371},"Grüne":{"base":58,"dist":[6,52,38,4],"n":743},"Linke":{"base":86,"dist":[21,65,13,1],"n":201},"FDP":{"base":29,"dist":[9,20,49,22],"n":125}}},"G6Q00002_SQ007":{"Geschlecht":{"Männer":{"base":99,"dist":[59,40,1,0],"n":1741},"Frauen":{"base":99,"dist":[59,40,1,0],"n":1320}},"Alter":{"18–34":{"base":99,"dist":[51,48,1,0],"n":261},"35–49":{"base":97,"dist":[51,46,2,1],"n":432},"50–64":{"base":99,"dist":[61,38,1,0],"n":1452},"65+":{"base":99,"dist":[62,37,1,0],"n":1007}},"Bildung":{"Niedrig":{"base":97,"dist":[45,53,2,0],"n":248},"Mittel":{"base":99,"dist":[57,42,1,0],"n":1294},"Hoch":{"base":100,"dist":[65,35,0,0],"n":1537}},"Wahlabsicht":{"CDU":{"base":100,"dist":[66,34,0,0],"n":692},"AfD":{"base":97,"dist":[38,59,2,1],"n":390},"SPD":{"base":100,"dist":[66,34,0,0],"n":381},"Grüne":{"base":100,"dist":[72,28,0,0],"n":763},"Linke":{"base":99,"dist":[53,46,1,0],"n":202},"FDP":{"base":100,"dist":[61,39,0,0],"n":127}}},"G7Q00001":{"Geschlecht":{"Männer":{"base":68,"dist":[11,57,30,2],"n":1730},"Frauen":{"base":72,"dist":[14,58,27,1],"n":1326}},"Alter":{"18–34":{"base":73,"dist":[16,57,25,2],"n":266},"35–49":{"base":73,"dist":[18,56,24,2],"n":433},"50–64":{"base":72,"dist":[13,59,27,1],"n":1452},"65+":{"base":65,"dist":[9,56,33,2],"n":998}},"Bildung":{"Niedrig":{"base":72,"dist":[15,56,28,1],"n":253},"Mittel":{"base":71,"dist":[13,59,27,1],"n":1298},"Hoch":{"base":69,"dist":[12,56,30,2],"n":1524}},"Wahlabsicht":{"CDU":{"base":65,"dist":[7,58,33,2],"n":684},"AfD":{"base":75,"dist":[23,51,24,2],"n":393},"SPD":{"base":67,"dist":[9,58,32,1],"n":382},"Grüne":{"base":69,"dist":[11,58,30,1],"n":760},"Linke":{"base":72,"dist":[16,56,23,5],"n":206},"FDP":{"base":65,"dist":[13,52,34,1],"n":127}}},"G7Q00005_SQ001":{"Geschlecht":{"Männer":{"base":72,"dist":[2,69,26,3],"n":1702},"Frauen":{"base":66,"dist":[4,62,31,3],"n":1294}},"Alter":{"18–34":{"base":57,"dist":[2,55,39,4],"n":261},"35–49":{"base":64,"dist":[3,61,32,4],"n":420},"50–64":{"base":68,"dist":[3,65,30,2],"n":1422},"65+":{"base":77,"dist":[4,73,21,2],"n":984}},"Bildung":{"Niedrig":{"base":82,"dist":[4,78,16,2],"n":248},"Mittel":{"base":72,"dist":[3,68,26,3],"n":1271},"Hoch":{"base":65,"dist":[2,63,33,2],"n":1497}},"Wahlabsicht":{"CDU":{"base":75,"dist":[2,73,24,1],"n":676},"AfD":{"base":58,"dist":[3,56,35,6],"n":386},"SPD":{"base":77,"dist":[4,73,21,2],"n":379},"Grüne":{"base":72,"dist":[3,68,27,2],"n":740},"Linke":{"base":63,"dist":[4,59,34,3],"n":197},"FDP":{"base":66,"dist":[2,64,31,3],"n":126}}},"G7Q00005_SQ002":{"Geschlecht":{"Männer":{"base":48,"dist":[3,45,45,7],"n":1704},"Frauen":{"base":45,"dist":[2,42,48,8],"n":1293}},"Alter":{"18–34":{"base":27,"dist":[3,24,57,16],"n":267},"35–49":{"base":39,"dist":[3,36,49,12],"n":425},"50–64":{"base":44,"dist":[2,42,49,7],"n":1423},"65+":{"base":60,"dist":[3,57,37,3],"n":969}},"Bildung":{"Niedrig":{"base":60,"dist":[4,56,34,6],"n":238},"Mittel":{"base":53,"dist":[3,49,41,7],"n":1272},"Hoch":{"base":39,"dist":[2,37,53,8],"n":1505}},"Wahlabsicht":{"CDU":{"base":50,"dist":[2,48,45,5],"n":679},"AfD":{"base":54,"dist":[6,48,39,7],"n":379},"SPD":{"base":49,"dist":[2,47,44,7],"n":376},"Grüne":{"base":42,"dist":[2,40,51,7],"n":752},"Linke":{"base":29,"dist":[0,29,60,11],"n":201},"FDP":{"base":49,"dist":[4,45,44,7],"n":128}}},"G7Q00002":{"Geschlecht":{"Männer":{"base":44,"dist":[2,42,50,6],"n":1713},"Frauen":{"base":39,"dist":[2,38,53,7],"n":1309}},"Alter":{"18–34":{"base":29,"dist":[1,28,60,11],"n":263},"35–49":{"base":33,"dist":[1,32,57,10],"n":428},"50–64":{"base":41,"dist":[2,39,52,7],"n":1430},"65+":{"base":50,"dist":[2,48,46,4],"n":992}},"Bildung":{"Niedrig":{"base":46,"dist":[1,45,46,8],"n":250},"Mittel":{"base":41,"dist":[1,40,52,7],"n":1286},"Hoch":{"base":41,"dist":[2,40,51,7],"n":1503}},"Wahlabsicht":{"CDU":{"base":49,"dist":[2,47,45,6],"n":680},"AfD":{"base":29,"dist":[1,28,53,18],"n":388},"SPD":{"base":51,"dist":[3,47,46,4],"n":380},"Grüne":{"base":48,"dist":[1,47,49,3],"n":753},"Linke":{"base":31,"dist":[1,30,62,7],"n":202},"FDP":{"base":37,"dist":[2,36,57,5],"n":123}}},"G7Q00003":{"Geschlecht":{"Männer":{"base":37,"dist":[0,37,58,5],"n":1692},"Frauen":{"base":31,"dist":[0,31,63,6],"n":1269}},"Alter":{"18–34":{"base":25,"dist":[0,25,68,7],"n":258},"35–49":{"base":30,"dist":[0,30,63,7],"n":423},"50–64":{"base":33,"dist":[0,33,61,6],"n":1406},"65+":{"base":42,"dist":[0,42,55,3],"n":965}},"Bildung":{"Niedrig":{"base":42,"dist":[0,42,54,4],"n":249},"Mittel":{"base":35,"dist":[0,35,60,5],"n":1256},"Hoch":{"base":33,"dist":[0,33,62,5],"n":1473}},"Wahlabsicht":{"CDU":{"base":48,"dist":[0,47,51,2],"n":665},"AfD":{"base":22,"dist":[0,22,65,13],"n":386},"SPD":{"base":39,"dist":[0,39,57,4],"n":375},"Grüne":{"base":37,"dist":[0,37,60,3],"n":733},"Linke":{"base":24,"dist":[0,24,69,7],"n":194},"FDP":{"base":38,"dist":[0,38,60,2],"n":121}}},"SKALO_CDU":{"Geschlecht":{"Männer":{"mean":-0.52,"dist11":[14.9,9.9,10.8,7.2,5.1,10.6,6.7,11.0,13.7,7.2,3.1],"base":42,"n":1725},"Frauen":{"mean":-0.71,"dist11":[17.6,9.1,11.5,6.7,4.4,10.9,5.5,12.4,14.1,5.5,2.3],"base":40,"n":1292}},"Alter":{"18–34":{"mean":-1.77,"dist11":[20.7,20.3,14.3,6.8,4.5,6.0,6.0,8.3,9.0,2.3,1.9],"base":27,"n":266},"35–49":{"mean":-1.0,"dist11":[21.2,9.8,13.7,7.4,2.1,8.6,4.4,10.5,13.5,7.2,1.6],"base":37,"n":430},"50–64":{"mean":-0.61,"dist11":[16.8,8.5,10.2,7.1,6.4,11.0,6.1,11.6,13.7,5.9,2.7],"base":40,"n":1431},"65+":{"mean":-0.09,"dist11":[11.8,7.9,10.6,6.6,3.9,12.3,6.8,12.7,15.4,8.0,3.9],"base":47,"n":973}},"Bildung":{"Niedrig":{"mean":-0.79,"dist11":[27.4,5.0,10.4,4.1,2.9,10.4,4.1,10.8,12.0,6.2,6.6],"base":40,"n":241},"Mittel":{"mean":-0.79,"dist11":[19.5,10.1,9.4,7.0,4.4,10.8,5.4,11.1,13.8,6.1,2.4],"base":39,"n":1271},"Hoch":{"mean":-0.38,"dist11":[11.1,9.6,12.8,7.6,5.4,10.8,6.9,11.9,14.2,6.9,2.8],"base":43,"n":1526}},"Wahlabsicht":{"CDU":{"mean":2.72,"dist11":[0.4,0.6,1.3,0.6,2.0,7.3,4.7,16.2,33.0,22.4,11.5],"base":88,"n":687},"AfD":{"mean":-2.8,"dist11":[43.4,13.5,11.0,9.0,1.8,4.0,3.3,5.3,6.3,1.8,0.8],"base":17,"n":399},"SPD":{"mean":-0.47,"dist11":[6.3,7.7,14.2,9.0,8.4,16.4,9.8,14.5,10.6,2.4,0.8],"base":38,"n":379},"Grüne":{"mean":-1.19,"dist11":[10.1,12.5,16.5,11.3,7.5,12.3,8.6,12.1,7.8,1.2,0.1],"base":30,"n":759},"Linke":{"mean":-3.14,"dist11":[33.5,22.8,16.0,8.7,4.4,6.8,3.9,1.5,1.9,0.5,0.0],"base":8,"n":206},"FDP":{"mean":0.13,"dist11":[6.3,7.1,14.3,5.6,6.3,8.7,6.3,16.7,21.4,6.3,0.8],"base":52,"n":126}}},"SKALO_AfD":{"Geschlecht":{"Männer":{"mean":-3.06,"dist11":[65.6,4.9,3.6,1.7,0.8,5.9,1.9,3.3,5.4,3.1,3.8],"base":18,"n":1719},"Frauen":{"mean":-3.77,"dist11":[77.3,3.4,2.1,1.4,1.1,4.3,1.1,2.6,2.5,1.5,2.7],"base":10,"n":1317}},"Alter":{"18–34":{"mean":-3.29,"dist11":[68.5,4.5,4.1,2.6,0.0,3.7,2.2,3.7,4.1,4.9,1.5],"base":16,"n":267},"35–49":{"mean":-2.56,"dist11":[59.3,5.2,3.3,2.1,2.1,3.5,2.1,5.9,7.7,4.4,4.4],"base":25,"n":427},"50–64":{"mean":-3.3,"dist11":[68.9,4.5,3.0,1.9,1.1,6.0,1.6,3.0,4.1,2.4,3.4],"base":15,"n":1446},"65+":{"mean":-3.86,"dist11":[79.0,3.4,2.2,0.8,0.6,4.9,0.9,1.4,2.4,0.9,3.4],"base":9,"n":981}},"Bildung":{"Niedrig":{"mean":-2.31,"dist11":[59.5,1.7,3.3,1.7,0.4,10.3,1.7,2.5,5.8,2.9,10.3],"base":23,"n":242},"Mittel":{"mean":-3.04,"dist11":[65.8,4.3,3.0,1.9,1.2,6.8,1.0,3.7,5.0,3.6,3.7],"base":17,"n":1285},"Hoch":{"mean":-3.85,"dist11":[76.9,4.7,2.8,1.5,0.9,2.7,1.8,2.4,3.1,1.4,1.8],"base":11,"n":1527}},"Wahlabsicht":{"CDU":{"mean":-4.08,"dist11":[73.9,7.5,4.7,2.8,1.2,4.0,2.2,2.3,0.9,0.4,0.1],"base":6,"n":681},"AfD":{"mean":2.71,"dist11":[1.0,0.8,1.5,2.0,1.5,12.0,3.5,12.5,24.0,17.5,23.8],"base":81,"n":400},"SPD":{"mean":-4.75,"dist11":[91.9,2.9,2.6,0.3,0.3,1.0,0.0,0.0,0.3,0.0,0.8],"base":1,"n":382},"Grüne":{"mean":-4.91,"dist11":[96.1,2.3,0.7,0.3,0.0,0.4,0.0,0.0,0.0,0.0,0.3],"base":0,"n":766},"Linke":{"mean":-4.7,"dist11":[92.3,2.4,1.0,0.0,1.0,1.4,0.5,0.0,1.4,0.0,0.0],"base":2,"n":207},"FDP":{"mean":-3.34,"dist11":[58.3,7.9,7.9,5.5,2.4,5.5,3.9,4.7,3.1,0.8,0.0],"base":13,"n":127}}},"SKALO_SPD":{"Geschlecht":{"Männer":{"mean":-1.25,"dist11":[20.8,8.5,11.9,9.7,6.4,11.8,7.4,10.2,8.1,3.8,1.4],"base":31,"n":1726},"Frauen":{"mean":-0.55,"dist11":[16.0,6.2,8.9,8.8,5.4,14.6,7.8,13.0,13.6,4.4,1.4],"base":40,"n":1297}},"Alter":{"18–34":{"mean":-0.77,"dist11":[13.9,6.0,9.8,11.7,7.1,16.5,10.2,11.7,9.8,3.0,0.4],"base":35,"n":266},"35–49":{"mean":-1.46,"dist11":[24.9,9.3,9.1,9.8,5.3,12.3,8.4,10.0,5.6,4.4,0.9],"base":29,"n":430},"50–64":{"mean":-1.16,"dist11":[21.0,7.4,11.4,9.3,6.3,12.3,7.3,10.6,10.2,3.1,1.1],"base":32,"n":1434},"65+":{"mean":-0.44,"dist11":[14.0,7.1,10.3,8.4,5.0,13.9,7.0,13.2,13.2,5.5,2.5],"base":41,"n":978}},"Bildung":{"Niedrig":{"mean":-1.17,"dist11":[29.2,9.5,7.4,3.7,1.2,15.2,4.9,8.6,9.9,5.8,4.5],"base":34,"n":243},"Mittel":{"mean":-1.24,"dist11":[22.2,8.0,11.4,8.9,5.3,12.5,7.0,10.3,10.1,3.3,1.0],"base":32,"n":1277},"Hoch":{"mean":-0.65,"dist11":[13.9,6.7,10.4,10.6,7.1,13.4,8.5,13.0,10.8,4.4,1.2],"base":38,"n":1525}},"Wahlabsicht":{"CDU":{"mean":-0.97,"dist11":[9.5,8.3,15.4,12.9,7.5,15.8,9.8,12.0,6.6,1.6,0.6],"base":31,"n":683},"AfD":{"mean":-4.18,"dist11":[68.3,13.1,7.6,3.5,2.0,2.3,1.3,0.8,0.8,0.0,0.5],"base":3,"n":397},"SPD":{"mean":2.42,"dist11":[0.5,0.5,2.9,3.4,2.3,6.3,7.0,14.1,32.1,21.7,9.1],"base":84,"n":383},"Grüne":{"mean":0.23,"dist11":[2.8,3.8,8.8,11.4,8.4,15.1,11.6,20.1,14.2,3.4,0.3],"base":50,"n":760},"Linke":{"mean":-0.87,"dist11":[8.7,9.2,10.2,14.1,9.7,18.0,10.2,10.7,7.3,1.5,0.5],"base":30,"n":206},"FDP":{"mean":-2.94,"dist11":[39.4,11.0,15.7,9.4,4.7,9.4,3.9,4.7,1.6,0.0,0.0],"base":10,"n":127}}},"SKALO_Grüne":{"Geschlecht":{"Männer":{"mean":-0.74,"dist11":[25.9,6.8,8.6,4.3,3.2,9.7,6.7,8.9,12.3,9.2,4.4],"base":41,"n":1714},"Frauen":{"mean":0.27,"dist11":[18.1,4.2,6.0,5.0,2.8,10.8,5.4,10.4,17.4,12.9,7.0],"base":53,"n":1302}},"Alter":{"18–34":{"mean":-0.14,"dist11":[22.6,5.3,5.3,6.4,3.0,6.4,4.1,12.4,19.9,10.2,4.5],"base":51,"n":266},"35–49":{"mean":-1.14,"dist11":[32.8,5.8,7.2,6.3,2.6,7.7,7.4,7.2,9.3,8.8,4.9],"base":38,"n":430},"50–64":{"mean":-0.33,"dist11":[23.4,5.5,8.0,3.8,3.5,10.1,5.4,8.7,13.7,11.6,6.2],"base":46,"n":1433},"65+":{"mean":0.02,"dist11":[17.3,5.8,7.6,4.7,2.4,12.3,6.8,11.2,15.9,10.9,5.1],"base":50,"n":973}},"Bildung":{"Niedrig":{"mean":-2.0,"dist11":[40.8,6.3,9.2,4.2,2.5,13.0,5.0,5.0,5.5,6.3,2.1],"base":24,"n":238},"Mittel":{"mean":-0.93,"dist11":[27.9,6.0,9.7,5.0,2.5,11.2,5.2,8.0,11.2,8.4,4.9],"base":38,"n":1276},"Hoch":{"mean":0.53,"dist11":[15.1,4.9,5.4,4.3,3.3,8.7,7.0,11.7,18.8,13.9,6.8],"base":58,"n":1523}},"Wahlabsicht":{"CDU":{"mean":-1.0,"dist11":[14.6,8.7,13.8,9.1,4.7,16.2,9.6,11.8,8.7,2.4,0.6],"base":33,"n":680},"AfD":{"mean":-4.55,"dist11":[84.3,6.1,4.0,1.5,0.5,1.3,0.3,0.8,0.3,0.5,0.5],"base":2,"n":396},"SPD":{"mean":1.1,"dist11":[6.1,1.6,5.0,4.7,3.2,13.2,11.9,15.6,24.8,12.9,1.1],"base":66,"n":379},"Grüne":{"mean":3.33,"dist11":[0.0,0.0,0.5,0.9,0.5,4.1,3.0,11.5,27.0,32.0,20.4],"base":94,"n":763},"Linke":{"mean":0.8,"dist11":[4.8,3.4,5.3,8.7,4.8,12.6,10.1,17.9,21.3,9.2,1.9],"base":60,"n":207},"FDP":{"mean":-2.66,"dist11":[36.2,15.7,11.0,6.3,7.9,8.7,4.7,3.1,5.5,0.0,0.8],"base":14,"n":127}}},"SKALO_Linke":{"Geschlecht":{"Männer":{"mean":-2.03,"dist11":[38.2,8.0,8.6,5.6,4.8,10.0,6.1,6.8,6.8,3.8,1.4],"base":25,"n":1716},"Frauen":{"mean":-1.11,"dist11":[27.1,5.5,8.1,5.7,5.4,14.4,7.7,8.9,9.4,5.1,2.7],"base":34,"n":1282}},"Alter":{"18–34":{"mean":-0.52,"dist11":[29.8,3.8,4.9,4.2,3.8,9.1,4.5,7.9,12.8,16.2,3.0],"base":45,"n":265},"35–49":{"mean":-2.12,"dist11":[40.2,7.8,6.8,7.8,4.7,9.4,6.4,5.2,4.9,4.2,2.6],"base":23,"n":425},"50–64":{"mean":-1.82,"dist11":[34.8,6.9,9.0,5.7,5.4,12.0,6.7,7.9,7.6,2.5,1.6],"base":26,"n":1428},"65+":{"mean":-1.48,"dist11":[29.9,7.4,9.1,5.0,4.7,14.2,7.7,8.2,8.2,3.7,2.0],"base":30,"n":965}},"Bildung":{"Niedrig":{"mean":-2.6,"dist11":[46.6,8.1,5.5,7.2,5.5,12.7,3.8,2.1,2.1,4.7,1.7],"base":14,"n":236},"Mittel":{"mean":-2.0,"dist11":[37.2,7.3,9.5,5.6,4.6,12.5,5.5,6.8,5.5,3.8,1.7],"base":23,"n":1266},"Hoch":{"mean":-1.18,"dist11":[28.2,6.5,8.0,5.5,5.1,11.5,8.1,9.4,10.7,4.7,2.2],"base":35,"n":1517}},"Wahlabsicht":{"CDU":{"mean":-3.34,"dist11":[46.8,14.4,13.0,5.5,3.7,10.2,3.7,1.2,0.7,0.6,0.1],"base":6,"n":675},"AfD":{"mean":-4.22,"dist11":[77.7,6.3,3.0,2.5,0.8,6.6,0.8,1.3,0.5,0.5,0.0],"base":3,"n":394},"SPD":{"mean":-0.53,"dist11":[13.6,2.1,11.4,7.4,7.7,20.5,10.9,12.8,10.1,3.5,0.0],"base":37,"n":376},"Grüne":{"mean":0.5,"dist11":[5.7,2.8,5.9,7.5,8.6,13.9,14.5,17.2,15.9,5.8,2.2],"base":56,"n":760},"Linke":{"mean":3.23,"dist11":[0.0,0.0,1.0,1.0,1.4,2.4,5.8,10.1,29.0,30.4,18.8],"base":94,"n":207},"FDP":{"mean":-4.15,"dist11":[69.0,11.1,6.3,2.4,4.0,5.6,0.8,0.8,0.0,0.0,0.0],"base":2,"n":126}}},"SKALO_BSW":{"Geschlecht":{"Männer":{"mean":-3.54,"dist11":[56.7,12.7,7.9,4.7,2.7,9.0,1.5,2.0,1.6,0.7,0.6],"base":6,"n":1674},"Frauen":{"mean":-3.3,"dist11":[54.7,9.9,8.7,4.9,2.2,10.7,2.7,2.5,1.7,1.2,0.7],"base":9,"n":1204}},"Alter":{"18–34":{"mean":-2.98,"dist11":[37.5,18.1,14.1,6.5,2.8,10.5,3.6,5.2,1.2,0.0,0.4],"base":10,"n":248},"35–49":{"mean":-2.99,"dist11":[47.8,10.1,10.1,7.2,2.7,10.4,3.0,3.7,2.5,2.0,0.5],"base":12,"n":404},"50–64":{"mean":-3.44,"dist11":[56.1,11.8,7.9,4.4,2.5,9.9,2.0,2.1,1.8,0.9,0.7],"base":7,"n":1376},"65+":{"mean":-3.72,"dist11":[63.4,9.2,6.6,3.9,2.7,9.6,1.3,0.9,1.2,0.5,0.8],"base":5,"n":930}},"Bildung":{"Niedrig":{"mean":-3.3,"dist11":[57.0,7.8,5.7,5.2,3.5,14.8,1.3,1.3,1.7,0.4,1.3],"base":6,"n":230},"Mittel":{"mean":-3.31,"dist11":[56.3,9.7,6.9,4.5,2.8,11.0,2.2,2.8,1.8,0.9,1.1],"base":9,"n":1212},"Hoch":{"mean":-3.58,"dist11":[55.2,13.5,9.8,4.9,2.3,8.0,1.9,1.9,1.6,0.8,0.1],"base":6,"n":1456}},"Wahlabsicht":{"CDU":{"mean":-4.06,"dist11":[68.7,9.2,7.3,3.5,2.1,6.8,0.8,0.9,0.6,0.2,0.0],"base":2,"n":662},"AfD":{"mean":-2.09,"dist11":[39.1,7.0,7.6,4.9,4.2,17.2,4.4,6.2,5.2,2.3,1.8],"base":20,"n":384},"SPD":{"mean":-3.5,"dist11":[55.1,11.9,9.1,5.8,2.5,9.4,1.9,1.9,0.8,0.6,0.8],"base":6,"n":361},"Grüne":{"mean":-3.92,"dist11":[58.4,17.0,8.3,5.4,1.9,6.4,1.0,1.1,0.3,0.0,0.3],"base":3,"n":724},"Linke":{"mean":-2.72,"dist11":[40.4,11.4,10.9,7.8,4.1,12.4,3.6,5.2,2.6,1.6,0.0],"base":13,"n":193},"FDP":{"mean":-3.83,"dist11":[60.8,8.8,11.2,6.4,2.4,8.0,1.6,0.0,0.0,0.8,0.0],"base":2,"n":125}}},"SKALO_FDP":{"Geschlecht":{"Männer":{"mean":-1.88,"dist11":[28.9,10.8,11.1,7.9,3.3,16.4,5.7,6.3,5.5,2.8,1.2],"base":22,"n":1705},"Frauen":{"mean":-2.08,"dist11":[30.8,11.9,11.3,5.8,3.8,18.9,4.8,5.2,3.9,2.1,1.5],"base":18,"n":1265}},"Alter":{"18–34":{"mean":-1.74,"dist11":[18.8,15.7,13.4,9.6,8.0,15.3,3.1,6.1,5.7,3.1,1.1],"base":19,"n":261},"35–49":{"mean":-1.76,"dist11":[26.4,11.0,12.2,6.0,2.6,19.4,7.7,4.3,6.5,3.1,0.7],"base":22,"n":417},"50–64":{"mean":-2.01,"dist11":[30.3,11.2,11.2,7.6,3.5,16.4,5.3,6.2,4.5,2.5,1.3],"base":20,"n":1414},"65+":{"mean":-2.06,"dist11":[34.1,10.0,9.8,5.4,3.0,18.4,5.0,5.7,4.7,2.0,1.9],"base":19,"n":960}},"Bildung":{"Niedrig":{"mean":-2.38,"dist11":[36.8,11.7,10.5,5.0,2.1,19.2,2.9,5.0,4.6,0.8,1.3],"base":15,"n":239},"Mittel":{"mean":-2.1,"dist11":[32.7,10.4,9.6,6.7,3.6,19.4,4.9,6.2,3.6,1.6,1.3],"base":18,"n":1248},"Hoch":{"mean":-1.78,"dist11":[26.7,11.7,12.2,7.5,3.9,15.2,6.1,5.7,6.1,3.5,1.5],"base":23,"n":1502}},"Wahlabsicht":{"CDU":{"mean":-0.32,"dist11":[8.4,6.6,9.5,7.5,4.6,27.0,11.5,9.5,9.5,4.1,1.8],"base":36,"n":677},"AfD":{"mean":-1.73,"dist11":[31.3,6.4,8.1,6.9,2.3,23.4,6.1,6.9,6.4,1.3,1.0],"base":22,"n":393},"SPD":{"mean":-2.76,"dist11":[35.6,13.1,14.7,8.3,5.1,12.8,4.0,4.5,0.8,0.5,0.5],"base":10,"n":374},"Grüne":{"mean":-3.2,"dist11":[41.1,16.5,13.8,7.2,4.1,10.8,2.7,2.5,0.8,0.3,0.1],"base":6,"n":751},"Linke":{"mean":-3.81,"dist11":[50.2,20.9,10.9,7.0,2.5,6.0,2.0,0.5,0.0,0.0,0.0],"base":2,"n":201},"FDP":{"mean":2.8,"dist11":[0.0,0.0,3.9,1.6,1.6,7.8,2.3,14.1,25.8,26.6,16.4],"base":85,"n":128}}}};
+// SUBGROUPS_DATA_END
 
 // Default dist labels (shown in chart legend) — generic positive→negative
 const DIST_LABELS = ['Positiv / Zustimmung', 'Eher positiv', 'Eher negativ', 'Negativ / Ablehnung'];
@@ -511,13 +888,25 @@ const FONT = { family: 'DM Sans', size: 11 };
 const GRID_CLR = 'rgba(0,0,0,0.05)';
 
 let charts = {};
+let distStacked = false;
+
+function toggleDistStacked() {
+  distStacked = !distStacked;
+  const btn = document.getElementById('dist-toggle');
+  btn.textContent = distStacked ? 'Gruppiert' : 'Gestapelt';
+  if (charts.dist) {
+    charts.dist.options.scales.x.stacked = distStacked;
+    charts.dist.options.scales.y.stacked = distStacked;
+    charts.dist.update();
+  }
+}
 
 // ── HELPERS ──────────────────────────────────────────────────────────────────
 function gruppeAvg(name) {
   const vals = Object.values(GRUPPEN[name].themen);
   return {
     base: Math.round(vals.reduce((s, t) => s + t.base, 0) / vals.length),
-    dist: [0,1,2,3].map(i => Math.round(vals.reduce((s, t) => s + t.dist[i], 0) / vals.length)),
+    dist: [0,0,0,0].map(i => Math.round(vals.reduce((s, t) => s + t.dist[i], 0) / vals.length)),
   };
 }
 
@@ -529,6 +918,36 @@ function getThemaData(gruppeName, themaName) {
 
 function barColor(v) {
   return v >= 55 ? "#1e3a5f" : v >= 40 ? "#2e6da4" : "#c0392b";
+}
+
+// Build the 4 dist-bucket labels from the original scale array.
+// The dist array is always a 4-bucket collapse of the raw scale:
+//   scale-4:  1:1 mapping
+//   scale-6:  [s0] [s1+s2] [s3+s4] [s5]
+//   scale-5:  [s0] [s1+s2] [s3]    [s4]
+function buildDistLabels(scale) {
+  if (!scale || scale.length === 0) return DIST_LABELS;
+  if (scale.length === 4) return scale.slice();
+  if (scale.length === 6) return [
+    scale[0],
+    scale[1] + ' / ' + scale[2],
+    scale[3] + ' / ' + scale[4],
+    scale[5]
+  ];
+  if (scale.length === 5) return [
+    scale[0],
+    scale[1] + ' / ' + scale[2],
+    scale[3],
+    scale[4]
+  ];
+  return scale.slice(0, 4);
+}
+
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
 }
 
 // Streuung: measures polarisation of answer distribution.
@@ -564,18 +983,300 @@ function streuungHTML(dist) {
   return `<div class="streuung" title="Streuung: ${lbl}">${dots}<span class="streuung-lbl">${lbl}</span></div>`;
 }
 
-function renderTable(tableId, gruppeName, activeThema) {
-  const tbody = document.querySelector(`#${tableId} tbody`);
+function renderTable(tableId, gruppeName, activeThema, subFilter, subVglFilter) {
+  if (GRUPPEN[gruppeName].plotType === 'skalometer') {
+    return renderTableSkalometer(tableId, gruppeName, activeThema, subFilter, subVglFilter);
+  }
+  const colId  = tableId === 'tbl-sel' ? 'tbl-sel-col' : 'tbl-vgl-col';
+  const thead  = document.querySelector(`#${tableId} thead tr`);
+  const tbody  = document.querySelector(`#${tableId} tbody`);
+  const hasSub = subFilter && subFilter !== '__all__' && !subFilter.includes('::__alle__')
+               && Object.keys(SUBGROUPS_DATA).length > 0;
+  const [subDim, subCat] = hasSub ? subFilter.split('::') : [];
+
+  // Always restore standard thead (in case we switched away from all-parties mode)
+  if (thead) thead.innerHTML = hasSub
+    ? `<th>Thema</th><th class="bar-w" id="${colId}">Zustimmung</th><th class="mono">%</th><th class="mono tbl-n">n</th><th>Streuung</th>`
+    : `<th>Thema</th><th class="bar-w" id="${colId}">Zustimmung</th><th class="mono">%</th><th>Streuung</th>`;
+
   tbody.innerHTML = Object.entries(GRUPPEN[gruppeName].themen).map(([name, d]) => {
+    let base = d.base, dist = d.dist, subN = null;
+    if (hasSub) {
+      const sub = SUBGROUPS_DATA[d.varName]?.[subDim]?.[subCat];
+      if (sub) { base = sub.base; dist = sub.dist; subN = sub.n; }
+    }
     const isActive = name === activeThema;
-    const color = barColor(d.base);
+    const color    = barColor(base);
+    const nCell    = hasSub
+      ? `<td class="mono tbl-n">${subN != null ? subN.toLocaleString('de-DE') : '—'}</td>`
+      : '';
     return `<tr class="${isActive ? 'active' : ''}">
       <td>${isActive ? '<strong>' + name + '</strong>' : name}</td>
-      <td class="bar-w"><div class="bar-bg"><div class="bar-fill" style="width:${d.base}%;background:${color}"></div></div></td>
-      <td class="mono">${d.base} %</td>
-      <td>${streuungHTML(d.dist)}</td>
+      <td class="bar-w"><div class="bar-bg"><div class="bar-fill" style="width:${base}%;background:${color}"></div></div></td>
+      <td class="mono">${base} %</td>
+      ${nCell}
+      <td>${streuungHTML(dist)}</td>
     </tr>`;
   }).join('');
+}
+
+// ── SKALOMETER ───────────────────────────────────────────────────────────────
+function skalometerColor(mean) {
+  if (mean >= 2)   return '#1e3a5f';
+  if (mean >= 0.5) return '#2e6da4';
+  if (mean >= -0.5) return '#7aafd4';
+  if (mean >= -2)  return '#e67e22';
+  return '#c0392b';
+}
+
+function skalometerMiniBar(mean) {
+  const pct   = (mean + 5) / 10 * 100;
+  const zero  = 50;
+  const left  = mean >= 0 ? zero : pct;
+  const width = Math.abs(pct - zero);
+  const col   = skalometerColor(mean);
+  return `<div class="skalo-track">
+    <div class="skalo-track-bg"></div>
+    <div class="skalo-bar" style="left:${left.toFixed(1)}%;width:${width.toFixed(1)}%;background:${col}"></div>
+    <div class="skalo-needle" style="left:${pct.toFixed(1)}%;background:${col}"></div>
+  </div>`;
+}
+
+function renderTableSkalometer(tableId, gruppeName, activeThema, subFilter, subVglFilter) {
+  const thead = document.querySelector(`#${tableId} thead tr`);
+  const colId = tableId === 'tbl-sel' ? 'tbl-sel-col' : 'tbl-vgl-col';
+  const hasSub    = subFilter    && subFilter    !== '__all__' && Object.keys(SUBGROUPS_DATA).length > 0;
+  const hasSubVgl = subVglFilter && subVglFilter !== '__all__' && Object.keys(SUBGROUPS_DATA).length > 0;
+  const selLbl = hasSub    ? subFilter.split('::')[1]    : 'Alle';
+  const vglLbl = hasSubVgl ? subVglFilter.split('::')[1] : null;
+  if (thead) thead.innerHTML = hasSubVgl
+    ? `<th>Partei</th><th class="bar-w" id="${colId}">–5 ··· +5</th><th class="skalo-mean-lbl">${selLbl}</th><th class="skalo-mean-lbl">${vglLbl}</th>`
+    : `<th>Partei</th><th class="bar-w" id="${colId}">–5 ··· +5</th><th class="skalo-mean-lbl">Ø</th><th></th>`;
+  const tbody = document.querySelector(`#${tableId} tbody`);
+  const [subDim, subCat] = hasSub    ? subFilter.split('::')    : [];
+  const [vglDim, vglCat] = hasSubVgl ? subVglFilter.split('::') : [];
+  tbody.innerHTML = Object.entries(GRUPPEN[gruppeName].themen).map(([name, d]) => {
+    let mean = d.mean;
+    if (hasSub) {
+      const sub = SUBGROUPS_DATA[d.varName]?.[subDim]?.[subCat];
+      if (sub?.mean !== undefined) mean = sub.mean;
+    }
+    let vglMean = null;
+    if (hasSubVgl) {
+      const sub = SUBGROUPS_DATA[d.varName]?.[vglDim]?.[vglCat];
+      if (sub?.mean !== undefined) vglMean = sub.mean;
+    }
+    const isActive = name === activeThema;
+    const sign    = mean    >= 0 ? '+' : '';
+    const vglSign = vglMean !== null && vglMean >= 0 ? '+' : '';
+    return `<tr class="${isActive ? 'active' : ''}">
+      <td>${isActive ? '<strong>' + name + '</strong>' : name}</td>
+      <td class="bar-w">${skalometerMiniBar(mean)}</td>
+      <td class="skalo-mean-lbl">${sign}${mean.toFixed(2)}</td>
+      <td class="skalo-mean-lbl">${vglMean !== null ? vglSign + vglMean.toFixed(2) : ''}</td>
+    </tr>`;
+  }).join('');
+}
+
+function getSkalometerData(themaData, subFilter) {
+  if (!subFilter || subFilter === '__all__') return themaData;
+  const [dim, cat] = subFilter.split('::');
+  const sub = SUBGROUPS_DATA[themaData.varName]?.[dim]?.[cat];
+  return sub ? { ...themaData, mean: sub.mean, dist11: sub.dist11, base: sub.base, n: sub.n } : themaData;
+}
+
+function renderSkalometerCharts(gruppe, thema, subSel, subVglSel) {
+  const allParties = Object.entries(GRUPPEN[gruppe].themen);
+
+  // ── Resolve isAllGroups (e.g. "Geschlecht::__alle__")
+  const isAllGroups  = subSel.endsWith('::__alle__');
+  const allGroupsDim = isAllGroups ? subSel.split('::')[0] : null;
+  const dimGroups    = isAllGroups
+    ? (DIM_ORDER[allGroupsDim] || Object.keys(SUBGROUP_NS[allGroupsDim] || {}))
+        .filter(g => (SUBGROUP_NS[allGroupsDim]?.[g] ?? 0) >= 30)
+    : null;
+
+  const hasSub    = subSel    !== '__all__' && !isAllGroups && Object.keys(SUBGROUPS_DATA).length > 0;
+  const hasSubVgl = subVglSel !== '__all__' && Object.keys(SUBGROUPS_DATA).length > 0;
+
+  const selLabel = isAllGroups ? (DIM_ALLE_LABEL[allGroupsDim] || allGroupsDim)
+                 : hasSub     ? subSel.split('::')[1]
+                              : 'Alle Befragten';
+  const vglLabel = hasSubVgl ? subVglSel.split('::')[1] : null;
+
+  // Gather means for all parties (single subgroup or overall)
+  const partyMeans = allParties.map(([name, d]) => {
+    const sd = hasSub ? getSkalometerData(d, subSel) : d;
+    return { name, mean: sd.mean, color: d.partyColor || skalometerColor(sd.mean) };
+  });
+  const partyMeansVgl = hasSubVgl ? allParties.map(([name, d]) => {
+    const sd = getSkalometerData(d, subVglSel);
+    return { name, mean: sd.mean, color: d.partyColor || skalometerColor(sd.mean) };
+  }) : null;
+
+  // For isAllGroups: one set of means per group
+  const groupMeanSets = isAllGroups ? dimGroups.map(grp => ({
+    grp,
+    color: DIM_COLORS[allGroupsDim]?.[grp] || '#888',
+    means: allParties.map(([name, d]) => getSkalometerData(d, `${allGroupsDim}::${grp}`).mean),
+  })) : null;
+
+  // Selected thema data
+  const selD  = GRUPPEN[gruppe].themen[thema] || allParties[0][1];
+  const selSD = hasSub    ? getSkalometerData(selD, subSel)    : selD;
+  const vglSD = hasSubVgl ? getSkalometerData(selD, subVglSel) : null;
+  // For isAllGroups dist11: treat first two groups as sel/vgl
+  const grpSD0 = isAllGroups && dimGroups.length > 0
+    ? getSkalometerData(selD, `${allGroupsDim}::${dimGroups[0]}`) : null;
+  const grpSD1 = isAllGroups && dimGroups.length > 1
+    ? getSkalometerData(selD, `${allGroupsDim}::${dimGroups[1]}`) : null;
+
+  // ── LEFT: overview bar chart (all parties)
+  document.getElementById('bar-title').textContent = 'Parteisympathie — Mittelwert (–5 bis +5)';
+  document.getElementById('bar-sub').textContent   = isAllGroups
+    ? selLabel
+    : hasSubVgl ? `${selLabel} vs. ${vglLabel}`
+    : hasSub ? selLabel : 'Alle Befragten';
+
+  const barNeedsRecreate = !charts.bar || !charts._barIsSkalometer
+    || charts._skaloHasVgl !== hasSubVgl || charts._skaloIsAllGroups !== isAllGroups
+    || (isAllGroups && charts._skaloAllGroupsDim !== allGroupsDim);
+
+  if (!barNeedsRecreate) {
+    if (isAllGroups) {
+      groupMeanSets.forEach((gs, i) => { charts.bar.data.datasets[i].data = gs.means; });
+    } else {
+      charts.bar.data.datasets[0].data = partyMeans.map(p => p.mean);
+      if (hasSubVgl) {
+        charts.bar.data.datasets[1].data = partyMeansVgl.map(p => p.mean);
+      } else {
+        charts.bar.data.datasets[0].backgroundColor = partyMeans.map(p => p.name === thema ? p.color : hexToRgba(p.color, 0.22));
+        charts.bar.data.datasets[0].borderWidth     = partyMeans.map(p => p.name === thema ? 3 : 0);
+        charts.bar.data.datasets[0].borderColor     = partyMeans.map(p => p.name === thema ? p.color : 'transparent');
+      }
+    }
+    charts.bar.update('none');
+  } else {
+    if (charts.bar) { charts.bar.destroy(); charts.bar = null; }
+    let datasets;
+    if (isAllGroups) {
+      datasets = groupMeanSets.map(gs => ({
+        label: gs.grp,
+        data: gs.means,
+        backgroundColor: hexToRgba(gs.color, 0.85),
+        borderRadius: 3,
+      }));
+    } else if (hasSubVgl) {
+      datasets = [
+        {
+          label: selLabel,
+          data:            partyMeans.map(p => p.mean),
+          backgroundColor: partyMeans.map(p => hexToRgba(p.color, 0.85)),
+          borderRadius: 3,
+        },
+        {
+          label: vglLabel,
+          data:            partyMeansVgl.map(p => p.mean),
+          backgroundColor: partyMeansVgl.map(p => hexToRgba(p.color, 0.38)),
+          borderColor:     partyMeansVgl.map(p => p.color),
+          borderWidth: 2,
+          borderRadius: 3,
+        }
+      ];
+    } else {
+      datasets = [{
+        data:            partyMeans.map(p => p.mean),
+        backgroundColor: partyMeans.map(p => p.name === thema ? p.color : hexToRgba(p.color, 0.22)),
+        borderColor:     partyMeans.map(p => p.name === thema ? p.color : 'transparent'),
+        borderWidth:     partyMeans.map(p => p.name === thema ? 3 : 0),
+        borderRadius: 3,
+      }];
+    }
+    charts.bar = new Chart(document.getElementById('chart-bar'), {
+      type: 'bar',
+      data: { labels: allParties.map(([n]) => n), datasets },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: isAllGroups || hasSubVgl, labels: { font: FONT, boxWidth: 11, padding: 10 } },
+          tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label || thema}: Ø ${ctx.parsed.y >= 0 ? '+' : ''}${ctx.parsed.y.toFixed(2)}` } }
+        },
+        scales: {
+          y: { min: -5, max: 5, grid: { color: GRID_CLR },
+               ticks: { font: FONT, callback: v => (v > 0 ? '+' : '') + v } },
+          x: { grid: { display: false }, ticks: { font: FONT } }
+        }
+      }
+    });
+    charts._barIsSkalometer    = true;
+    charts._skaloHasVgl        = hasSubVgl;
+    charts._skaloIsAllGroups   = isAllGroups;
+    charts._skaloAllGroupsDim  = allGroupsDim;
+  }
+
+  // ── RIGHT: Distribution histogram for selected party
+  const dist11Labels = ['-5','-4','-3','-2','-1','0','+1','+2','+3','+4','+5'];
+  const dist11Colors = dist11Labels.map((_, i) => {
+    const t = i / 10;
+    const r = Math.round(192 * (1-t) + 30 * t);
+    const g = Math.round(57 * (1-t) + 58 * t);
+    const b = Math.round(43 * (1-t) + 95 * t);
+    return `rgba(${r},${g},${b},0.82)`;
+  });
+  const dist11ColorsVgl = dist11Colors.map(c => c.replace('0.82)', '0.38)'));
+
+  // For isAllGroups: show first two groups' distributions side by side
+  const distShowsTwo = hasSubVgl || (isAllGroups && grpSD1 !== null);
+  const distSelSD    = isAllGroups ? grpSD0 : selSD;
+  const distVglSD    = isAllGroups ? grpSD1 : vglSD;
+  const distSelLabel = isAllGroups ? dimGroups[0] : selLabel;
+  const distVglLabel = isAllGroups ? dimGroups[1] : vglLabel;
+
+  const meanSign    = distSelSD.mean >= 0 ? '+' : '';
+  const vglMeanSign = distVglSD ? (distVglSD.mean >= 0 ? '+' : '') : '';
+  document.getElementById('dist-sub').textContent = distShowsTwo
+    ? `${thema}: ${distSelLabel} Ø ${meanSign}${distSelSD.mean.toFixed(2)} / ${distVglLabel} Ø ${vglMeanSign}${distVglSD.mean.toFixed(2)}`
+    : `${thema}: Ø ${meanSign}${distSelSD.mean.toFixed(2)}`;
+
+  const distNeedsRecreate = !charts.dist || !charts._distIsSkalometer
+    || charts._skaloDistHasVgl !== distShowsTwo;
+
+  if (!distNeedsRecreate) {
+    charts.dist.data.datasets[0].data  = distSelSD.dist11;
+    charts.dist.data.datasets[0].label = distSelLabel;
+    if (distShowsTwo) {
+      charts.dist.data.datasets[1].data  = distVglSD.dist11;
+      charts.dist.data.datasets[1].label = distVglLabel;
+    }
+    charts.dist.update();
+  } else {
+    if (charts.dist) { charts.dist.destroy(); charts.dist = null; }
+    const distDatasets = distShowsTwo
+      ? [
+          { label: distSelLabel, data: distSelSD.dist11, backgroundColor: dist11Colors,    borderRadius: 2 },
+          { label: distVglLabel, data: distVglSD.dist11, backgroundColor: dist11ColorsVgl, borderRadius: 2 }
+        ]
+      : [
+          { label: thema,        data: distSelSD.dist11, backgroundColor: dist11Colors,    borderRadius: 2 }
+        ];
+    charts.dist = new Chart(document.getElementById('chart-dist'), {
+      type: 'bar',
+      data: { labels: dist11Labels, datasets: distDatasets },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: distShowsTwo, labels: { font: FONT, boxWidth: 11, padding: 10 } },
+          tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)} %` } }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: FONT } },
+          y: { grid: { color: GRID_CLR }, ticks: { font: FONT, callback: v => v + ' %' } }
+        }
+      }
+    });
+    charts._distIsSkalometer = true;
+    charts._skaloDistHasVgl  = distShowsTwo;
+  }
 }
 
 // ── POPULATE SELECTS ─────────────────────────────────────────────────────────
@@ -597,6 +1298,24 @@ function fillThemaSelect(selId, gruppeName, includeAvg) {
   if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
 }
 
+function updateSubgroupAvailability() {
+  const MIN_N = 30;
+  ['sel-sub', 'sel-sub-vgl'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    Array.from(sel.options).forEach(opt => {
+      if (!opt.value || opt.value === '__all__' || opt.value === '__none__' || opt.value.includes('::__alle__')) return;
+      const [dim, cat] = opt.value.split('::');
+      const n = SUBGROUP_NS?.[dim]?.[cat] ?? 0;
+      const tooSmall = n > 0 && n < MIN_N;
+      opt.disabled = tooSmall;
+      // Keep label clean — strip any previous annotation, then add if needed
+      opt.textContent = opt.textContent.replace(/\s*\(n\s*<\s*30\)$/, '');
+      if (tooSmall) opt.textContent += ` (n < 30)`;
+    });
+  });
+}
+
 function initSelects() {
   // Themengruppe
   const gSel = document.getElementById('sel-gruppe');
@@ -607,11 +1326,12 @@ function initSelects() {
   // Vergleichsgruppe — first option is "none"
   const vSel = document.getElementById('sel-vgl');
   const none = document.createElement('option'); none.value = '__none__'; none.textContent = '— kein Vergleich —'; vSel.appendChild(none);
-  Object.keys(GRUPPEN).forEach(g => {
+  Object.keys(GRUPPEN).filter(g => GRUPPEN[g].plotType !== 'skalometer').forEach(g => {
     const o = document.createElement('option'); o.value = g; o.textContent = g; vSel.appendChild(o);
   });
   vSel.selectedIndex = 0; // default: no comparison
 
+  updateSubgroupAvailability();
   onGruppeChange();
 }
 
@@ -620,12 +1340,19 @@ function onGruppeChange() {
   const info   = GRUPPEN[gruppe];
 
   const wrapThema = document.getElementById('wrap-thema');
-  if (info.subgroups) {
+  if (info.subgroups || info.plotType === 'skalometer') {
     wrapThema.style.display = 'flex';
     fillThemaSelect('sel-thema', gruppe, false);
   } else {
     wrapThema.style.display = 'none';
   }
+
+  // Skalometer has no meaningful Vergleichsgruppe
+  const isSkalometer = info.plotType === 'skalometer';
+  const vglSel = document.getElementById('sel-vgl');
+  vglSel.disabled = isSkalometer;
+  if (isSkalometer) vglSel.value = '__none__';
+
   onVglChange();
 }
 
@@ -650,16 +1377,68 @@ function onVglChange() {
 // ── MAIN RENDER ──────────────────────────────────────────────────────────────
 function render() {
   const gruppe   = document.getElementById('sel-gruppe').value;
-  const thema    = GRUPPEN[gruppe].subgroups ? document.getElementById('sel-thema').value : null;
+  const isSkalometer = GRUPPEN[gruppe].plotType === 'skalometer';
+  const thema    = (GRUPPEN[gruppe].subgroups || isSkalometer) ? document.getElementById('sel-thema').value : null;
   const vgl      = document.getElementById('sel-vgl').value;
-  const hasVgl   = vgl !== '__none__';
+  let hasVgl     = vgl !== '__none__';
   const vglThema = hasVgl && GRUPPEN[vgl].subgroups
     ? document.getElementById('sel-vgl-thema').value : null;
 
-  const selData  = getThemaData(gruppe, thema);
-  const vglData  = hasVgl ? getThemaData(vgl, vglThema) : null;
-  const selLabel = thema && thema !== '__avg__' ? thema : gruppe;
-  const vglLabel = hasVgl ? (vglThema && vglThema !== '__avg__' ? vglThema : vgl) : null;
+  let selData  = isSkalometer
+    ? (GRUPPEN[gruppe].themen[thema] || Object.values(GRUPPEN[gruppe].themen)[0])
+    : getThemaData(gruppe, thema);
+  let vglData  = hasVgl ? getThemaData(vgl, vglThema) : null;
+  let selLabel = thema && thema !== '__avg__' ? thema : gruppe;
+  let vglLabel = hasVgl ? (vglThema && vglThema !== '__avg__' ? vglThema : vgl) : null;
+
+  // ── SUBGROUP FILTER
+  const subSel = document.getElementById('sel-sub').value;
+  const isAllGroups  = subSel.endsWith('::__alle__');
+  const allGroupsDim = isAllGroups ? subSel.split('::')[0] : null;
+  const hasSubgroup  = subSel !== '__all__' && !isAllGroups && Object.keys(SUBGROUPS_DATA).length > 0;
+  if (hasSubgroup) {
+    const [dim, cat] = subSel.split('::');
+    const applySubgroup = (data) => {
+      const vn = data.varName;
+      const sub = SUBGROUPS_DATA[vn]?.[dim]?.[cat];
+      return sub ? { ...data, base: sub.base, dist: sub.dist, n: sub.n } : data;
+    };
+    selData = applySubgroup(selData);
+    if (vglData) vglData = applySubgroup(vglData);
+  }
+  // update selLabel to subgroup name when a primary filter is active
+  if (hasSubgroup) selLabel = subSel.split('::')[1];
+
+  // badge text for breadcrumb (rendered inline below)
+  const badgeText = hasSubgroup ? subSel.split('::')[1]
+    : (isAllGroups ? (DIM_ALLE_LABEL[allGroupsDim] || allGroupsDim) : null);
+
+  // ── SUBGROUP COMPARISON
+  const subVglSel  = document.getElementById('sel-sub-vgl').value;
+  const hasSubVgl  = subVglSel !== '__all__' && Object.keys(SUBGROUPS_DATA).length > 0;
+
+  if (hasSubVgl) {
+    const [dimV, catV] = subVglSel.split('::');
+    if (isSkalometer) {
+      // For skalometer, subVgl compares two subgroups; no thema-level vglData needed
+      hasVgl   = true;
+      vglLabel = catV;
+    } else {
+      const baseData = getThemaData(gruppe, thema);   // raw, unfiltered
+      const sub = SUBGROUPS_DATA[baseData.varName]?.[dimV]?.[catV];
+      if (sub) {
+        vglData  = { ...baseData, base: sub.base, dist: sub.dist, n: sub.n };
+        hasVgl   = true;
+        vglLabel = catV;
+      }
+    }
+  }
+
+  // mutual exclusivity: grey out theme-Vergleich when subgroup comparison active, and vice versa
+  const themeVglActive = vgl !== '__none__';
+  document.getElementById('sel-sub-vgl').disabled   = themeVglActive || isAllGroups;
+  document.getElementById('sel-vgl').disabled       = hasSubVgl || isSkalometer || isAllGroups;
+  document.getElementById('sel-vgl-thema').disabled = hasSubVgl || isSkalometer || isAllGroups;
 
   // ── FRAGEWORTLAUT
   const selFrage = selData.fragewortlaut || '(Kein Fragewortlaut für Gruppenebene verfügbar)';
@@ -668,7 +1447,10 @@ function render() {
   const frageVglBlock = document.getElementById('frage-vgl-block');
   if (hasVgl) {
     frageVglBlock.style.display = 'flex';
-    const vglFrage = vglData.fragewortlaut || '(Kein Fragewortlaut für Gruppenebene verfügbar)';
+    // for subgroup comparisons both sides show the same question — just label differs
+    const vglFrage = hasSubVgl
+      ? (selData.fragewortlaut || '(Kein Fragewortlaut für Gruppenebene verfügbar)')
+      : (vglData.fragewortlaut || '(Kein Fragewortlaut für Gruppenebene verfügbar)');
     document.getElementById('frage-vgl-lbl').textContent  = `Fragewortlaut — ${vglLabel}`;
     document.getElementById('frage-vgl-text').textContent = `„${vglFrage}"`;
     document.getElementById('frage-panel').style.setProperty('--frage-cols', '1fr 1fr');
@@ -678,112 +1460,503 @@ function render() {
   }
 
   // ── BREADCRUMB
-  let bc = `<strong>${gruppe}</strong>`;
+  const badgeHtml = badgeText ? `<span class="sub-badge">${badgeText}</span> ` : '';
+  let bc = badgeHtml + `<strong>${gruppe}</strong>`;
   if (thema && thema !== '__avg__') bc += ` <span class="bc-arrow">›</span> <strong>${thema}</strong>`;
+  if (hasSubgroup) bc += ` <span class="bc-arrow">·</span> <strong>${subSel.split('::')[1]}</strong>`;
   if (hasVgl) {
-    bc += ` <span class="bc-arrow">vs.</span> <strong>${vgl}</strong>`;
-    if (vglThema && vglThema !== '__avg__') bc += ` <span class="bc-arrow">›</span> <strong>${vglThema}</strong>`;
+    bc += ` <span class="bc-arrow">vs.</span> `;
+    if (hasSubVgl) {
+      bc += `<strong>${vglLabel}</strong>`;
+    } else {
+      bc += `<strong>${vgl}</strong>`;
+      if (vglThema && vglThema !== '__avg__') bc += ` <span class="bc-arrow">›</span> <strong>${vglThema}</strong>`;
+    }
   }
   document.getElementById('bc').innerHTML = bc;
 
   // ── KPIs
-  document.getElementById('kpi-sel').textContent     = selData.base + ' %';
-  document.getElementById('kpi-sel-lbl').textContent = selLabel;
-  const kpiVglRow = document.getElementById('kpi-vgl-cell');
+  const kpiVglRow  = document.getElementById('kpi-vgl-cell');
   const kpiDiffRow = document.getElementById('kpi-diff-cell');
-  if (hasVgl) {
-    kpiVglRow.style.display  = '';
-    kpiDiffRow.style.display = '';
-    document.getElementById('kpi-vgl').textContent     = vglData.base + ' %';
-    document.getElementById('kpi-vgl-lbl').textContent = vglLabel;
-    const diff = selData.base - vglData.base;
-    const diffEl = document.getElementById('kpi-diff');
-    diffEl.textContent = (diff >= 0 ? '+' : '') + diff + ' Pkt.';
-    diffEl.className   = 'kpi-val ' + (diff > 0 ? 'c-g' : diff < 0 ? 'c-r' : 'c-b');
-    document.getElementById('kpi-diff-lbl').textContent = selLabel + ' ggü. ' + vglLabel;
+  if (isSkalometer) {
+    const sd = getSkalometerData(selData, hasSubgroup ? subSel : '__all__');
+    const meanVal = sd.mean;
+    const sign = meanVal >= 0 ? '+' : '';
+    document.getElementById('kpi-sel-label').textContent = 'Mittelwert — ' + selLabel;
+    document.getElementById('kpi-sel').textContent = sign + meanVal.toFixed(2);
+    document.getElementById('kpi-sel-lbl').textContent = '(–5 bis +5)';
+    if (hasSubVgl) {
+      const vglSD   = getSkalometerData(selData, subVglSel);
+      const vglMean = vglSD.mean;
+      const vglSign = vglMean >= 0 ? '+' : '';
+      kpiVglRow.style.display  = '';
+      kpiDiffRow.style.display = '';
+      document.getElementById('kpi-vgl').textContent     = vglSign + vglMean.toFixed(2);
+      document.getElementById('kpi-vgl-lbl').textContent = vglLabel;
+      const diff    = parseFloat((meanVal - vglMean).toFixed(2));
+      const diffEl  = document.getElementById('kpi-diff');
+      diffEl.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(2) + ' Pkt.';
+      diffEl.className   = 'kpi-val ' + (diff > 0 ? 'c-g' : diff < 0 ? 'c-r' : 'c-b');
+      document.getElementById('kpi-diff-lbl').textContent = selLabel + ' ggü. ' + vglLabel;
+    } else {
+      kpiVglRow.style.display  = 'none';
+      kpiDiffRow.style.display = 'none';
+    }
   } else {
-    kpiVglRow.style.display  = 'none';
-    kpiDiffRow.style.display = 'none';
+    const fmtN = n => (n != null) ? ' · n = ' + n.toLocaleString('de-DE') : '';
+    document.getElementById('kpi-sel').textContent     = selData.base + ' %';
+    document.getElementById('kpi-sel-lbl').textContent = selLabel + fmtN(hasSubgroup ? (selData.n ?? null) : null);
+    if (hasVgl && !isAllGroups) {
+      kpiVglRow.style.display  = '';
+      kpiDiffRow.style.display = '';
+      document.getElementById('kpi-vgl').textContent     = vglData.base + ' %';
+      document.getElementById('kpi-vgl-lbl').textContent = vglLabel + fmtN(hasSubVgl ? (vglData?.n ?? null) : null);
+      const diff = selData.base - vglData.base;
+      const diffEl = document.getElementById('kpi-diff');
+      diffEl.textContent = (diff >= 0 ? '+' : '') + diff + ' Pkt.';
+      diffEl.className   = 'kpi-val ' + (diff > 0 ? 'c-g' : diff < 0 ? 'c-r' : 'c-b');
+      document.getElementById('kpi-diff-lbl').textContent = selLabel + ' ggü. ' + vglLabel;
+    } else {
+      kpiVglRow.style.display  = 'none';
+      kpiDiffRow.style.display = 'none';
+    }
   }
 
-  // ── BAR CHART
-  document.getElementById('bar-title').textContent = hasVgl ? 'Zustimmungsrate im Vergleich' : 'Zustimmungsrate';
-  document.getElementById('bar-sub').textContent   = hasVgl ? selLabel + ' vs. ' + vglLabel : selLabel;
-  const barLabels = hasVgl ? [selLabel, vglLabel] : [selLabel];
-  const barData   = hasVgl ? [selData.base, vglData.base] : [selData.base];
-  const barColors = barData.map(v => barColor(v));
+  // ── CHARTS + TABLES (Skalometer vs. standard)
+  if (isSkalometer) {
+    // hide the dist-toggle (not applicable)
+    document.getElementById('dist-toggle').style.display = 'none';
+    document.getElementById('kpi-vgl-label').textContent = 'Mittelwert — Vergleich';
 
-  if (charts.bar) charts.bar.destroy();
-  charts.bar = new Chart(document.getElementById('chart-bar'), {
-    type: 'bar',
-    data: {
-      labels: barLabels,
-      datasets: [{ data: barData, backgroundColor: barColors, borderRadius: 3 }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y} %` } }
+    renderSkalometerCharts(gruppe, thema || Object.keys(GRUPPEN[gruppe].themen)[0], subSel, subVglSel);
+
+    const nParties = Object.keys(GRUPPEN[gruppe].themen).length;
+    document.getElementById('tbl-sel-title').textContent = 'Parteien — Skalometer';
+    document.getElementById('tbl-sel-sub').textContent   = hasSubVgl
+      ? `${subSel !== '__all__' ? subSel.split('::')[1] : 'Alle'} vs. ${subVglSel.split('::')[1]} · ${nParties} Parteien`
+      : hasSubgroup
+        ? `${subSel.split('::')[1]} · ${nParties} Parteien`
+        : `Alle ${nParties} Parteien · Mittelwert`;
+    renderTable('tbl-sel', gruppe, thema, hasSubgroup ? subSel : null, hasSubVgl ? subVglSel : null);
+    document.getElementById('tbl-vgl-card').style.display = 'none';
+  } else if (isAllGroups) {
+    // ── ALL-PARTIES BREAKDOWN ─────────────────────────────────────────────────
+    document.getElementById('dist-toggle').style.display = '';
+    const baseLabel = selData.baseLabel || 'Zustimmung';
+    document.getElementById('kpi-sel-label').textContent = baseLabel + ' — Gesamt';
+    document.getElementById('tbl-sel-col').textContent   = baseLabel;
+
+    const varName   = selData.varName;
+    const dimOrder  = DIM_ORDER[allGroupsDim]  || [];
+    const dimColors = DIM_COLORS[allGroupsDim] || {};
+    const partyBars = dimOrder
+      .map(p => {
+        const sub = SUBGROUPS_DATA[varName]?.[allGroupsDim]?.[p];
+        return sub ? { label: p, base: sub.base, dist: sub.dist, n: sub.n, color: dimColors[p] || '#999' } : null;
+      })
+      .filter(Boolean);
+
+    // Bar chart: one bar per group, dimension-colored
+    document.getElementById('bar-title').textContent = baseLabel + ' nach ' + allGroupsDim;
+    document.getElementById('bar-sub').textContent   = partyBars.length + ' Gruppen';
+    if (charts.bar) charts.bar.destroy();
+    charts._barIsSkalometer = false;
+    charts.bar = new Chart(document.getElementById('chart-bar'), {
+      type: 'bar',
+      data: {
+        labels: partyBars.map(p => p.label),
+        datasets: [{ data: partyBars.map(p => p.base),
+                     backgroundColor: partyBars.map(p => p.color), borderRadius: 3 }]
       },
-      scales: {
-        y: { min: 0, max: 100, grid: { color: GRID_CLR }, ticks: { font: FONT, callback: v => v + '%' } },
-        x: { grid: { display: false }, ticks: { font: FONT } }
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx =>
+            ` ${ctx.parsed.y} %  (n = ${partyBars[ctx.dataIndex].n.toLocaleString('de-DE')})`
+          }}
+        },
+        scales: {
+          y: { min: 0, max: 100, grid: { color: GRID_CLR }, ticks: { font: FONT, callback: v => v + '%' } },
+          x: { grid: { display: false }, ticks: { font: FONT } }
+        }
       }
-    }
-  });
+    });
 
-  // ── DIST CHART
-  document.getElementById('dist-sub').textContent = hasVgl ? selLabel + ' vs. ' + vglLabel : selLabel;
-  const distLabels  = hasVgl ? [selLabel, vglLabel] : [selLabel];
-  // Use actual scale labels from the selected Thema (first 4 items), fall back to generic
-  const selScale = (selData.scale && selData.scale.length >= 4) ? selData.scale.slice(0, 4) : DIST_LABELS;
-  if (charts.dist) charts.dist.destroy();
-  charts.dist = new Chart(document.getElementById('chart-dist'), {
-    type: 'bar',
-    data: {
-      labels: distLabels,
-      datasets: selScale.map((lbl, i) => ({
-        label: lbl,
-        data: hasVgl ? [selData.dist[i], vglData.dist[i]] : [selData.dist[i]],
-        backgroundColor: DIST_COLORS[i],
-        borderRadius: 2,
-      }))
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { position: 'bottom', labels: { font: FONT, boxWidth: 11, padding: 10 } },
-        tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y} %` } }
+    // Dist chart: response categories per party
+    const selScale = buildDistLabels(selData.scale);
+    document.getElementById('dist-sub').textContent = 'Antwortverteilung nach Partei';
+    if (charts.dist) charts.dist.destroy();
+    charts._distIsSkalometer = false;
+    charts.dist = new Chart(document.getElementById('chart-dist'), {
+      type: 'bar',
+      data: {
+        labels: partyBars.map(p => p.label),
+        datasets: selScale.map((lbl, i) => ({
+          label: lbl,
+          data: partyBars.map(p => p.dist[i] ?? 0),
+          backgroundColor: DIST_COLORS[i], borderRadius: 2,
+        })).filter(ds => ds.data.some(v => v > 0)),
       },
-      scales: {
-        x: { stacked: true, grid: { display: false }, ticks: { font: FONT } },
-        y: { stacked: true, max: 100, grid: { color: GRID_CLR }, ticks: { font: FONT, callback: v => v + '%' } }
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { font: FONT, boxWidth: 11, padding: 10 } },
+          tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y} %` } }
+        },
+        scales: {
+          x: { stacked: distStacked, grid: { display: false }, ticks: { font: FONT } },
+          y: { stacked: distStacked, max: 100, grid: { color: GRID_CLR },
+               ticks: { font: FONT, callback: v => v + '%' } }
+        }
       }
-    }
-  });
+    });
 
-  // ── TABLES
-  document.getElementById('tbl-sel-title').textContent = `Themen — ${gruppe}`;
-  document.getElementById('tbl-sel-sub').textContent   = `Alle ${Object.keys(GRUPPEN[gruppe].themen).length} Themen`;
-  renderTable('tbl-sel', gruppe, thema);
+    // Party table for the current thema
+    document.getElementById('tbl-sel-title').textContent = (thema || gruppe) + ' — ' + (DIM_ALLE_LABEL[allGroupsDim] || allGroupsDim);
+    document.getElementById('tbl-sel-sub').textContent   = partyBars.length + ' Parteien';
+    const selThead = document.querySelector('#tbl-sel thead tr');
+    if (selThead) selThead.innerHTML =
+      `<th>Partei</th><th class="bar-w" id="tbl-sel-col">Zustimmung</th><th class="mono">%</th><th class="mono tbl-n">n</th>`;
+    const selTbody = document.querySelector('#tbl-sel tbody');
+    selTbody.innerHTML = partyBars.map(p =>
+      `<tr>
+        <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;
+                         background:${p.color};margin-right:5px;vertical-align:middle"></span>${p.label}</td>
+        <td class="bar-w"><div class="bar-bg"><div class="bar-fill" style="width:${p.base}%;background:${p.color}"></div></div></td>
+        <td class="mono">${p.base} %</td>
+        <td class="mono tbl-n">${p.n.toLocaleString('de-DE')}</td>
+      </tr>`).join('');
+    document.getElementById('tbl-vgl-card').style.display = 'none';
 
-  const tblVglCard = document.getElementById('tbl-vgl-card');
-  if (hasVgl) {
-    tblVglCard.style.display = 'flex';
-    document.getElementById('tbl-vgl-title').textContent = `Themen — ${vgl}`;
-    document.getElementById('tbl-vgl-sub').textContent   = `Alle ${Object.keys(GRUPPEN[vgl].themen).length} Themen`;
-    renderTable('tbl-vgl', vgl, vglThema && vglThema !== '__avg__' ? vglThema : null);
   } else {
-    tblVglCard.style.display = 'none';
+    document.getElementById('dist-toggle').style.display = '';
+
+    // ── BAR CHART
+    const baseLabel = selData.baseLabel || 'Zustimmung';
+    document.getElementById('kpi-sel-label').textContent = baseLabel + ' — Auswahl';
+    document.getElementById('tbl-sel-col').textContent = baseLabel;
+    document.getElementById('tbl-vgl-col').textContent = baseLabel;
+    document.getElementById('kpi-vgl-label').textContent = baseLabel + ' — Vergleich';
+    document.getElementById('bar-title').textContent = hasVgl ? baseLabel + 'srate im Vergleich' : baseLabel + 'srate';
+    document.getElementById('bar-sub').textContent   = hasVgl ? selLabel + ' vs. ' + vglLabel : selLabel;
+    const barLabels = hasVgl ? [selLabel, vglLabel] : [selLabel];
+    const barData   = hasVgl ? [selData.base, vglData.base] : [selData.base];
+    const barColors = barData.map(v => barColor(v));
+
+    if (charts.bar) charts.bar.destroy();
+    charts._barIsSkalometer = false;
+    charts.bar = new Chart(document.getElementById('chart-bar'), {
+      type: 'bar',
+      data: {
+        labels: barLabels,
+        datasets: [{ data: barData, backgroundColor: barColors, borderRadius: 3 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y} %` } }
+        },
+        scales: {
+          y: { min: 0, max: 100, grid: { color: GRID_CLR }, ticks: { font: FONT, callback: v => v + '%' } },
+          x: { grid: { display: false }, ticks: { font: FONT } }
+        }
+      }
+    });
+
+    // ── DIST CHART
+    document.getElementById('dist-sub').textContent = hasVgl ? selLabel + ' vs. ' + vglLabel : selLabel;
+    const distLabels  = hasVgl ? [selLabel, vglLabel] : [selLabel];
+    const selScale = buildDistLabels(selData.scale);
+    if (charts.dist) charts.dist.destroy();
+    charts._distIsSkalometer = false;
+    charts.dist = new Chart(document.getElementById('chart-dist'), {
+      type: 'bar',
+      data: {
+        labels: distLabels,
+        datasets: selScale.map((lbl, i) => ({
+          label: lbl,
+          data: hasVgl ? [selData.dist[i], vglData.dist[i]] : [selData.dist[i]],
+          backgroundColor: DIST_COLORS[i],
+          borderRadius: 2,
+        })).filter(ds => ds.data.some(v => v > 0)),
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { font: FONT, boxWidth: 11, padding: 10 } },
+          tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y} %` } }
+        },
+        scales: {
+          x: { stacked: distStacked, grid: { display: false }, ticks: { font: FONT } },
+          y: { stacked: distStacked, max: 100, grid: { color: GRID_CLR }, ticks: { font: FONT, callback: v => v + '%' } }
+        }
+      }
+    });
+
+    // ── TABLES
+    document.getElementById('tbl-sel-title').textContent = `Themen — ${gruppe}`;
+    document.getElementById('tbl-sel-sub').textContent   = hasSubgroup
+      ? `${subSel.split('::')[1]} · ${Object.keys(GRUPPEN[gruppe].themen).length} Themen`
+      : `Alle ${Object.keys(GRUPPEN[gruppe].themen).length} Themen`;
+    renderTable('tbl-sel', gruppe, thema, hasSubgroup ? subSel : null);
+
+    const tblVglCard = document.getElementById('tbl-vgl-card');
+    if (hasVgl) {
+      tblVglCard.style.display = 'flex';
+      if (hasSubVgl) {
+        document.getElementById('tbl-vgl-title').textContent = `Themen — ${gruppe}`;
+        document.getElementById('tbl-vgl-sub').textContent   = vglLabel;
+        renderTable('tbl-vgl', gruppe, thema, subVglSel);
+      } else {
+        document.getElementById('tbl-vgl-title').textContent = `Themen — ${vgl}`;
+        document.getElementById('tbl-vgl-sub').textContent   = `Alle ${Object.keys(GRUPPEN[vgl].themen).length} Themen`;
+        renderTable('tbl-vgl', vgl, vglThema && vglThema !== '__avg__' ? vglThema : null, hasSubgroup ? subSel : null);
+      }
+    } else {
+      tblVglCard.style.display = 'none';
+    }
   }
 
   // ── FOOTER
   document.getElementById('footer-txt').textContent = hasVgl ? `${selLabel}  ↔  ${vglLabel}` : selLabel;
+
+  // ── URL HASH (shareable state)
+  const p = new URLSearchParams({ g: gruppe });
+  if (thema) p.set('t', thema);
+  if (vgl !== '__none__') { p.set('vg', vgl); if (vglThema) p.set('vt', vglThema); }
+  if (subSel !== '__all__') p.set('sub', subSel);
+  if (subVglSel !== '__all__') p.set('sub_vgl', subVglSel);
+  const hash = '#' + p.toString();
+  try { history.replaceState(null, '', hash); } catch(e) { /* file:// security restriction */ }
+  // store for copyShareLink — don't rely on location.href being updated
+  const base = location.href.split('#')[0];
+  window._shareUrl = base + hash;
+}
+
+// ── EXPORT ───────────────────────────────────────────────────────────────────
+function exportCharts() {
+  const dpr   = devicePixelRatio || 1;
+  const cBar  = document.getElementById('chart-bar');
+  const cDist = document.getElementById('chart-dist');
+
+  // current state
+  const gruppe    = document.getElementById('sel-gruppe').value;
+  const thema     = document.getElementById('sel-thema').value;
+  const vgl       = document.getElementById('sel-vgl').value;
+  const vglThema  = document.getElementById('sel-vgl-thema').value;
+  const subSel    = document.getElementById('sel-sub').value;
+  const subVglSel = document.getElementById('sel-sub-vgl').value;
+  const hasSubgroup = subSel !== '__all__' && Object.keys(SUBGROUPS_DATA).length > 0;
+  const hasSubVgl   = subVglSel !== '__all__' && Object.keys(SUBGROUPS_DATA).length > 0;
+  const hasThemeVgl = vgl && vgl !== '__none__';
+  const hasVgl      = hasThemeVgl || hasSubVgl;
+
+  // subgroup helper: apply subgroup filter to a [name, d] entry
+  function applySubFilter(d, filter) {
+    if (!filter || filter === '__all__' || !Object.keys(SUBGROUPS_DATA).length) return d;
+    const [dim, cat] = filter.split('::');
+    const sub = SUBGROUPS_DATA[d.varName]?.[dim]?.[cat];
+    return sub ? { ...d, base: sub.base, dist: sub.dist } : d;
+  }
+
+  // layout constants (device px)
+  const pad = 28 * dpr, gap = 16 * dpr, headerH = 34 * dpr;
+  const divH = 24 * dpr;   // gap between chart section and table section
+  const rowH = 20 * dpr, tblTitleH = 22 * dpr, colHdrH = 18 * dpr;
+
+  const tblRows1 = Object.entries(GRUPPEN[gruppe].themen);
+  // when subgroup comparison, second table is same gruppe but different subgroup
+  const vglGruppe = hasSubVgl ? gruppe : (hasThemeVgl ? vgl : null);
+  const tblRows2  = hasVgl ? Object.entries(GRUPPEN[vglGruppe].themen) : [];
+  const maxRows   = Math.max(tblRows1.length, tblRows2.length);
+  const tblBodyH = maxRows * rowH;
+  const tblH     = tblTitleH + colHdrH + tblBodyH + pad;
+
+  const chartH = Math.max(cBar.height, cDist.height);
+  const W = cBar.width + cDist.width + gap + pad * 2;
+  const H = headerH + chartH + divH + tblH;
+
+  const tmp = document.createElement('canvas');
+  tmp.width = W; tmp.height = H;
+  const ctx = tmp.getContext('2d');
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+  // ── header
+  ctx.fillStyle = '#1e3a5f';
+  ctx.font = `bold ${13 * dpr}px DM Sans, sans-serif`;
+  const headerSubLabel = hasSubgroup ? ` · ${subSel.split('::')[1]}` : (hasSubVgl ? ` · ${subSel === '__all__' ? 'Gesamt' : subSel.split('::')[1]} vs. ${subVglSel.split('::')[1]}` : '');
+  ctx.fillText(`Hessen-Monitor — ${gruppe}${thema ? ' / ' + thema : ''}${headerSubLabel}`, pad, headerH - 8 * dpr);
+
+  // ── charts
+  ctx.drawImage(cBar,  pad,                    headerH);
+  ctx.drawImage(cDist, pad + cBar.width + gap, headerH);
+
+  // ── divider
+  const divY = headerH + chartH + divH * 0.5;
+  ctx.strokeStyle = '#ccdaea'; ctx.lineWidth = dpr;
+  ctx.beginPath(); ctx.moveTo(pad, divY); ctx.lineTo(W - pad, divY); ctx.stroke();
+
+  // ── tables
+  const tblStartY = headerH + chartH + divH;
+  const tblW = hasVgl ? (W - pad * 2 - gap) / 2 : W - pad * 2;
+
+  function drawTable(rows, title, activeThema, xOff, subFilter) {
+    const cName = tblW * 0.44, cBar_ = tblW * 0.26, cPct = tblW * 0.12, cStr = tblW * 0.18;
+    let y = tblStartY;
+
+    // section title
+    ctx.fillStyle = '#4a6a8a';
+    ctx.font = `500 ${9 * dpr}px DM Sans, sans-serif`;
+    ctx.fillText(title.toUpperCase(), xOff, y + tblTitleH * 0.7);
+    y += tblTitleH;
+
+    // column headers
+    ctx.fillStyle = '#9ca3af';
+    ctx.font = `${8 * dpr}px DM Sans, sans-serif`;
+    ctx.fillText('THEMA',      xOff,            y + colHdrH * 0.75);
+    ctx.fillText('ZUSTIMMUNG', xOff + cName,    y + colHdrH * 0.75);
+    ctx.fillText('%',          xOff + cName + cBar_ + 4 * dpr, y + colHdrH * 0.75);
+    ctx.fillText('STREUUNG',   xOff + cName + cBar_ + cPct + 4 * dpr, y + colHdrH * 0.75);
+    y += colHdrH;
+
+    rows.forEach(([name, d_raw], i) => {
+      const d = applySubFilter(d_raw, subFilter);
+      const ry = y + i * rowH;
+      const baseline = ry + rowH * 0.72;
+
+      // zebra stripe
+      if (i % 2 === 0) {
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillRect(xOff - 4 * dpr, ry, tblW + 4 * dpr, rowH);
+      }
+      // highlight active
+      if (name === activeThema) {
+        ctx.fillStyle = '#eaf1f8';
+        ctx.fillRect(xOff - 4 * dpr, ry, tblW + 4 * dpr, rowH);
+      }
+
+      // name
+      const display = name.length > 32 ? name.slice(0, 31) + '…' : name;
+      ctx.fillStyle = name === activeThema ? '#1e3a5f' : '#374151';
+      ctx.font = `${name === activeThema ? '500 ' : ''}${9 * dpr}px DM Sans, sans-serif`;
+      ctx.fillText(display, xOff, baseline);
+
+      // approval bar
+      const bx = xOff + cName, bw = cBar_ - 8 * dpr, bh = 6 * dpr, by = ry + (rowH - bh) / 2;
+      ctx.fillStyle = '#e5e7eb'; ctx.fillRect(bx, by, bw, bh);
+      ctx.fillStyle = barColor(d.base); ctx.fillRect(bx, by, bw * d.base / 100, bh);
+
+      // pct
+      ctx.fillStyle = '#374151';
+      ctx.font = `${9 * dpr}px DM Sans, sans-serif`;
+      ctx.fillText(d.base + ' %', xOff + cName + cBar_ + 4 * dpr, baseline);
+
+      // streuung label
+      ctx.fillText(streuungLabel(streuung(d.dist)), xOff + cName + cBar_ + cPct + 4 * dpr, baseline);
+    });
+  }
+
+  // build table titles respecting subgroup state
+  const tbl1SubLabel = hasSubgroup ? ` · ${subSel.split('::')[1]}` : '';
+  const tbl1Title    = gruppe + (thema ? ` — ${thema}` : '') + tbl1SubLabel;
+  const subFilter1   = hasSubgroup ? subSel : null;
+
+  let tbl2Title, subFilter2, activeThema2;
+  if (hasSubVgl) {
+    tbl2Title    = gruppe + (thema ? ` — ${thema}` : '') + ` · ${subVglSel.split('::')[1]}`;
+    subFilter2   = subVglSel;
+    activeThema2 = thema;
+  } else {
+    tbl2Title    = vgl + (vglThema && vglThema !== '__avg__' ? ` — ${vglThema}` : '') + tbl1SubLabel;
+    subFilter2   = subFilter1;
+    activeThema2 = vglThema;
+  }
+
+  drawTable(tblRows1, tbl1Title, thema, pad, subFilter1);
+  if (hasVgl) drawTable(tblRows2, tbl2Title, activeThema2, pad + tblW + gap, subFilter2);
+
+  const a = document.createElement('a');
+  a.download = `hessenmonitor-${gruppe.replace(/\s+/g, '-')}.png`;
+  a.href = tmp.toDataURL('image/png');
+  a.click();
+}
+
+// ── SHARE LINK ────────────────────────────────────────────────────────────────
+function copyShareLink() {
+  // _shareUrl is set by render() — more reliable than location.href on file://
+  const url = window._shareUrl || location.href;
+  const btn = document.getElementById('share-btn');
+  const orig = btn.textContent;
+
+  function onSuccess() {
+    btn.textContent = '✓ Kopiert!'; btn.classList.add('success');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('success'); }, 2000);
+  }
+
+  // Step 1: execCommand — MUST run synchronously inside the click handler
+  // (navigator.clipboard rejects outside user gesture, breaking the cascade)
+  const ta = document.createElement('textarea');
+  ta.value = url; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  let copied = false;
+  try { copied = document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta);
+
+  if (copied) { onSuccess(); return; }
+
+  // Step 2: modern clipboard API (works on HTTPS; try anyway)
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(onSuccess).catch(() => {
+      window.prompt('Link zum Kopieren markieren (Strg+C / ⌘C):', url);
+    });
+  } else {
+    window.prompt('Link zum Kopieren markieren (Strg+C / ⌘C):', url);
+  }
+}
+
+// ── RESTORE FROM HASH ─────────────────────────────────────────────────────────
+function restoreFromHash() {
+  const hash = _initialHash.slice(1); // use hash captured before initSelects() ran
+  if (!hash) return;
+  const p = new URLSearchParams(hash);
+
+  function setVal(id, val) {
+    if (!val) return;
+    document.getElementById(id).value = val;
+  }
+
+  const g = p.get('g'), t = p.get('t'), vg = p.get('vg'), vt = p.get('vt');
+  const sub = p.get('sub'), subVgl = p.get('sub_vgl');
+
+  // Set gruppe
+  const gSel = document.getElementById('sel-gruppe');
+  if (g && [...gSel.options].some(o => o.value === g)) gSel.value = g;
+
+  // Set subgroups and vgl BEFORE calling onGruppeChange so that
+  // the intermediate render() it triggers already sees the full state
+  setVal('sel-sub',     sub);
+  setVal('sel-sub-vgl', subVgl);
+  if (vg) setVal('sel-vgl', vg);
+
+  // Populate dependent selects (sel-thema, sel-vgl-thema) and trigger render
+  onGruppeChange();
+
+  // Set thema after onGruppeChange has filled the options
+  setVal('sel-thema', t);
+  if (vg && vt) setVal('sel-vgl-thema', vt);
+
+  render();
 }
 
 // ── START ─────────────────────────────────────────────────────────────────────
+if (new URLSearchParams(location.search).get('ref') === 'home') {
+  document.getElementById('back-btn').classList.add('visible');
+}
+const _initialHash = location.hash; // capture before initSelects() overwrites it via render()
 initSelects();
+restoreFromHash();
 </script>
 </body>
 </html>
